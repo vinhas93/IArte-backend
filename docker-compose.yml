@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  cloud_walker:
+    build: .
+    container_name: cloud_walker
+    restart: always
+    ports:
+      - '3000:3000'
+    volumes:
+      - .:/usr/app
+    depends_on:
+      - database_cloud_walker
+    environment:
+      - DATABASE_URL=postgres://docker:ignite@database_cloud_walker:5432/cloud_walker?reconnect=true
+
+  database_cloud_walker: 
+    image: postgres
+    container_name: database_ignite
+    restart: always
+    ports: 
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=docker
+      - POSTGRES_PASSWORD=ignite
+      - POSTGRES_DB=cloud_walker
+    volumes:
+      - pgdata:/data/postgres
+
+volumes:
+  pgdata: ~
