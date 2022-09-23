@@ -9,125 +9,118 @@ datasource db {
 }
 
 model Canva {
-  id          Int           @id(map: "Canva_pk") @default(autoincrement())
-  multiplier  Float
-  sku         String        @db.VarChar(255)
-  genre       Bytes
-  description String?       @db.VarChar(300)
-  createdAt   DateTime      @default(dbgenerated("'2022-09-14 21:03:26.052672'::timestamp without time zone")) @map("created_at") @db.Timestamp(6)
-  updatedAt   DateTime      @map("updated_at") @db.Timestamp(6)
-  Product     Product[]
-  UpdateCanva UpdateCanva[]
-
+  id           Int           @id() @default(autoincrement())
+  name         String        @db.VarChar(30)
+  price        Float
+  sku          String        @db.VarChar(255)
+  genre        Bytes
+  description  String?       @db.VarChar(300)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  category     Category      @relation(fields: [categoryName], references: [name], onDelete: Cascade, onUpdate: Cascade)
+  categoryName String        @db.VarChar(255)
+  product      Product[]
+  updateCanva  UpdateCanva[]
   @@map("canvas")
 }
 
 model Cart {
-  id            Int       @id(map: "Cart_pk") @default(autoincrement())
-  customerId    Int       @map("customer_id")
-  voucherId     Int?      @map("voucher_id")
+  id            Int       @id() @default(autoincrement())
   quantity      Int?
-  priceSum      Float?    @map("price_sum")
-  finalPrice    Float     @map("final_price")
-  totalDiscount Float     @map("total_discount")
-  createdAt     DateTime  @default(dbgenerated("'2022-09-14 21:03:26.052672'::timestamp without time zone")) @map("created_at") @db.Timestamp(6)
-  updatedAt     DateTime  @map("updated_at") @db.Timestamp(6)
-  Customer      Customer  @relation(fields: [customerId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Cart_fk0")
-  Voucher       Voucher?  @relation(fields: [voucherId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Cart_fk1")
-  Product       Product[]
-
+  priceSum      Float?
+  finalPrice    Float
+  totalDiscount Float
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  customer      Customer  @relation(fields: [costumerId], references: [id], onDelete: NoAction, onUpdate: Cascade)
+  costumerId    Int
+  voucher       Voucher?  @relation(fields: [voucherId], references: [id], onDelete: NoAction, onUpdate: Cascade)
+  voucherId     Int?
+  product       Product[]
   @@map("carts")
 }
 
 model Category {
-  id          Int       @id(map: "Category_pk") @default(autoincrement())
+  id          Int      @id() @default(autoincrement())
   price       Float
-  product     Bytes
-  createdAt   DateTime  @default(dbgenerated("'2022-09-14 21:03:26.052672'::timestamp without time zone")) @map("created_at") @db.Timestamp(6)
-  updatedAt   DateTime  @map("updated_at") @db.Timestamp(6)
-  description String?   @db.VarChar(300)
-  Product     Product[]
-
+  name        String   @unique @db.VarChar(255)
+  description String?  @db.VarChar(300)
+  cost        Float
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  canvas       Canva[]
   @@map("categories")
 }
 
 model Customer {
-  id        Int      @id(map: "Customer_pk") @default(autoincrement())
+  id        Int      @id() @default(autoincrement())
   name      String   @db.VarChar(25)
   password  String   @db.VarChar(15)
   email     String   @unique @db.VarChar(50)
-  createdAt DateTime @default(dbgenerated("'2022-09-14 21:03:26.052672'::timestamp without time zone")) @map("created_at") @db.Timestamp(6)
-  updatedAt DateTime @map("updated_at") @db.Timestamp(6)
   wallet    Float
-  Cart      Cart[]
-
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  carts     Cart[]
   @@map("customers")
 }
 
 model Guideline {
-  id            Int      @id(map: "Guideline_pk") @default(autoincrement())
-  aboutUs       String   @map("about_us") @db.VarChar(500)
-  privacyPolicy String?  @map("privacy_policy") @db.VarChar(500)
-  refundPolicy  String   @map("refund_policy") @db.VarChar(500)
-  createdAt     DateTime @default(dbgenerated("'2022-09-14 21:03:26.052672'::timestamp without time zone")) @map("created_at") @db.Timestamp(6)
-  updatedAt     DateTime @map("updated_at") @db.Timestamp(6)
-
+  id            Int      @id() @default(autoincrement())
+  aboutUs       String   @db.VarChar(500)
+  privacyPolicy String?  @db.VarChar(500)
+  refundPolicy  String   @db.VarChar(500)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
   @@map("guidelines")
 }
 
 model Product {
-  id         Int      @id(map: "Product_pk") @default(autoincrement())
-  cartId     Int      @map("cart_id")
-  canvaId    Int?     @map("canva_id")
-  categoryId Int      @map("category_id")
-  erased     Boolean  @default(false)
-  createdAt  DateTime @default(dbgenerated("'2022-09-14 21:03:26.052672'::timestamp without time zone")) @map("created_at") @db.Timestamp(6)
-  updatedAt  DateTime @map("updated_at") @db.Timestamp(6)
-  Cart       Cart     @relation(fields: [cartId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Product_fk0")
-  Canva      Canva?   @relation(fields: [canvaId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Product_fk1")
-  Category   Category @relation(fields: [categoryId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Product_fk2")
-
+  id        Int      @id() @default(autoincrement())
+  erased    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  cart      Cart     @relation(fields: [cartId], references: [id], onDelete: NoAction, onUpdate: Cascade)
+  cartId    Int
+  canva     Canva?   @relation(fields: [canvaId], references: [id], onDelete: NoAction, onUpdate: Cascade)
+  canvaId   Int?
   @@map("products")
 }
 
 model UpdateCanva {
-  id        Int      @id(map: "UpdateCanva_pk") @default(autoincrement())
-  userId    Int      @map("user_id")
-  canvaId   Int      @map("canva_id")
-  oldPrice  Float    @map("old_price")
-  newPrice  Float    @map("new_price")
-  createdAt DateTime @default(dbgenerated("'2022-09-14 21:03:26.052672'::timestamp without time zone")) @map("created_at") @db.Timestamp(6)
-  User      User     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "UpdateCanva_fk0")
-  Canva     Canva    @relation(fields: [canvaId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "UpdateCanva_fk1")
-
+  id        Int      @id() @default(autoincrement())
+  oldPrice  Float
+  newPrice  Float
+  createdAt DateTime @default(now()) 
+  user      User     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: Cascade, map: "updateCanva_fk0")
+  userId    Int
+  canva     Canva    @relation(fields: [canvaId], references: [id], onDelete: NoAction, onUpdate: Cascade, map: "updateCanva_fk1")
+  canvaId   Int
   @@map("updated_canvas")
 }
 
 model User {
-  id          Int           @id(map: "User_pk") @default(autoincrement())
+  id          Int           @id() @default(autoincrement())
   name        String        @db.VarChar(25)
   image       String        @db.VarChar(255)
   password    String        @db.VarChar(15)
   email       String        @unique @db.VarChar(50)
   role        String        @db.VarChar(255)
-  createdAt   DateTime      @default(dbgenerated("'2022-09-14 21:03:26.052672'::timestamp without time zone")) @map("created_at") @db.Timestamp(6)
-  updatedAt   DateTime      @map("updated_at") @db.Timestamp(6)
-  UpdateCanva UpdateCanva[]
-
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  updateCanva UpdateCanva[]
   @@map("users")
 }
 
 model Voucher {
-  id           Int       @id(map: "Voucher_pk") @default(autoincrement())
-  discountRate Float     @map("discount_rate")
+  id           Int       @id() @default(autoincrement())
+  discountRate Float
   active       Boolean   @default(false)
-  startDate    DateTime? @map("start_date") @db.Date
-  maxQuantity  Int?      @map("max_quantity")
+  startDate    DateTime? @db.Date
+  maxQuantity  Int?
   interval     Int
-  endDate      DateTime? @map("end_date") @db.Date
-  createdAt    DateTime  @default(dbgenerated("'2022-09-14 21:03:26.052672'::timestamp without time zone")) @map("created_at") @db.Timestamp(6)
-  updatedAt    DateTime  @map("updated_at") @db.Timestamp(6)
-  Cart         Cart[]
-
+  endDate      DateTime? @db.Date
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  cart         Cart[]
   @@map("vouchers")
 }
