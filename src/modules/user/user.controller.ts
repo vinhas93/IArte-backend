@@ -9,11 +9,11 @@ import { CreateUserService } from './services';
 
 @Controller()
 export class UserController {
-    constructor(private createUserService: CreateUserService) {}
+  constructor(private createUserService: CreateUserService) {}
 
-    @Post()
-    async createUser(@Body() dto: CreateUserDto, @Res() res: Response) {
-        const {status, data} = await this.createUserService.execute(dto);
-        return res.status(status).send(data);
-    }
+  @Post()
+  async createUser(@Body() dto: CreateUserDto, @Res() res: Response) {
+    const { status, data } = await this.createUserService.execute(dto);
+    return res.status(status).send(data);
+  }
 }
