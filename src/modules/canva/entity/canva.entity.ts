@@ -1,0 +1,1 @@
+export class CanvaEntity implements Prisma.Unchec

@@ -15,13 +15,15 @@ model Canva {
   genre        String?
   description  String?       @db.VarChar(300)
   inStock      Boolean       @default(true) @map("in_stock")
-  createdAt    DateTime      @default(now()) @map("created_at")
-  updatedAt    DateTime      @updatedAt @map("updated_at")
+  image        String
   category     Category      @relation(fields: [categoryName], references: [name], onDelete: Cascade, onUpdate: Cascade)
   categoryName String        @map("category_name") @db.VarChar(255)
   product      Product[]
   updateCanva  UpdateCanva[]
 
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+  
   @@map("canvas")
 }
 
@@ -109,7 +111,7 @@ model User {
   id          Int           @id() @default(autoincrement())
   name        String        @db.VarChar(25)
   image       String?       @db.VarChar(255)
-  password    String        @db.VarChar(15)
+  password    String        @db.VarChar(255)
   email       String        @unique @db.VarChar(50)
   role        UserRole      @default(SalesPerson)
   createdAt   DateTime      @default(now()) @map("created_at")

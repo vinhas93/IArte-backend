@@ -3,6 +3,7 @@ import { UserRole } from '@prisma/client';
 import {
   IsEmail,
   IsEnum,
+  IsIn,
   IsNotEmpty,
   IsOptional,
   IsString,
@@ -44,7 +45,8 @@ export class CreateUserDto {
   })
   email: string;
 
-  @IsEnum(['Owner', 'Manager', 'SalesPerson'])
+  @IsEnum(['Owner', 'Manager', 'SalesPerson', 'Customer'])
+  @IsIn(['Owner', 'Manager', 'SalesPerson', 'Customer'])
   @ApiProperty({
     description: 'Grants user access to routes based on roles',
     example: 'Owner',

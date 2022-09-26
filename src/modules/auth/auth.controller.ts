@@ -11,7 +11,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UserEntity } from '../user/entity/user.entity';
 import { AuthService } from './auth.service';
-import { LoggedCustomer } from './decorator/logged-user.decorator';
+import { LoggedCustomer } from './decorator/logged-customer.decorator';
 import { LoginUserDto } from './dto/login-user.dto';
 
 @ApiTags('Auth')

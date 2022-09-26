@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UserRepository } from '../repository/user.repository';
-import * as crypto from 'crypto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class CreateUserService {
@@ -19,7 +19,7 @@ export class CreateUserService {
       };
     }
 
-    data.password = crypto.randomBytes(32).toString('hex');
+    data.password = await bcrypt.hash(data.password, 10);
 
     const createUser = await this.userRep.createUser(data);
     return {
