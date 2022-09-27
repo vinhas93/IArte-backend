@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
+import { UpdateMyAccountDto } from '../dto/update-my-account.dto';
 import { UserRepository } from '../repository/user.repository';
 
 @Injectable()
-export class MyAccountService {
+export class UpdateMyAccountService {
   constructor(private userRep: UserRepository) {}
 
-  async execute(id: number) {
-    const user = await this.userRep.findUserById(id);
+  async execute(dto: UpdateMyAccountDto, id: number) {
+    const user = await this.userRep.updateMyAccount(dto, id);
 
     delete user.password;
 
