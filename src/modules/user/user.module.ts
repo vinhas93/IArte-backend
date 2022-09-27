@@ -4,12 +4,13 @@ https://docs.nestjs.com/modules
 */
 
 import { Module } from '@nestjs/common';
-import { CreateUserService } from './services';
+import { CreateUserService, MyAccountService } from './services';
 import { UserRepository } from './repository/user.repository';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
-  imports: [],
+  imports: [PassportModule.register({ defaultStrategy: 'jwt' })],
   controllers: [UserController],
-  providers: [CreateUserService, UserRepository],
+  providers: [CreateUserService, MyAccountService, UserRepository],
 })
 export class UserModule {}

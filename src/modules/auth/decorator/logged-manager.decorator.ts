@@ -11,7 +11,7 @@ export const LoggedManager = createParamDecorator(
     const userObject = request.user;
 
     if (userObject.role === UserRole.Owner || UserRole.Manager) {
-      delete userObject.passwordHash;
+      delete userObject.password;
 
       return userObject;
     } else {

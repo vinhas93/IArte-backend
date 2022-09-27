@@ -10,7 +10,7 @@ export const LoggedOwner = createParamDecorator((_, ctx: ExecutionContext) => {
   const userObject = request.user;
 
   if (userObject.role === UserRole.Owner) {
-    delete userObject.passwordHash;
+    delete userObject.password;
 
     return userObject;
   } else {

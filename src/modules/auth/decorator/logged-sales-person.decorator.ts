@@ -15,7 +15,7 @@ export const LoggedSalesPerson = createParamDecorator(
       UserRole.Manager ||
       UserRole.SalesPerson
     ) {
-      delete userObject.passwordHash;
+      delete userObject.password;
 
       return userObject;
     } else {
