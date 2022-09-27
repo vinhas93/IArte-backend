@@ -18,7 +18,5 @@ export class UserController {
   }
 
   @Get()
-  async myAccount (){
-    
-  }
+  async myAccount() {}
 }

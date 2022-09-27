@@ -11,7 +11,11 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('')
     .setDescription('')
-    .setVersion('')
+    .setVersion('1.0.0')
+    .addTag('Status')
+    .addTag('Auth')
+    .addTag('User')
+    .addTag('Category')
     .addTag('')
     .addBearerAuth()
     .build();
