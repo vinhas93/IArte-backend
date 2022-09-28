@@ -12,6 +12,7 @@ import {
 } from './services';
 import { UserRepository } from './repository/user.repository';
 import { PassportModule } from '@nestjs/passport';
+import { DeleteMyAccountService } from './services/delete-my-account.service';
 
 @Module({
   imports: [PassportModule.register({ defaultStrategy: 'jwt' })],
@@ -22,6 +23,7 @@ import { PassportModule } from '@nestjs/passport';
     UserRepository,
     UpdateMyAccountService,
     UpdateMyPasswordService,
+    DeleteMyAccountService,
   ],
 })
 export class UserModule {}

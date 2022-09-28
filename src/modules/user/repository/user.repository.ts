@@ -29,4 +29,8 @@ export class UserRepository extends PrismaClient {
     const data = { ...updateMyPasswordDto };
     return this.user.update({ where: { id }, data }).catch(handleError);
   }
+
+  async deleteMyAccount(id: number) {
+    return this.user.delete({ where: { id } });
+  }
 }

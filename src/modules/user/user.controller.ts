@@ -5,6 +5,7 @@ https://docs.nestjs.com/controllers#controllers
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Patch,
   Post,
@@ -26,6 +27,7 @@ import {
   MyAccountService,
   UpdateMyPasswordService,
   UpdateMyAccountService,
+  DeleteMyAccountService,
 } from './services';
 
 @Controller()
@@ -35,6 +37,7 @@ export class UserController {
     private myAccountService: MyAccountService,
     private updateMyPasswordService: UpdateMyPasswordService,
     private updateMyAccountService: UpdateMyAccountService,
+    private deleteMyAccountService: DeleteMyAccountService,
   ) {}
 
   // ============================ Permissões LoggedManager ==========================
@@ -101,5 +104,21 @@ export class UserController {
       user.id,
     );
     return res.status(status).send(data);
+  }
+
+  @Delete('/my-account') //Deleta a conta do usuário logado
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Delete logged user`s account',
+  })
+  async DeleteMyAccountService(
+    @LoggedUser() user: UserEntity,
+    @Res() res: Response,
+  ) {
+    const { status, message } = await this.deleteMyAccountService.execute(
+      user.id,
+    );
+    return res.status(status).send(message);
   }
 }
