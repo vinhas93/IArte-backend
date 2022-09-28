@@ -14,7 +14,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { LoggedManager } from '../auth/decorator/logged-manager.decorator';
 import { LoggedUser } from '../auth/decorator/logged-user.decorator';
@@ -42,6 +42,7 @@ export class UserController {
 
   // ============================ Permissões LoggedManager ==========================
 
+  @ApiTags('Just Manager')
   @Post('/admin/create-user') //Owner ou Manager Criam usuários
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
@@ -59,6 +60,7 @@ export class UserController {
 
   // ============================ Permissões LoggedUser ==========================
 
+  @ApiTags('My account')
   @Get('/my-account') //Perfil de quem está logado
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
@@ -70,6 +72,7 @@ export class UserController {
     return res.status(status).send(data);
   }
 
+  @ApiTags('My account')
   @Put('/my-account') //Update Password
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
@@ -88,6 +91,7 @@ export class UserController {
     return res.status(status).send(data);
   }
 
+  @ApiTags('My account')
   @Patch('/my-account') //Update nome ou imagem da conta
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
@@ -106,6 +110,7 @@ export class UserController {
     return res.status(status).send(data);
   }
 
+  @ApiTags('My account')
   @Delete('/my-account') //Deleta a conta do usuário logado
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
