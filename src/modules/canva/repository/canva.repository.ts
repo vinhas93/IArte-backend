@@ -16,9 +16,12 @@ export class CanvaRepository extends PrismaClient {
     return this.canva.findFirst({ where: { id } });
   }
 
-  // async updateCanva(id: number, { ...data }: UpdateCanvaDto) {
-  //   return this.canva.update({ where: { id }, data });
-  // }
+  async updateCanvaById(
+    id: number,
+    data: UpdateCanvaDto,
+  ): Promise<CanvaEntity> {
+    return this.canva.update({ where: { id }, data });
+  }
 
   async deleteCava(id: number) {
     return this.canva.delete({ where: { id } });

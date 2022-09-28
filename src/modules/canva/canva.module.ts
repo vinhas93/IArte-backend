@@ -7,6 +7,7 @@ import {
   DeleteCanvaService,
   GetAllCanvasService,
   GetCanvaByIdService,
+  UpdateCanvaByIdService,
 } from './services';
 
 @Module({
@@ -18,6 +19,7 @@ import {
     GetCanvaByIdService,
     GetAllCanvasService,
     DeleteCanvaService,
+    UpdateCanvaByIdService,
   ],
 })
 export class CanvaModule {}
