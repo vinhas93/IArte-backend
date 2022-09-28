@@ -9,7 +9,6 @@ export class UpdateMyPasswordService {
 
   async execute(dto: UpdateMyPasswordDto, id: number) {
     const user = await this.userRep.findUserById(id);
-    // const user = await this.userRep.updateMyAccount(dto, id);
 
     const isHashValid = await bcrypt.compare(dto.oldPassword, user.password);
 
@@ -17,8 +16,10 @@ export class UpdateMyPasswordService {
       throw new BadRequestException('Wrong Password');
     }
 
-    delete user.password;
+    dto.newPassword = await bcrypt.hash(dto.newPassword, 10);
 
-    return { status: 200, data: user };
+    await this.userRep.updateMyPassword(dto, id);
+
+    return { status: 200, data: 'Your password is up to date.' };
   }
 }

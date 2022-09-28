@@ -41,14 +41,13 @@ export class CreateUserDto {
   })
   password: string;
 
-  @IsString()
-  @IsNotEmpty()
-  @IsOptional() // Remover depois dos testes
-  @ApiProperty({
-    description: 'Confirm password',
-    example: '0wn3r12#$2.0',
-  })
-  confirmPassword: string;
+  // @IsString()
+  // @IsNotEmpty()
+  // @ApiProperty({
+  //   description: 'Confirm password',
+  //   example: '0wn3r12#$2.0',
+  // })
+  // confirmPassword: string;
 
   @IsString()
   @IsEmail()
@@ -59,8 +58,8 @@ export class CreateUserDto {
   })
   email: string;
 
-  @IsEnum(['Owner', 'Manager', 'SalesPerson', 'Customer'])
-  @IsIn(['Owner', 'Manager', 'SalesPerson', 'Customer'])
+  @IsEnum(['Owner', 'Manager', 'SalesPerson'])
+  @IsIn(['Owner', 'Manager', 'SalesPerson'])
   @ApiProperty({
     description: 'Grants user access to routes based on roles',
     example: 'Owner',

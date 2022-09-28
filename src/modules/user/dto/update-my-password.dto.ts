@@ -22,12 +22,11 @@ export class UpdateMyPasswordDto {
   })
   newPassword: string;
 
-  @IsString()
-  @IsNotEmpty()
-  @IsOptional() // Remover depois dos testes
-  @ApiProperty({
-    description: 'Confirm password',
-    example: '0wn3r12#$2.0',
-  })
-  confirmNewPassword: string;
+  // @IsString()
+  // @IsNotEmpty()
+  // @ApiProperty({
+  //   description: 'Confirm password',
+  //   example: '0wn3r12#$2.0',
+  // })
+  // confirmNewPassword: string;
 }
