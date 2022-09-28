@@ -14,10 +14,11 @@ import {
   DeleteCanvaService,
   GetAllCanvasService,
   GetCanvaByIdService,
+  GetCanvaBySearchService,
   UpdateCanvaByIdService,
 } from './services';
 import { Response } from 'express';
-import { CanvaByIdDto } from './dtos/canva-by-id.dto';
+import { CanvaByIdDto, FilterBySearchDto } from './dtos/canva-by-id.dto';
 import { UpdateCanvaDto } from './dtos/update-canva.dto';
 
 @Controller('canva')
@@ -28,6 +29,7 @@ export class CanvaController {
     private getAllCanvasService: GetAllCanvasService,
     private deleteCanvaService: DeleteCanvaService,
     private updateCanvaByIdService: UpdateCanvaByIdService,
+    private getCanvaBySearchService: GetCanvaBySearchService,
   ) {}
 
   @Post()
@@ -52,6 +54,16 @@ export class CanvaController {
   @Get(':id')
   async getCanvaById(@Param() { id }: CanvaByIdDto, @Res() res: Response) {
     const { status, data } = await this.getCanvaByIdService.execute(+id);
+
+    return res.status(status).send(data);
+  }
+
+  @Get('/name/:name')
+  async getCanvaByCategoryName(
+    @Param() { name }: FilterBySearchDto,
+    @Res() res: Response,
+  ) {
+    const { status, data } = await this.getCanvaBySearchService.execute(name);
 
     return res.status(status).send(data);
   }

@@ -16,6 +16,17 @@ export class CanvaRepository extends PrismaClient {
     return this.canva.findFirst({ where: { id } });
   }
 
+  async search(search: string): Promise<CanvaEntity[]> {
+    return this.canva.findMany({
+      where: {
+        name: {
+          contains: search,
+          mode: 'insensitive',
+        },
+      },
+    });
+  }
+
   async updateCanvaById(
     id: number,
     data: UpdateCanvaDto,

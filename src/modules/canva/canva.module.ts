@@ -7,6 +7,7 @@ import {
   DeleteCanvaService,
   GetAllCanvasService,
   GetCanvaByIdService,
+  GetCanvaBySearchService,
   UpdateCanvaByIdService,
 } from './services';
 
@@ -20,6 +21,7 @@ import {
     GetAllCanvasService,
     DeleteCanvaService,
     UpdateCanvaByIdService,
+    GetCanvaBySearchService,
   ],
 })
 export class CanvaModule {}
