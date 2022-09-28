@@ -3,11 +3,12 @@ import { PrismaService } from 'prisma/service/prisma.service';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './modules/auth/auth.module';
+import { CategoryModule } from './modules/category/category.module';
 //import { CanvaModule } from './modules/canva/canva.module';
 import { UserModule } from './modules/user/user.module';
 
 @Module({
-  imports: [UserModule, AuthModule],
+  imports: [UserModule, AuthModule, CategoryModule],
   controllers: [AppController],
   providers: [AppService, PrismaService],
 })
