@@ -1,9 +1,11 @@
+import { Injectable } from '@nestjs/common';
 import { CategoryRepository } from 'src/modules/category/repository/category.repository';
 
+@Injectable()
 export class FindCategoryByNameService {
-  async execute(name: string) {
-    const categoryRepository = new CategoryRepository();
+  constructor(private categoryRepository: CategoryRepository) {}
 
-    return await categoryRepository.findCategoryByName(name);
+  async execute(name: string) {
+    return this.categoryRepository.findCategoryByName(name);
   }
 }

@@ -4,14 +4,13 @@ import { CategoryRepository } from '../repository/category.repository';
 
 @Injectable()
 export class CreateCategoryService {
-  constructor(private categoryRep: CategoryRepository) {}
+  constructor(private categoryRepository: CategoryRepository) {}
 
   async execute(data: CreateCategoryDto) {
     const { name } = data;
 
-    const categoryAlreadyExists = await this.categoryRep.findCategoryByName(
-      name,
-    );
+    const categoryAlreadyExists =
+      await this.categoryRepository.findCategoryByName(name);
 
     if (categoryAlreadyExists) {
       return {
@@ -19,7 +18,7 @@ export class CreateCategoryService {
         data: { message: 'Category already exists in records' },
       };
     } else {
-      const createCategory = await this.categoryRep.createCategory(data);
+      const createCategory = await this.categoryRepository.createCategory(data);
       return {
         status: 201,
         data: createCategory,
