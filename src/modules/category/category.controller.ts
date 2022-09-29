@@ -43,6 +43,16 @@ export class CategoryController {
     return res.status(status).send(data);
   }
 
+  @Get()
+  @ApiOperation({
+    summary: 'Return all categories registered.',
+  })
+  async findAllCategories(@Res() res: Response) {
+    const { status, data } = await this.findAllCategoriesService.execute();
+
+    return res.status(status).send(data);
+  }
+
   @Get('/:name')
   @ApiOperation({
     summary: 'Return a category by name.',
@@ -58,16 +68,6 @@ export class CategoryController {
   })
   async findCategoryById(@Param('id') id: number, @Res() res: Response) {
     const { status, data } = await this.findCategoryByIdService.execute(+id);
-
-    return res.status(status).send(data);
-  }
-
-  @Get()
-  @ApiOperation({
-    summary: 'Return all categories registered.',
-  })
-  async findAllCategories(@Res() res: Response) {
-    const { status, data } = await this.findAllCategoriesService.execute();
 
     return res.status(status).send(data);
   }

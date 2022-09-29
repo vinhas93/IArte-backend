@@ -24,7 +24,10 @@ export class CategoryRepository extends PrismaClient {
     id: number,
     data: UpdateCategoryDto,
   ): Promise<CategoryEntity> {
-    return this.category.update({ where: { id }, data });
+    return this.category.update({
+      where: { id },
+      data,
+    });
   }
 
   async deleteCategory(id: number) {
