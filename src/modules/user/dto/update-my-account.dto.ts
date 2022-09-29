@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Length, IsString, IsOptional } from 'class-validator';
+import { Length, IsString, IsOptional, IsUrl } from 'class-validator';
 
 export class UpdateMyAccountDto {
   @Length(3, 30)
@@ -12,6 +12,7 @@ export class UpdateMyAccountDto {
   name: string;
 
   @IsString()
+  @IsUrl()
   @IsOptional()
   @ApiProperty({
     description: "User's photograph",

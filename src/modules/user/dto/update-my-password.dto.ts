@@ -20,7 +20,7 @@ export class UpdateMyPasswordDto {
       "User's password should contain at least capital letters, small letters, a number and or a special character.",
     example: '0Wn3r12#$2.0',
   })
-  newPassword: string;
+  password: string;
 
   @IsString()
   @IsNotEmpty()
