@@ -7,7 +7,7 @@ export class UpdateMyAccountDto {
   @IsOptional()
   @ApiProperty({
     description: "User's name",
-    example: 'John Smith',
+    example: 'John Smith 2.0',
   })
   name: string;
 
