@@ -16,7 +16,7 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
-import { UpdateCategoryService } from './services';
+import { FindCategoryByIdService, UpdateCategoryService } from './services';
 import { CreateCategoryService } from './services/create-category.service';
 import { DeleteCategoryService } from './services/delete-category.service';
 import { FindAllCategoriesService } from './services/find-all-categories.service';
@@ -28,6 +28,7 @@ export class CategoryController {
   constructor(
     private createCategoryService: CreateCategoryService,
     private findCategoryByNameService: FindCategoryByNameService,
+    private findCategoryByIdService: FindCategoryByIdService,
     private findAllCategoriesService: FindAllCategoriesService,
     private updateCategoryService: UpdateCategoryService,
     private deleteCategoryService: DeleteCategoryService,
@@ -52,32 +53,52 @@ export class CategoryController {
     return this.findCategoryByNameService.execute(name);
   }
 
+  @Get('/id/:id')
+  @ApiOperation({
+    summary: 'Return a category by ID.',
+  })
+  async findCategoryById(@Param('id') id: number, @Res() res: Response) {
+    const { status, data } = await this.findCategoryByIdService.execute(+id);
+
+    return res.status(status).send(data);
+  }
+
   @Get()
   @ApiOperation({
     summary: 'Return all categories registered.',
   })
-  async findAllCategories() {
-    return this.findAllCategoriesService.execute();
+  async findAllCategories(@Res() res: Response) {
+    const { status, data } = await this.findAllCategoriesService.execute();
+
+    return res.status(status).send(data);
   }
 
   //@UseGuards(AuthGuard())
   //@ApiBearerAuth()
-  @Patch()
+  @Patch('/:id')
   @ApiOperation({
     summary: 'Edit a category by ID - (FOR ADMIN).',
   })
-  async updateCategory(@Param('id') id: number, data: UpdateCategoryDto) {
-    return this.updateCategoryService.execute(+id, data);
+  async updateCategory(
+    @Param('id') id: number,
+    dto: UpdateCategoryDto,
+    @Res() res: Response,
+  ) {
+    const { status, data } = await this.updateCategoryService.execute(+id, dto);
+
+    return res.status(status).send(data);
   }
 
   //@UseGuards(AuthGuard())
   //@ApiBearerAuth()
-  @Delete()
+  @Delete('/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({
     summary: 'Delete a category by ID - (FOR ADMIN).',
   })
-  deleteCategory(@Param('id') id: number) {
-    return this.deleteCategoryService.execute(+id);
+  async deleteCategory(@Param('id') id: number, @Res() res: Response) {
+    const { status, data } = await this.deleteCategoryService.execute(+id);
+
+    return res.status(status).send(data);
   }
 }
