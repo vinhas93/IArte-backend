@@ -1,4 +1,6 @@
-export class CategoryEntity {
+import { Prisma } from '@prisma/client';
+
+export class CategoryEntity implements Prisma.CategoryUncheckedCreateInput {
   id?: number;
   price: number;
   name: string;
@@ -6,4 +8,5 @@ export class CategoryEntity {
   cost: number;
   createdAt?: string | Date;
   updatedAt?: string | Date;
+  canvas?: Prisma.CanvaUncheckedCreateNestedManyWithoutCategoryInput;
 }

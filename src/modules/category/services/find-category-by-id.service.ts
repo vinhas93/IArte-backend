@@ -2,22 +2,22 @@ import { Injectable } from '@nestjs/common';
 import { CategoryRepository } from '../repository/category.repository';
 
 @Injectable()
-export class FindAllCategoriesService {
+export class FindCategoryByIdService {
   constructor(private categoryRepository: CategoryRepository) {}
 
-  async execute() {
-    const categories = await this.categoryRepository.findAllCategories();
+  async execute(id: number) {
+    const categoryExists = await this.categoryRepository.findCategoryById(id);
 
-    if (categories.length <= 0) {
+    if (!categoryExists) {
       return {
         status: 404,
-        data: { message: 'Category is empty' },
+        data: { message: 'Category not found!' },
       };
     }
 
     return {
       status: 200,
-      data: categories,
+      data: categoryExists,
     };
   }
 }

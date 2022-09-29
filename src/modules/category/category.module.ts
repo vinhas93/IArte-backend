@@ -4,6 +4,7 @@ import { CategoryController } from './category.controller';
 import { CategoryRepository } from './repository/category.repository';
 import {
   FindAllCategoriesService,
+  FindCategoryByIdService,
   FindCategoryByNameService,
   UpdateCategoryService,
 } from './services';
@@ -17,6 +18,7 @@ import { DeleteCategoryService } from './services/delete-category.service';
     CreateCategoryService,
     CategoryRepository,
     FindCategoryByNameService,
+    FindCategoryByIdService,
     FindAllCategoriesService,
     UpdateCategoryService,
     DeleteCategoryService,
