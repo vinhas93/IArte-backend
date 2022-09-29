@@ -2,9 +2,16 @@ import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 
 export const LoggedUser = createParamDecorator((_, ctx: ExecutionContext) => {
   const request = ctx.switchToHttp().getRequest();
-  const user = request.user;
+  const userObject = request.user;
 
-  delete user.password;
+  if (userObject) {
+    delete userObject.password;
 
-  return user;
+    return userObject;
+  } else {
+    return {
+      status: 401,
+      data: 'User does not have permission to access this route',
+    };
+  }
 });
