@@ -37,7 +37,7 @@ export class CreateUserDto {
   @ApiProperty({
     description:
       "User's password should contain at least capital letters, small letters, a number and or a special character.",
-    example: '0wn3r12#$',
+    example: '0Wn3r12#$',
   })
   password: string;
 
@@ -45,7 +45,7 @@ export class CreateUserDto {
   @IsNotEmpty()
   @ApiProperty({
     description: 'Confirm password',
-    example: '0wn3r12#$',
+    example: '0Wn3r12#$',
   })
   confirmPassword: string;
 

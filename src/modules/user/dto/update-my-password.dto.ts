@@ -1,12 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsOptional, IsString, Matches } from 'class-validator';
+import { IsNotEmpty, IsString, Matches } from 'class-validator';
 
 export class UpdateMyPasswordDto {
   @IsString()
   @IsNotEmpty()
   @ApiProperty({
     description: "User's password",
-    example: '0wn3r12#$',
+    example: '0Wn3r12#$',
   })
   oldPassword: string;
 
@@ -18,7 +18,7 @@ export class UpdateMyPasswordDto {
   @ApiProperty({
     description:
       "User's password should contain at least capital letters, small letters, a number and or a special character.",
-    example: '0wn3r12#$2.0',
+    example: '0Wn3r12#$2.0',
   })
   newPassword: string;
 
@@ -26,7 +26,7 @@ export class UpdateMyPasswordDto {
   @IsNotEmpty()
   @ApiProperty({
     description: 'Confirm password',
-    example: '0wn3r12#$2.0',
+    example: '0Wn3r12#$2.0',
   })
   confirmNewPassword: string;
 }
