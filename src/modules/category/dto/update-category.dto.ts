@@ -1,23 +1,23 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
-import { CreateCategoryDto } from './create-category.dto';
+import { CategoryEntity } from '../entity/category.entity';
 
-export class UpdateCategoryDto extends PartialType(CreateCategoryDto) {
+export class UpdateCategoryDto extends PartialType(CategoryEntity) {
   @IsNumber()
-  @IsNotEmpty()
+  @IsOptional()
   @ApiProperty({
     description: 'Base Price of the category',
     example: 20.99,
   })
-  price: number;
+  price?: number;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   @ApiProperty({
     description: 'Name of the category',
     example: 'wallpaper',
   })
-  name: string;
+  name?: string;
 
   @IsString()
   @IsOptional()
@@ -28,10 +28,10 @@ export class UpdateCategoryDto extends PartialType(CreateCategoryDto) {
   description?: string;
 
   @IsNumber()
-  @IsNotEmpty()
+  @IsOptional()
   @ApiProperty({
     description: 'Profit relational cost',
     example: 0.0,
   })
-  cost: number;
+  cost?: number;
 }

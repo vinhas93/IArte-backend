@@ -45,6 +45,16 @@ export class CategoryController {
     return res.status(status).send(data);
   }
 
+  @Get()
+  @ApiOperation({
+    summary: 'Return all categories registered.',
+  })
+  async findAllCategories(@Res() res: Response) {
+    const { status, data } = await this.findAllCategoriesService.execute();
+
+    return res.status(status).send(data);
+  }
+
   @Get('/:name')
   @ApiOperation({
     summary: 'Return a category by name.',
@@ -63,16 +73,6 @@ export class CategoryController {
     return res.status(status).send(data);
   }
 
-  @Get()
-  @ApiOperation({
-    summary: 'Return all categories registered.',
-  })
-  async findAllCategories(@Res() res: Response) {
-    const { status, data } = await this.findAllCategoriesService.execute();
-
-    return res.status(status).send(data);
-  }
-
   //@UseGuards(AuthGuard())
   //@ApiBearerAuth()
   @Patch('/:id')
@@ -81,7 +81,7 @@ export class CategoryController {
   })
   async updateCategory(
     @Param('id') id: number,
-    dto: UpdateCategoryDto,
+    @Body() dto: UpdateCategoryDto,
     @Res() res: Response,
   ) {
     const { status, data } = await this.updateCategoryService.execute(+id, dto);

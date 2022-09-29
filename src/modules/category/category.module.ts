@@ -3,13 +3,13 @@ import { PassportModule } from '@nestjs/passport';
 import { CategoryController } from './category.controller';
 import { CategoryRepository } from './repository/category.repository';
 import {
+  CreateCategoryService,
+  DeleteCategoryService,
   FindAllCategoriesService,
   FindCategoryByIdService,
   FindCategoryByNameService,
   UpdateCategoryService,
 } from './services';
-import { CreateCategoryService } from './services/create-category.service';
-import { DeleteCategoryService } from './services/delete-category.service';
 
 @Module({
   imports: [PassportModule.register({ defaultStrategy: 'jwt' })],
