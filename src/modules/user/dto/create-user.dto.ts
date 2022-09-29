@@ -41,13 +41,13 @@ export class CreateUserDto {
   })
   password: string;
 
-  // @IsString()
-  // @IsNotEmpty()
-  // @ApiProperty({
-  //   description: 'Confirm password',
-  //   example: '0wn3r12#$2.0',
-  // })
-  // confirmPassword: string;
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({
+    description: 'Confirm password',
+    example: '0wn3r12#$',
+  })
+  confirmPassword: string;
 
   @IsString()
   @IsEmail()

@@ -16,6 +16,12 @@ export class UpdateMyPasswordService {
       throw new BadRequestException('Wrong Password');
     }
 
+    if (dto.newPassword !== dto.confirmNewPassword) {
+      throw new BadRequestException('The new password does`nt match.');
+    }
+
+    delete dto.confirmNewPassword;
+
     dto.newPassword = await bcrypt.hash(dto.newPassword, 10);
 
     await this.userRep.updateMyPassword(dto, id);

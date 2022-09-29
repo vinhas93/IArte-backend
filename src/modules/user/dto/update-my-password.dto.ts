@@ -18,15 +18,15 @@ export class UpdateMyPasswordDto {
   @ApiProperty({
     description:
       "User's password should contain at least capital letters, small letters, a number and or a special character.",
-    example: '0wn3r12#$',
+    example: '0wn3r12#$2.0',
   })
   newPassword: string;
 
-  // @IsString()
-  // @IsNotEmpty()
-  // @ApiProperty({
-  //   description: 'Confirm password',
-  //   example: '0wn3r12#$2.0',
-  // })
-  // confirmNewPassword: string;
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({
+    description: 'Confirm password',
+    example: '0wn3r12#$2.0',
+  })
+  confirmNewPassword: string;
 }

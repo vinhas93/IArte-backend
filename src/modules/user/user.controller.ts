@@ -117,10 +117,7 @@ export class UserController {
   @ApiOperation({
     summary: 'Delete logged user`s account',
   })
-  async DeleteMyAccountService(
-    @LoggedUser() user: UserEntity,
-    @Res() res: Response,
-  ) {
+  async DeleteMyAccount(@LoggedUser() user: UserEntity, @Res() res: Response) {
     const { status, message } = await this.deleteMyAccountService.execute(
       user.id,
     );
