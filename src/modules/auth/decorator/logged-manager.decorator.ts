@@ -1,4 +1,8 @@
-import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+import {
+  createParamDecorator,
+  ExecutionContext,
+  UnauthorizedException,
+} from '@nestjs/common';
 
 export const LoggedManager = createParamDecorator(
   (_, ctx: ExecutionContext) => {
@@ -10,10 +14,7 @@ export const LoggedManager = createParamDecorator(
 
       return userObject;
     } else {
-      return {
-        status: 401,
-        data: 'User does not have permission to access this route',
-      };
+      throw new UnauthorizedException('You don`t have permission to access.');
     }
   },
 );
