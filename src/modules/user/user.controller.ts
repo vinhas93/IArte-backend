@@ -24,12 +24,13 @@ import { UpdateMyPasswordDto } from './dto/update-my-password.dto';
 import { UserEntity } from './entity/user.entity';
 import {
   CreateUserService,
-  MyAccountService,
-  UpdateMyPasswordService,
-  UpdateMyAccountService,
   DeleteMyAccountService,
+  MyAccountService,
+  UpdateMyAccountService,
+  UpdateMyPasswordService,
 } from './services';
 
+@ApiTags()
 @Controller()
 export class UserController {
   constructor(

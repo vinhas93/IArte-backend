@@ -3,7 +3,6 @@ import {
   ExecutionContext,
   UnauthorizedException,
 } from '@nestjs/common';
-import { UserRole } from '@prisma/client';
 
 export const LoggedSalesPerson = createParamDecorator(
   (_, ctx: ExecutionContext) => {
@@ -11,9 +10,9 @@ export const LoggedSalesPerson = createParamDecorator(
     const userObject = request.user;
 
     if (
-      userObject.role === UserRole.Owner ||
-      UserRole.Manager ||
-      UserRole.SalesPerson
+      userObject.role === 'Owner' ||
+      userObject.role === 'Manager' ||
+      userObject.role === 'SalesPerson'
     ) {
       delete userObject.password;
 
