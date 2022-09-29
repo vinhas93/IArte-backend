@@ -20,7 +20,10 @@ export class CategoryRepository extends PrismaClient {
     return this.category.findMany();
   }
 
-  async updateCategory(id: number, data: UpdateCategoryDto) {
+  async updateCategory(
+    id: number,
+    data: UpdateCategoryDto,
+  ): Promise<CategoryEntity> {
     return this.category.update({ where: { id }, data });
   }
 

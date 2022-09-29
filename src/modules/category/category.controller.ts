@@ -1,18 +1,16 @@
 import {
   Body,
   Controller,
-  Get,
-  Param,
-  Patch,
   Delete,
-  Post,
-  Res,
-  UseGuards,
+  Get,
   HttpCode,
   HttpStatus,
+  Param,
+  Patch,
+  Post,
+  Res,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
@@ -49,8 +47,9 @@ export class CategoryController {
   @ApiOperation({
     summary: 'Return a category by name.',
   })
-  async findCategoryByName(@Param('name') name: string) {
-    return this.findCategoryByNameService.execute(name);
+  async findCategoryByName(@Param('name') name: string, @Res() res: Response) {
+    const { status, data } = await this.findCategoryByNameService.execute(name);
+    return res.status(status).send(data);
   }
 
   @Get('/id/:id')
@@ -81,7 +80,7 @@ export class CategoryController {
   })
   async updateCategory(
     @Param('id') id: number,
-    dto: UpdateCategoryDto,
+    @Body() dto: UpdateCategoryDto,
     @Res() res: Response,
   ) {
     const { status, data } = await this.updateCategoryService.execute(+id, dto);
