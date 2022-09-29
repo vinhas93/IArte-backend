@@ -34,7 +34,7 @@ export class AuthController {
   @ApiOperation({
     summary: 'Return user authentication now.',
   })
-  User(@LoggedUser() user: UserEntity) {
+  Auth(@LoggedUser() user: UserEntity) {
     return user;
   }
 }
