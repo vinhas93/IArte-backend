@@ -20,7 +20,9 @@ import {
 import { Response } from 'express';
 import { CanvaByIdDto, FilterBySearchDto } from './dtos/canva-by-id.dto';
 import { UpdateCanvaDto } from './dtos/update-canva.dto';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Canva')
 @Controller('canva')
 export class CanvaController {
   constructor(
@@ -33,6 +35,9 @@ export class CanvaController {
   ) {}
 
   @Post()
+  @ApiOperation({
+    summary: 'Create a canva.',
+  })
   async createCanva(
     @Body() createCanvaDto: CreateCanvaDto,
     @Res() res: Response,
@@ -45,6 +50,9 @@ export class CanvaController {
   }
 
   @Get()
+  @ApiOperation({
+    summary: 'Find all canvas.',
+  })
   async getAllcanvas(@Res() res: Response) {
     const { status, data } = await this.getAllCanvasService.execute();
 
@@ -52,6 +60,9 @@ export class CanvaController {
   }
 
   @Get(':id')
+  @ApiOperation({
+    summary: 'Find canva by id.',
+  })
   async getCanvaById(@Param() { id }: CanvaByIdDto, @Res() res: Response) {
     const { status, data } = await this.getCanvaByIdService.execute(+id);
 
@@ -59,6 +70,9 @@ export class CanvaController {
   }
 
   @Get('/name/:name')
+  @ApiOperation({
+    summary: 'Search canva by name.',
+  })
   async getCanvaByCategoryName(
     @Param() { name }: FilterBySearchDto,
     @Res() res: Response,
@@ -69,6 +83,9 @@ export class CanvaController {
   }
 
   @Put(':id')
+  @ApiOperation({
+    summary: 'Update a canva.',
+  })
   async updateCanvaById(
     @Param() { id }: CanvaByIdDto,
     @Body() updatecanva: UpdateCanvaDto,
@@ -83,6 +100,9 @@ export class CanvaController {
   }
 
   @Delete(':id')
+  @ApiOperation({
+    summary: 'Delete a canva.',
+  })
   async deleteCanva(@Param() { id }: CanvaByIdDto, @Res() res: Response) {
     const { status, data } = await this.deleteCanvaService.execute(+id);
 
