@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UserRepository } from '../repository/user.repository';
 import * as bcrypt from 'bcrypt';
@@ -18,6 +18,12 @@ export class CreateUserService {
         data: { message: 'Email already exists in records' },
       };
     }
+
+    if (data.password !== data.confirmPassword) {
+      throw new BadRequestException('The password does`nt match.');
+    }
+
+    delete data.confirmPassword;
 
     data.password = await bcrypt.hash(data.password, 10);
 

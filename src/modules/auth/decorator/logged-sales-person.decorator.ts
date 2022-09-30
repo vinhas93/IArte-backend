@@ -3,7 +3,6 @@ import {
   ExecutionContext,
   UnauthorizedException,
 } from '@nestjs/common';
-import { UserRole } from '@prisma/client';
 
 export const LoggedSalesPerson = createParamDecorator(
   (_, ctx: ExecutionContext) => {
@@ -11,17 +10,15 @@ export const LoggedSalesPerson = createParamDecorator(
     const userObject = request.user;
 
     if (
-      userObject.role === UserRole.Owner ||
-      UserRole.Manager ||
-      UserRole.SalesPerson
+      userObject.role === 'Owner' ||
+      userObject.role === 'Manager' ||
+      userObject.role === 'SalesPerson'
     ) {
-      delete userObject.passwordHash;
+      delete userObject.password;
 
       return userObject;
     } else {
-      throw new UnauthorizedException(
-        'User does not have permission to access this route',
-      );
+      throw new UnauthorizedException('You don`t have permission to access.');
     }
   },
 );

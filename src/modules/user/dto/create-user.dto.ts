@@ -8,6 +8,7 @@ import {
   IsOptional,
   IsString,
   Length,
+  Matches,
 } from 'class-validator';
 
 export class CreateUserDto {
@@ -30,11 +31,23 @@ export class CreateUserDto {
 
   @IsString()
   @IsNotEmpty()
+  @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
+    message: 'You need a stronger password.',
+  })
   @ApiProperty({
-    description: "User's password",
-    example: '0wn3r12#$',
+    description:
+      "User's password should contain at least capital letters, small letters, a number and or a special character.",
+    example: '0Wn3r12#$',
   })
   password: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({
+    description: 'Confirm password',
+    example: '0Wn3r12#$',
+  })
+  confirmPassword: string;
 
   @IsString()
   @IsEmail()
@@ -45,8 +58,8 @@ export class CreateUserDto {
   })
   email: string;
 
-  @IsEnum(['Owner', 'Manager', 'SalesPerson', 'Customer'])
-  @IsIn(['Owner', 'Manager', 'SalesPerson', 'Customer'])
+  @IsEnum(['Owner', 'Manager', 'SalesPerson'])
+  @IsIn(['Owner', 'Manager', 'SalesPerson'])
   @ApiProperty({
     description: 'Grants user access to routes based on roles',
     example: 'Owner',

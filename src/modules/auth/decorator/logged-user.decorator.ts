@@ -4,11 +4,11 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 
-export const LoggedOwner = createParamDecorator((_, ctx: ExecutionContext) => {
+export const LoggedUser = createParamDecorator((_, ctx: ExecutionContext) => {
   const request = ctx.switchToHttp().getRequest();
   const userObject = request.user;
 
-  if (userObject.role === 'Owner') {
+  if (userObject) {
     delete userObject.password;
 
     return userObject;

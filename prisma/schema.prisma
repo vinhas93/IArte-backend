@@ -140,5 +140,4 @@ enum UserRole {
   Owner
   Manager
   SalesPerson
-  Customer
 }
