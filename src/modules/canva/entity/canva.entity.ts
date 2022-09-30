@@ -1,6 +1,6 @@
 import { Prisma } from '@prisma/client';
 
-export class CanvaEntity implements Prisma.CanvaUncheckedCreateInput {
+export class CanvaEntity {
   id?: number;
   name: string;
   price: number;
@@ -10,7 +10,7 @@ export class CanvaEntity implements Prisma.CanvaUncheckedCreateInput {
   image: string;
   categoryName: string;
   product?: Prisma.ProductUncheckedCreateNestedManyWithoutCanvaInput;
-  updateCanva?: Prisma.UpdateCanvaUncheckedCreateNestedManyWithoutCanvaInput;
+  updateCanva?: number;
   createdAt?: string | Date;
   updatedAt?: string | Date;
 }
