@@ -9,9 +9,13 @@ import {
   Patch,
   Post,
   Res,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
+import { LoggedManager } from '../auth/decorator/logged-manager.decorator';
+import { UserEntity } from '../user/entity/user.entity';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { FindCategoryByIdService, UpdateCategoryService } from './services';
@@ -32,13 +36,17 @@ export class CategoryController {
     private deleteCategoryService: DeleteCategoryService,
   ) {}
 
-  //@UseGuards(AuthGuard())
-  //@ApiBearerAuth()
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
   @Post()
   @ApiOperation({
     summary: 'Create a new category - (FOR ADMIN).',
   })
-  async createCategory(@Body() dto: CreateCategoryDto, @Res() res: Response) {
+  async createCategory(
+    @LoggedManager() user: UserEntity,
+    @Body() dto: CreateCategoryDto,
+    @Res() res: Response,
+  ) {
     const { status, data } = await this.createCategoryService.execute(dto);
     return res.status(status).send(data);
   }
@@ -72,13 +80,14 @@ export class CategoryController {
     return res.status(status).send(data);
   }
 
-  //@UseGuards(AuthGuard())
-  //@ApiBearerAuth()
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
   @Patch('/:id')
   @ApiOperation({
     summary: 'Edit a category by ID - (FOR ADMIN).',
   })
   async updateCategory(
+    @LoggedManager() user: UserEntity,
     @Param('id') id: number,
     @Body() dto: UpdateCategoryDto,
     @Res() res: Response,
@@ -88,14 +97,18 @@ export class CategoryController {
     return res.status(status).send(data);
   }
 
-  //@UseGuards(AuthGuard())
-  //@ApiBearerAuth()
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
   @Delete('/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({
     summary: 'Delete a category by ID - (FOR ADMIN).',
   })
-  async deleteCategory(@Param('id') id: number, @Res() res: Response) {
+  async deleteCategory(
+    @LoggedManager() user: UserEntity,
+    @Param('id') id: number,
+    @Res() res: Response,
+  ) {
     const { status, data } = await this.deleteCategoryService.execute(+id);
 
     return res.status(status).send(data);

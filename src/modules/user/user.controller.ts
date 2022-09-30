@@ -59,10 +59,6 @@ export class UserController {
     return res.status(status).send(data);
   }
 
-<<<<<<< HEAD
-  @Get()
-  async myAccount() {}
-=======
   // ============================ Permissões LoggedUser ==========================
 
   @ApiTags('My account')
@@ -128,5 +124,4 @@ export class UserController {
     );
     return res.status(status).send(message);
   }
->>>>>>> be455c33de0451cc30d71fe1e808ffc068fb2dc9
 }
