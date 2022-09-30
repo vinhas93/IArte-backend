@@ -14,4 +14,3 @@ export class CanvaEntity implements Prisma.CanvaUncheckedCreateInput {
   createdAt?: string | Date;
   updatedAt?: string | Date;
 }
-
