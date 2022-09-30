@@ -43,12 +43,12 @@ export class UserController {
 
   // ============================ Permissões LoggedManager ==========================
 
-  @ApiTags('Just Manager')
+  @ApiTags('User')
   @Post('/admin/create-user') //Owner ou Manager Criam usuários
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
   @ApiOperation({
-    summary: 'Create an User.',
+    summary: 'Create an User. - (Manager)',
   })
   async createUser(
     @LoggedManager() user: UserEntity,
@@ -66,7 +66,7 @@ export class UserController {
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
   @ApiOperation({
-    summary: 'Return logged user`s profile.',
+    summary: 'Return logged user`s profile. - (User`s but Customer)',
   })
   async myAccount(@LoggedUser() user: UserEntity, @Res() res: Response) {
     const { status, data } = await this.myAccountService.execute(user.id);
@@ -78,7 +78,7 @@ export class UserController {
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
   @ApiOperation({
-    summary: 'Upddates logged User`s password.',
+    summary: 'Upddates logged User`s password. - (User`s but Customer)',
   })
   async updateMyPassword(
     @LoggedUser() user: UserEntity,
@@ -97,7 +97,7 @@ export class UserController {
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
   @ApiOperation({
-    summary: 'Upddates logged User`s name or image.',
+    summary: 'Upddates logged User`s name or image. - (User`s but Customer)',
   })
   async updateMyAccount(
     @LoggedUser() user: UserEntity,
@@ -116,7 +116,7 @@ export class UserController {
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
   @ApiOperation({
-    summary: 'Delete logged user`s account',
+    summary: 'Delete logged user`s account - (User`s but Customer)',
   })
   async DeleteMyAccount(@LoggedUser() user: UserEntity, @Res() res: Response) {
     const { status, message } = await this.deleteMyAccountService.execute(
