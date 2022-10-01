@@ -18,7 +18,7 @@ async function bootstrap() {
 
               It's Alive!!!!
 
-  Swagger: http://localhost:3001/api
+  Swagger: http://localhost:${process.env.PORT}/api
   `);
 }
 bootstrap();
