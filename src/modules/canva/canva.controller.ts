@@ -7,6 +7,7 @@ import {
   Post,
   Put,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { CreateCanvaDto } from './dtos/create-canva.dto';
 import {
@@ -20,7 +21,10 @@ import {
 import { Response } from 'express';
 import { CanvaByIdDto, FilterBySearchDto } from './dtos/canva-by-id.dto';
 import { UpdateCanvaDto } from './dtos/update-canva.dto';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
+import { LoggedSalesPerson } from '../auth/decorator/logged-sales-person.decorator';
+import { UserEntity } from '../user/entity/user.entity';
 
 @ApiTags('Canva')
 @Controller('canva')
@@ -36,9 +40,12 @@ export class CanvaController {
 
   @Post()
   @ApiOperation({
-    summary: 'Create a canva.',
+    summary: 'Create a canva. - (User`s but Customer)',
   })
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
   async createCanva(
+    @LoggedSalesPerson() user: UserEntity,
     @Body() createCanvaDto: CreateCanvaDto,
     @Res() res: Response,
   ) {
@@ -84,9 +91,12 @@ export class CanvaController {
 
   @Put(':id')
   @ApiOperation({
-    summary: 'Update a canva.',
+    summary: 'Update a canva. - (User`s but Customer)',
   })
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
   async updateCanvaById(
+    @LoggedSalesPerson() user: UserEntity,
     @Param() { id }: CanvaByIdDto,
     @Body() updatecanva: UpdateCanvaDto,
     @Res() res: Response,
@@ -101,9 +111,15 @@ export class CanvaController {
 
   @Delete(':id')
   @ApiOperation({
-    summary: 'Delete a canva.',
+    summary: 'Delete a canva. - (User`s but Customer)',
   })
-  async deleteCanva(@Param() { id }: CanvaByIdDto, @Res() res: Response) {
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
+  async deleteCanva(
+    @LoggedSalesPerson() user: UserEntity,
+    @Param() { id }: CanvaByIdDto,
+    @Res() res: Response,
+  ) {
     const { status, data } = await this.deleteCanvaService.execute(+id);
 
     return res.status(status).send(data);
