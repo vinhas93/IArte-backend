@@ -6,6 +6,13 @@ export class DeleteCategoryService {
   constructor(private categoryRepository: CategoryRepository) {}
 
   async execute(id: number) {
+    if (isNaN(id)) {
+      return {
+        status: 400,
+        data: { message: 'ID MUST be a number' },
+      };
+    }
+
     const categoryExists = await this.categoryRepository.findCategoryById(id);
 
     if (!categoryExists) {
@@ -18,7 +25,7 @@ export class DeleteCategoryService {
     await this.categoryRepository.deleteCategory(id);
 
     return {
-      status: 204,
+      status: 200,
       data: { message: 'Category deleted successfully!' },
     };
   }
