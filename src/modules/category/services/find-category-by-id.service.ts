@@ -6,6 +6,12 @@ export class FindCategoryByIdService {
   constructor(private categoryRepository: CategoryRepository) {}
 
   async execute(id: number) {
+    if (isNaN(id)) {
+      return {
+        status: 400,
+        data: { message: 'ID MUST be a number' },
+      };
+    }
     const categoryExists = await this.categoryRepository.findCategoryById(id);
 
     if (!categoryExists) {
