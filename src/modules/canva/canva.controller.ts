@@ -80,7 +80,7 @@ export class CanvaController {
   @ApiOperation({
     summary: 'Search canva by name.',
   })
-  async getCanvaByCategoryName(
+  async getCanvaByName(
     @Param() { name }: FilterBySearchDto,
     @Res() res: Response,
   ) {
