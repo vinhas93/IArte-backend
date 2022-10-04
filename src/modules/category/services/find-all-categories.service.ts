@@ -1,23 +1,28 @@
+import { PageMetaDto } from './../../../shared/pagination-dtos/pageMeta.dto';
 import { Injectable } from '@nestjs/common';
+import { PageDto, PageOptionsDto } from 'src/shared/pagination-dtos';
 import { CategoryRepository } from '../repository/category.repository';
 
 @Injectable()
 export class FindAllCategoriesService {
   constructor(private categoryRepository: CategoryRepository) {}
 
-  async execute() {
-    const categories = await this.categoryRepository.findAllCategories();
+  async execute(pageOptionsDto: PageOptionsDto) {
+    const categories = await this.categoryRepository.findAllCategoriesByParams(
+      pageOptionsDto,
+    );
 
-    if (categories.length <= 0) {
-      return {
-        status: 404,
-        data: { message: 'Category is empty' },
-      };
-    }
+    const allCategories = await this.categoryRepository.findAllCategories();
+
+    const itemCount = allCategories.length;
+
+    const pageMetaDto = new PageMetaDto({ pageOptionsDto, itemCount });
+
+    const response = new PageDto(categories, pageMetaDto);
 
     return {
       status: 200,
-      data: categories,
+      data: response,
     };
   }
 }
