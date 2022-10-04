@@ -1,12 +1,6 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsString,
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsBoolean,
-} from 'class-validator';
+import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
 import { CanvaEntity } from '../entity/canva.entity';
 
 export class UpdateCanvaDto extends PartialType(CanvaEntity) {

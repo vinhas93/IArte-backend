@@ -1,28 +1,26 @@
 import { Injectable } from '@nestjs/common';
-import { CategoryRepository } from 'src/modules/category/repository/category.repository';
 import { CreateCanvaDto } from '../dtos/create-canva.dto';
+import { CreateCanvaHelper } from '../helpers/create-canva.helper';
 import { CanvaRepository } from './../repository/canva.repository';
 
 @Injectable()
 export class CreateCanvaService {
   constructor(
     private canvaRepository: CanvaRepository,
-    private categoryRepository: CategoryRepository,
+    private createCanvaHelper: CreateCanvaHelper,
   ) {}
 
-  async execute(data: CreateCanvaDto) {
-    const categoryExists = await this.categoryRepository.findCategoryByName(
-      data.categoryName,
-    );
+  async execute(createData: CreateCanvaDto) {
+    const { status, data } = await this.createCanvaHelper.execute(createData);
 
-    if (!categoryExists) {
+    if (status !== 200) {
       return {
-        status: 400,
-        data: { message: 'Invalid Category.' },
+        status,
+        data,
       };
     }
 
-    const createCanva = await this.canvaRepository.createCanva(data);
+    const createCanva = await this.canvaRepository.createCanva(createData);
 
     return {
       status: 201,

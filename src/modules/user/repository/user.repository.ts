@@ -13,11 +13,11 @@ export class UserRepository extends PrismaClient {
   }
 
   async findUserByEmail(email: string): Promise<UserEntity> {
-    return this.user.findUnique({ where: { email } });
+    return this.user.findUnique({ where: { email } }).catch(handleError);
   }
 
   async findUserById(id: number): Promise<UserEntity> {
-    return this.user.findUnique({ where: { id } });
+    return this.user.findUnique({ where: { id } }).catch(handleError);
   }
 
   async updateMyAccount(updateMyAccountDto: UpdateMyAccountDto, id: number) {
@@ -31,6 +31,6 @@ export class UserRepository extends PrismaClient {
   }
 
   async deleteMyAccount(id: number) {
-    return this.user.delete({ where: { id } });
+    return this.user.delete({ where: { id } }).catch(handleError);
   }
 }
