@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { PageOptionsDto } from 'src/shared/pagination-dtos';
 import { handleError } from 'src/shared/utils/handle-error.util';
 import { CreateCanvaDto } from '../dtos/create-canva.dto';
 import { UpdateCanvaDto } from '../dtos/update-canva.dto';
@@ -9,8 +10,44 @@ export class CanvaRepository extends PrismaClient {
     return this.canva.create({ data }).catch(handleError);
   }
 
-  async getAllCanvas(): Promise<CanvaEntity[]> {
-    return this.canva.findMany().catch(handleError);
+  async findAllCanvasByParams({
+    skip,
+    order,
+    orderByColumn,
+    take,
+  }: PageOptionsDto): Promise<CanvaEntity[]> {
+    return this.canva.findMany({
+      skip,
+      take,
+      orderBy: {
+        [orderByColumn]: order,
+      },
+    });
+  }
+
+  async getAllCanvas(name = '') {
+    if (name == '') {
+      return this.canva
+        .findMany({
+          select: {
+            id: true,
+          },
+        })
+        .catch(handleError);
+    }
+    return this.canva
+      .findMany({
+        where: {
+          name: {
+            contains: name,
+            mode: 'insensitive',
+          },
+        },
+        select: {
+          id: true,
+        },
+      })
+      .catch(handleError);
   }
 
   async getCanvaById(id: number): Promise<CanvaEntity> {
@@ -21,7 +58,25 @@ export class CanvaRepository extends PrismaClient {
     return this.canva.findFirst(params).catch(handleError);
   }
 
-  async search(search: string): Promise<CanvaEntity[]> {
+  async findAllSearchByParam({
+    skip,
+    order,
+    orderByColumn,
+    take,
+  }: PageOptionsDto): Promise<CanvaEntity[]> {
+    return this.canva.findMany({
+      skip,
+      take,
+      orderBy: {
+        [orderByColumn]: order,
+      },
+    });
+  }
+
+  async search(
+    search: string,
+    { skip, order, take, orderByColumn }: PageOptionsDto,
+  ): Promise<CanvaEntity[]> {
     return this.canva
       .findMany({
         where: {
@@ -29,6 +84,11 @@ export class CanvaRepository extends PrismaClient {
             contains: search,
             mode: 'insensitive',
           },
+        },
+        skip,
+        take,
+        orderBy: {
+          [orderByColumn]: order,
         },
       })
       .catch(handleError);

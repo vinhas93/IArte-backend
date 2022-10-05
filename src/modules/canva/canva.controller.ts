@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   Res,
   UseGuards,
 } from '@nestjs/common';
@@ -25,6 +26,7 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { LoggedSalesPerson } from '../auth/decorator/logged-sales-person.decorator';
 import { UserEntity } from '../user/entity/user.entity';
+import { PageOptionsDto } from 'src/shared/pagination-dtos/pageOptions.dto';
 
 @ApiTags('Canva')
 @Controller('canva')
@@ -60,8 +62,13 @@ export class CanvaController {
   @ApiOperation({
     summary: 'Find all canvas.',
   })
-  async getAllcanvas(@Res() res: Response) {
-    const { status, data } = await this.getAllCanvasService.execute();
+  async getAllcanvas(
+    @Query() pageOptionsDto: PageOptionsDto,
+    @Res() res: Response,
+  ) {
+    const { status, data } = await this.getAllCanvasService.execute(
+      pageOptionsDto,
+    );
 
     return res.status(status).send(data);
   }
@@ -82,9 +89,13 @@ export class CanvaController {
   })
   async getCanvaByName(
     @Param() { name }: FilterBySearchDto,
+    @Query() pageOptionsDto: PageOptionsDto,
     @Res() res: Response,
   ) {
-    const { status, data } = await this.getCanvaBySearchService.execute(name);
+    const { status, data } = await this.getCanvaBySearchService.execute(
+      name,
+      pageOptionsDto,
+    );
 
     return res.status(status).send(data);
   }

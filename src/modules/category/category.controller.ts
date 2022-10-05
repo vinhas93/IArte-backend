@@ -8,14 +8,17 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   Res,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
+import { PageOptionsDto } from 'src/shared/pagination-dtos/pageOptions.dto';
 import { LoggedManager } from '../auth/decorator/logged-manager.decorator';
 import { UserEntity } from '../user/entity/user.entity';
+import { CategoryByIdDto, CategoryByNameDto } from './dto/category-by-id.dto';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { FindCategoryByIdService, UpdateCategoryService } from './services';
@@ -55,8 +58,13 @@ export class CategoryController {
   @ApiOperation({
     summary: 'Return all categories registered.',
   })
-  async findAllCategories(@Res() res: Response) {
-    const { status, data } = await this.findAllCategoriesService.execute();
+  async findAllCategories(
+    @Query() pageOptionsDto: PageOptionsDto,
+    @Res() res: Response,
+  ) {
+    const { status, data } = await this.findAllCategoriesService.execute(
+      pageOptionsDto,
+    );
 
     return res.status(status).send(data);
   }
@@ -65,7 +73,10 @@ export class CategoryController {
   @ApiOperation({
     summary: 'Return a category by name.',
   })
-  async findCategoryByName(@Param('name') name: string, @Res() res: Response) {
+  async findCategoryByName(
+    @Param() { name }: CategoryByNameDto,
+    @Res() res: Response,
+  ) {
     const { status, data } = await this.findCategoryByNameService.execute(name);
     return res.status(status).send(data);
   }
@@ -74,7 +85,10 @@ export class CategoryController {
   @ApiOperation({
     summary: 'Return a category by ID.',
   })
-  async findCategoryById(@Param('id') id: number, @Res() res: Response) {
+  async findCategoryById(
+    @Param() { id }: CategoryByIdDto,
+    @Res() res: Response,
+  ) {
     const { status, data } = await this.findCategoryByIdService.execute(+id);
 
     return res.status(status).send(data);

@@ -2,6 +2,7 @@ import { PrismaClient } from '@prisma/client';
 import { CreateCategoryDto } from '../dto/create-category.dto';
 import { UpdateCategoryDto } from '../dto/update-category.dto';
 import { CategoryEntity } from '../entity/category.entity';
+import { PageOptionsDto } from '../../../shared/pagination-dtos/index';
 
 export class CategoryRepository extends PrismaClient {
   async createCategory(data: CreateCategoryDto) {
@@ -19,8 +20,27 @@ export class CategoryRepository extends PrismaClient {
     return this.category.findFirst({ where: { id } });
   }
 
-  async findAllCategories(): Promise<CategoryEntity[]> {
-    return this.category.findMany();
+  async findAllCategoriesByParams({
+    skip,
+    order,
+    orderByColumn,
+    take,
+  }: PageOptionsDto): Promise<CategoryEntity[]> {
+    return this.category.findMany({
+      skip,
+      take,
+      orderBy: {
+        [orderByColumn]: order,
+      },
+    });
+  }
+
+  async findAllCategories() {
+    return this.category.findMany({
+      select: {
+        id: true,
+      },
+    });
   }
 
   async updateCategory(
