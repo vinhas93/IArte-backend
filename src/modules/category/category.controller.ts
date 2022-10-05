@@ -18,6 +18,7 @@ import { Response } from 'express';
 import { PageOptionsDto } from 'src/shared/pagination-dtos/pageOptions.dto';
 import { LoggedManager } from '../auth/decorator/logged-manager.decorator';
 import { UserEntity } from '../user/entity/user.entity';
+import { CategoryByIdDto } from './dto/category-by-id.dto';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { FindCategoryByIdService, UpdateCategoryService } from './services';
@@ -81,7 +82,10 @@ export class CategoryController {
   @ApiOperation({
     summary: 'Return a category by ID.',
   })
-  async findCategoryById(@Param('id') id: number, @Res() res: Response) {
+  async findCategoryById(
+    @Param() { id }: CategoryByIdDto,
+    @Res() res: Response,
+  ) {
     const { status, data } = await this.findCategoryByIdService.execute(+id);
 
     return res.status(status).send(data);
