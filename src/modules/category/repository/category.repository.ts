@@ -8,8 +8,11 @@ export class CategoryRepository extends PrismaClient {
     return this.category.create({ data });
   }
 
-  async findCategoryByName(name: string): Promise<CategoryEntity> {
-    return this.category.findUnique({ where: { name } });
+  async findCategoryByName(name: string): Promise<any> {
+    return this.category.findUnique({
+      where: { name },
+      include: { canvas: true },
+    });
   }
 
   async findCategoryById(id: number): Promise<CategoryEntity> {
