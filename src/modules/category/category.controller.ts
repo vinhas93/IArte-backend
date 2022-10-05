@@ -8,12 +8,14 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   Res,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
+import { PageOptionsDto } from 'src/shared/pagination-dtos/pageOptions.dto';
 import { LoggedManager } from '../auth/decorator/logged-manager.decorator';
 import { UserEntity } from '../user/entity/user.entity';
 import { CreateCategoryDto } from './dto/create-category.dto';
@@ -55,8 +57,13 @@ export class CategoryController {
   @ApiOperation({
     summary: 'Return all categories registered.',
   })
-  async findAllCategories(@Res() res: Response) {
-    const { status, data } = await this.findAllCategoriesService.execute();
+  async findAllCategories(
+    @Query() pageOptionsDto: PageOptionsDto,
+    @Res() res: Response,
+  ) {
+    const { status, data } = await this.findAllCategoriesService.execute(
+      pageOptionsDto,
+    );
 
     return res.status(status).send(data);
   }

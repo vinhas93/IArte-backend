@@ -33,7 +33,11 @@ export class CategoryRepository extends PrismaClient {
   }
 
   async findAllCategories() {
-    return this.category.findMany({ select: ['id'] });
+    return this.category.findMany({
+      select: {
+        id: true,
+      },
+    });
   }
 
   async updateCategory(
