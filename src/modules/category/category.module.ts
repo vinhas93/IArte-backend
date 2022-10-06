@@ -5,6 +5,7 @@ import { CategoryRepository } from './repository/category.repository';
 import {
   CreateCategoryService,
   DeleteCategoryService,
+  FindAllCategoriesDropdownService,
   FindAllCategoriesService,
   FindCategoryByIdService,
   FindCategoryByNameService,
@@ -22,6 +23,7 @@ import {
     FindAllCategoriesService,
     UpdateCategoryService,
     DeleteCategoryService,
+    FindAllCategoriesDropdownService,
   ],
 })
 export class CategoryModule {}
