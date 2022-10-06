@@ -9,43 +9,42 @@ datasource db {
 }
 
 model Canva {
-  id                Int                 @id() @default(autoincrement())
+  id                Int                 @id @default(autoincrement())
   name              String              @db.VarChar(30)
   price             Float
-  genre             CanvaGenre          @default(Others)
   description       String?             @db.VarChar(300)
   inStock           Boolean             @default(true) @map("in_stock")
   image             String
-  category          Category            @relation(fields: [categoryName], references: [name], onDelete: Cascade, onUpdate: Cascade)
   categoryName      String              @map("category_name") @db.VarChar(255)
-  product           Product[]
+  createdAt         DateTime            @default(now()) @map("created_at")
+  updatedAt         DateTime            @updatedAt @map("updated_at")
+  genre             CanvaGenre          @default(Others)
+  category          Category            @relation(fields: [categoryName], references: [name], onDelete: Cascade)
   bulkUpdateRecords BulkUpdateRecords[]
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  product           Product[]
 
   @@map("canvas")
 }
 
 model Cart {
-  id               Int       @id() @default(autoincrement())
-  volumeOfProducts Int?      @map("volume_of_products")
+  id               Int       @id @default(autoincrement())
   priceSum         Float?    @map("price_sum")
   finalPrice       Float     @map("final_price")
   totalDiscount    Float     @map("total_discount")
   createdAt        DateTime  @default(now()) @map("created_at")
   updatedAt        DateTime  @updatedAt @map("updated_at")
-  customer         Customer  @relation(fields: [costumerId], references: [id], onDelete: NoAction, onUpdate: Cascade)
   costumerId       Int       @map("costumer_id")
-  voucher          Voucher?  @relation(fields: [voucherId], references: [id], onDelete: NoAction, onUpdate: Cascade)
   voucherId        Int?      @map("voucher_id")
+  volumeOfProducts Int?      @map("volume_of_products")
+  customer         Customer  @relation(fields: [costumerId], references: [id], onDelete: NoAction)
+  voucher          Voucher?  @relation(fields: [voucherId], references: [id], onDelete: NoAction)
   product          Product[]
 
   @@map("carts")
 }
 
 model Category {
-  id          Int      @id() @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   price       Float
   name        String   @unique @db.VarChar(255)
   description String?  @db.VarChar(300)
@@ -58,7 +57,7 @@ model Category {
 }
 
 model Customer {
-  id        Int      @id() @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   name      String   @db.VarChar(25)
   password  String   @db.VarChar(15)
   email     String   @unique @db.VarChar(50)
@@ -71,7 +70,7 @@ model Customer {
 }
 
 model Guideline {
-  id            Int      @id() @default(autoincrement())
+  id            Int      @id @default(autoincrement())
   aboutUs       String   @map("about_us") @db.VarChar(500)
   privacyPolicy String?  @map("privacy_policy") @db.VarChar(500)
   refundPolicy  String   @map("refund_policy") @db.VarChar(500)
@@ -82,48 +81,48 @@ model Guideline {
 }
 
 model Product {
-  id        Int      @id() @default(autoincrement())
-  quantity  Int?
+  id        Int      @id @default(autoincrement())
   erased    Boolean  @default(false)
-  cart      Cart     @relation(fields: [cartId], references: [id], onDelete: NoAction, onUpdate: Cascade)
-  cartId    Int      @map("cart_id")
-  canva     Canva?   @relation(fields: [canvaId], references: [id], onDelete: NoAction, onUpdate: Cascade)
-  canvaId   Int?     @map("canva_id")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
+  cartId    Int      @map("cart_id")
+  canvaId   Int?     @map("canva_id")
+  quantity  Int?
+  canva     Canva?   @relation(fields: [canvaId], references: [id], onDelete: NoAction)
+  cart      Cart     @relation(fields: [cartId], references: [id], onDelete: NoAction)
 
   @@map("products")
 }
 
 model BulkUpdateRecords {
-  id        Int      @id() @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   oldPrice  Float    @map("old_price")
   newPrice  Float    @map("new_price")
-  user      User     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: Cascade, map: "bulk_update_records_fk0")
   userId    Int      @map("user_id")
-  canva     Canva    @relation(fields: [canvaId], references: [id], onDelete: NoAction, onUpdate: Cascade, map: "bulk_update_records_fk1")
   canvaId   Int      @map("canva_id")
   createdAt DateTime @default(now()) @map("created_at")
+  user      User     @relation(fields: [userId], references: [id], onDelete: NoAction, map: "bulk_update_records_fk0")
+  canva     Canva    @relation(fields: [canvaId], references: [id], onDelete: NoAction, map: "bulk_update_records_fk1")
 
   @@map("bulk_update_records")
 }
 
 model User {
-  id                Int                 @id() @default(autoincrement())
+  id                Int                 @id @default(autoincrement())
   name              String              @db.VarChar(25)
   image             String?             @db.VarChar(255)
   password          String              @db.VarChar(255)
   email             String              @unique @db.VarChar(50)
   role              UserRole            @default(SalesPerson)
-  bulkUpdateRecords BulkUpdateRecords[]
   createdAt         DateTime            @default(now()) @map("created_at")
   updatedAt         DateTime            @updatedAt @map("updated_at")
+  bulkUpdateRecords BulkUpdateRecords[]
 
   @@map("users")
 }
 
 model Voucher {
-  id           Int       @id() @default(autoincrement())
+  id           Int       @id @default(autoincrement())
   discountRate Float     @map("discount_rate")
   active       Boolean   @default(false)
   startDate    DateTime? @map("start_date") @db.Date
