@@ -1,5 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumberString, IsString } from 'class-validator';
+import { CanvaGenre } from '@prisma/client';
+import {
+  IsEnum,
+  IsIn,
+  IsNotEmpty,
+  IsNumberString,
+  IsString,
+} from 'class-validator';
 
 export class CanvaByIdDto {
   @IsNumberString()
@@ -19,4 +26,14 @@ export class FilterBySearchDto {
     example: 'John Smith',
   })
   name: string;
+}
+
+export class FilterByGenreDto {
+  @IsEnum(['Realism', 'Abstract', 'Fantasy', 'Gothic', 'PopArt', 'Others'])
+  @IsIn(['Realism', 'Abstract', 'Fantasy', 'Gothic', 'PopArt', 'Others'])
+  @ApiProperty({
+    description: "Canva's genre",
+    example: 'Realistic',
+  })
+  genre: CanvaGenre;
 }

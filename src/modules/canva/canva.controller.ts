@@ -14,13 +14,18 @@ import { CreateCanvaDto } from './dtos/create-canva.dto';
 import {
   CreateCanvaService,
   DeleteCanvaService,
+  FilterCanvasByGenreService,
   GetAllCanvasService,
   GetCanvaByIdService,
   GetCanvaBySearchService,
   UpdateCanvaByIdService,
 } from './services';
 import { Response } from 'express';
-import { CanvaByIdDto, FilterBySearchDto } from './dtos/canva-by-id.dto';
+import {
+  CanvaByIdDto,
+  FilterByGenreDto,
+  FilterBySearchDto,
+} from './dtos/canva-by-id.dto';
 import { UpdateCanvaDto } from './dtos/update-canva.dto';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
@@ -38,6 +43,7 @@ export class CanvaController {
     private deleteCanvaService: DeleteCanvaService,
     private updateCanvaByIdService: UpdateCanvaByIdService,
     private getCanvaBySearchService: GetCanvaBySearchService,
+    private filterCanvaByGenreService: FilterCanvasByGenreService,
   ) {}
 
   @Post()
@@ -95,6 +101,21 @@ export class CanvaController {
     const { status, data } = await this.getCanvaBySearchService.execute(
       name,
       pageOptionsDto,
+    );
+
+    return res.status(status).send(data);
+  }
+
+  @Get('/genre/:genre')
+  @ApiOperation({
+    summary: 'Filter canva by genre.',
+  })
+  async filterCanvaByGenre(
+    @Param() { genre }: FilterByGenreDto,
+    @Res() res: Response,
+  ) {
+    const { status, data } = await this.filterCanvaByGenreService.execute(
+      genre,
     );
 
     return res.status(status).send(data);

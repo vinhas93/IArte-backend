@@ -12,7 +12,7 @@ model Canva {
   id                Int                 @id() @default(autoincrement())
   name              String              @db.VarChar(30)
   price             Float
-  genre             String?
+  genre             CanvaGenre          @default(Others)
   description       String?             @db.VarChar(300)
   inStock           Boolean             @default(true) @map("in_stock")
   image             String
@@ -141,4 +141,13 @@ enum UserRole {
   Owner
   Manager
   SalesPerson
+}
+
+enum CanvaGenre {
+  Others
+  Realism
+  Abstract
+  Fantasy
+  Gothic
+  PopArt
 }

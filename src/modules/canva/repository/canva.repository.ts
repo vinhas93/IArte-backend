@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { CanvaGenre, PrismaClient } from '@prisma/client';
 import { PageOptionsDto } from 'src/shared/pagination-dtos';
 import { handleError } from 'src/shared/utils/handle-error.util';
 import { CreateCanvaDto } from '../dtos/create-canva.dto';
@@ -16,13 +16,15 @@ export class CanvaRepository extends PrismaClient {
     orderByColumn,
     take,
   }: PageOptionsDto): Promise<CanvaEntity[]> {
-    return this.canva.findMany({
-      skip,
-      take,
-      orderBy: {
-        [orderByColumn]: order,
-      },
-    });
+    return this.canva
+      .findMany({
+        skip,
+        take,
+        orderBy: {
+          [orderByColumn]: order,
+        },
+      })
+      .catch(handleError);
   }
 
   async getAllCanvas(name = '') {
@@ -50,6 +52,16 @@ export class CanvaRepository extends PrismaClient {
       .catch(handleError);
   }
 
+  async filterCanvasByGenre(genre: CanvaGenre): Promise<any> {
+    return this.canva
+      .findMany({
+        where: {
+          genre,
+        },
+      })
+      .catch(handleError);
+  }
+
   async getCanvaById(id: number): Promise<CanvaEntity> {
     return this.canva.findFirst({ where: { id } }).catch(handleError);
   }
@@ -64,13 +76,15 @@ export class CanvaRepository extends PrismaClient {
     orderByColumn,
     take,
   }: PageOptionsDto): Promise<CanvaEntity[]> {
-    return this.canva.findMany({
-      skip,
-      take,
-      orderBy: {
-        [orderByColumn]: order,
-      },
-    });
+    return this.canva
+      .findMany({
+        skip,
+        take,
+        orderBy: {
+          [orderByColumn]: order,
+        },
+      })
+      .catch(handleError);
   }
 
   async search(

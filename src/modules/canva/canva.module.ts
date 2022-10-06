@@ -8,6 +8,7 @@ import { CanvaRepository } from './repository/canva.repository';
 import {
   CreateCanvaService,
   DeleteCanvaService,
+  FilterCanvasByGenreService,
   GetAllCanvasService,
   GetCanvaByIdService,
   GetCanvaBySearchService,
@@ -28,6 +29,7 @@ import {
     CategoryRepository,
     CreateCanvaHelper,
     UpdateCanvaHelper,
+    FilterCanvasByGenreService,
   ],
 })
 export class CanvaModule {}

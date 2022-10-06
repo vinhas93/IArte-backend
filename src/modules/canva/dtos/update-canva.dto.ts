@@ -1,6 +1,14 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
+import { CanvaGenre } from '@prisma/client';
+import {
+  IsBoolean,
+  IsEnum,
+  IsIn,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { CanvaEntity } from '../entity/canva.entity';
 
 export class UpdateCanvaDto extends PartialType(CanvaEntity) {
@@ -20,13 +28,13 @@ export class UpdateCanvaDto extends PartialType(CanvaEntity) {
   })
   price?: number;
 
-  @IsString()
-  @IsOptional()
+  @IsEnum(['Realism', 'Abstract', 'Fantasy', 'Gothic', 'PopArt', 'Others'])
+  @IsIn(['Realism', 'Abstract', 'Fantasy', 'Gothic', 'PopArt', 'Others'])
   @ApiProperty({
     description: "Canva's genre",
-    example: 'realistic',
+    example: 'Realistic',
   })
-  genre?: string;
+  genre: CanvaGenre;
 
   @IsString()
   @IsOptional()

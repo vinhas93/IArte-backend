@@ -1,6 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { CanvaGenre } from '@prisma/client';
 import {
   IsBoolean,
+  IsEnum,
+  IsIn,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -24,13 +27,13 @@ export class CreateCanvaDto {
   })
   price: number;
 
-  @IsString()
-  @IsOptional()
+  @IsEnum(['Realism', 'Abstract', 'Fantasy', 'Gothic', 'PopArt', 'Others'])
+  @IsIn(['Realism', 'Abstract', 'Fantasy', 'Gothic', 'PopArt', 'Others'])
   @ApiProperty({
     description: "Canva's genre",
-    example: 'realistic',
+    example: 'Realistic',
   })
-  genre?: string;
+  genre: CanvaGenre;
 
   @IsString()
   @IsOptional()
