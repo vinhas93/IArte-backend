@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { dataTreatment } from 'src/shared/utils/data-treatment.util';
 import { CreateCanvaDto } from '../dtos/create-canva.dto';
 import { CreateCanvaHelper } from '../helpers/create-canva.helper';
 import { CanvaRepository } from './../repository/canva.repository';
@@ -11,6 +12,8 @@ export class CreateCanvaService {
   ) {}
 
   async execute(createData: CreateCanvaDto) {
+    createData.categoryName = dataTreatment(createData.categoryName);
+
     const { status, data } = await this.createCanvaHelper.execute(createData);
 
     if (status !== 200) {
