@@ -10,8 +10,13 @@ export class CategoryRepository extends PrismaClient {
   }
 
   async findCategoryByName(name: string): Promise<any> {
-    return this.category.findUnique({
-      where: { name },
+    return this.category.findMany({
+      where: {
+        name: {
+          contains: name,
+          mode: 'insensitive',
+        },
+      },
       include: { canvas: true },
     });
   }
