@@ -12,7 +12,7 @@ export class FindAllCategoriesService {
       pageOptionsDto,
     );
 
-    const allCategories = await this.categoryRepository.findAllCategories();
+    const allCategories = await this.categoryRepository.countAllCategories();
 
     const itemCount = allCategories.length;
 

@@ -21,7 +21,11 @@ import { UserEntity } from '../user/entity/user.entity';
 import { CategoryByIdDto, CategoryByNameDto } from './dto/category-by-id.dto';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
-import { FindCategoryByIdService, UpdateCategoryService } from './services';
+import {
+  FindAllCategoriesDropdownService,
+  FindCategoryByIdService,
+  UpdateCategoryService,
+} from './services';
 import { CreateCategoryService } from './services/create-category.service';
 import { DeleteCategoryService } from './services/delete-category.service';
 import { FindAllCategoriesService } from './services/find-all-categories.service';
@@ -35,6 +39,7 @@ export class CategoryController {
     private findCategoryByNameService: FindCategoryByNameService,
     private findCategoryByIdService: FindCategoryByIdService,
     private findAllCategoriesService: FindAllCategoriesService,
+    private findAllCategoriesDropdownService: FindAllCategoriesDropdownService,
     private updateCategoryService: UpdateCategoryService,
     private deleteCategoryService: DeleteCategoryService,
   ) {}
@@ -65,6 +70,17 @@ export class CategoryController {
     const { status, data } = await this.findAllCategoriesService.execute(
       pageOptionsDto,
     );
+
+    return res.status(status).send(data);
+  }
+
+  @Get('/dropdown')
+  @ApiOperation({
+    summary: 'Return all categories registered.',
+  })
+  async findAllCategoriesDropdown(@Res() res: Response) {
+    const { status, data } =
+      await this.findAllCategoriesDropdownService.execute();
 
     return res.status(status).send(data);
   }
