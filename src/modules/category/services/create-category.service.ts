@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { dataTreatment } from 'src/shared/utils/data-treatment.util';
 import { CreateCategoryDto } from '../dto/create-category.dto';
 import { CategoryRepository } from '../repository/category.repository';
 
@@ -7,6 +8,8 @@ export class CreateCategoryService {
   constructor(private categoryRepository: CategoryRepository) {}
 
   async execute(data: CreateCategoryDto) {
+    data.name = dataTreatment(data.name);
+
     const { name } = data;
 
     const categoryAlreadyExists =
