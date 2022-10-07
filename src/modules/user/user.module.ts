@@ -11,6 +11,7 @@ import {
   MyAccountService,
   UpdateMyAccountService,
   UpdateMyPasswordService,
+  UpdateUserRoleById,
 } from './services';
 import { UserRepository } from './repository/user.repository';
 import { PassportModule } from '@nestjs/passport';
@@ -28,6 +29,7 @@ import { DeleteMyAccountService } from './services/delete-my-account.service';
     DeleteMyAccountService,
     FindUserByIdService,
     FindAllUsersService,
+    UpdateUserRoleById,
   ],
 })
 export class UserModule {}

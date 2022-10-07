@@ -29,6 +29,15 @@ export class UserRepository extends PrismaClient {
     return this.user.update({ where: { id }, data }).catch(handleError);
   }
 
+  async updateUserRoleById(id: number, role) {
+    return this.user
+      .update({
+        where: { id },
+        data: { role },
+      })
+      .catch(handleError);
+  }
+
   async updateMyPassword(updateMyPasswordDto: UpdateMyPasswordDto, id: number) {
     const data = { ...updateMyPasswordDto };
     return this.user.update({ where: { id }, data }).catch(handleError);
