@@ -6,9 +6,10 @@ import { AuthModule } from './modules/auth/auth.module';
 import { CanvaModule } from './modules/canva/canva.module';
 import { CategoryModule } from './modules/category/category.module';
 import { UserModule } from './modules/user/user.module';
+import { UploadModule } from './modules/upload/upload.module';
 
 @Module({
-  imports: [UserModule, AuthModule, CategoryModule, CanvaModule],
+  imports: [UserModule, AuthModule, CategoryModule, CanvaModule, UploadModule],
   controllers: [AppController],
   providers: [AppService, PrismaService],
 })
