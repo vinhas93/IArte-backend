@@ -108,15 +108,16 @@ model BulkUpdateRecords {
 }
 
 model User {
-  id                Int                 @id @default(autoincrement())
-  name              String              @db.VarChar(25)
-  image             String?             @db.VarChar(255)
-  password          String              @db.VarChar(255)
-  email             String              @unique @db.VarChar(50)
-  role              UserRole            @default(SalesPerson)
-  createdAt         DateTime            @default(now()) @map("created_at")
-  updatedAt         DateTime            @updatedAt @map("updated_at")
-  bulkUpdateRecords BulkUpdateRecords[]
+  id                   Int                 @id() @default(autoincrement())
+  name                 String              @db.VarChar(25)
+  image                String?             @db.VarChar(255)
+  password             String              @db.VarChar(255)
+  email                String              @unique @db.VarChar(50)
+  recoverPasswordToken String?
+  role                 UserRole            @default(SalesPerson)
+  bulkUpdateRecords    BulkUpdateRecords[]
+  createdAt            DateTime            @default(now()) @map("created_at")
+  updatedAt            DateTime            @updatedAt @map("updated_at")
 
   @@map("users")
 }

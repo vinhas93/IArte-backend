@@ -8,6 +8,6 @@ export class DeleteMyAccountService {
   async execute(id: number) {
     await this.userRep.deleteMyAccount(id);
 
-    return { status: 200, message: 'Your account has been deleted.' };
+    return { status: 200, data: { message: 'Account has been deleted.' } };
   }
 }
