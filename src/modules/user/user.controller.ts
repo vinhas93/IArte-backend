@@ -26,7 +26,10 @@ import {
   UserEmailDto,
 } from './dto/get-user.dto';
 import { UpdateMyAccountDto } from './dto/update-my-account.dto';
-import { UpdateMyPasswordDto } from './dto/update-my-password.dto';
+import {
+  CreatePasswordHashDto,
+  UpdateMyPasswordDto,
+} from './dto/update-my-password.dto';
 import { UserEntity } from './entity/user.entity';
 import {
   CreateUserService,
@@ -37,6 +40,7 @@ import {
   RecoveryPasswordByEmail,
   UpdateMyAccountService,
   UpdateMyPasswordService,
+  UpdatePasswordByEmailService,
   UpdateUserRoleById,
 } from './services';
 
@@ -53,6 +57,7 @@ export class UserController {
     private findAllUsersService: FindAllUsersService,
     private updateUserRoleById: UpdateUserRoleById,
     private recoveryPasswordByEmail: RecoveryPasswordByEmail,
+    private updatePasswordByEmailService: UpdatePasswordByEmailService,
   ) {}
 
   // ============================ Permissões LoggedManager ==========================
@@ -194,6 +199,14 @@ export class UserController {
     const { status, data } = await this.recoveryPasswordByEmail.execute(email);
 
     return res.status(status).send(data);
+  }
+
+  @Patch('update_password')
+  @ApiOperation({
+    summary: 'User update password- (FOR ALL USERS).',
+  })
+  updatePassword(@Body() updatePassword: CreatePasswordHashDto) {
+    return this.updatePasswordByEmailService.execute(updatePassword);
   }
 
   @ApiTags('My account')

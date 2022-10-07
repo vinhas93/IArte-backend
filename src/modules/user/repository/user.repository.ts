@@ -24,6 +24,12 @@ export class UserRepository extends PrismaClient {
     return this.user.findUnique({ where: { id } }).catch(handleError);
   }
 
+  async findByToken(recoverPasswordToken: string): Promise<UserEntity> {
+    return this.user
+      .findFirst({ where: { recoverPasswordToken } })
+      .catch(handleError);
+  }
+
   async updateMyAccount(updateMyAccountDto: UpdateMyAccountDto, id: number) {
     const data = { ...updateMyAccountDto };
     return this.user.update({ where: { id }, data }).catch(handleError);
@@ -50,6 +56,22 @@ export class UserRepository extends PrismaClient {
         data: { recoverPasswordToken },
       })
       .catch(handleError);
+  }
+
+  async updatePassword(id: number, password: string): Promise<UserEntity> {
+    const updatedUser = await this.user.update({
+      where: {
+        id,
+      },
+      data: {
+        recoverPasswordToken: null,
+        password,
+      },
+    });
+
+    delete updatedUser.password;
+
+    return updatedUser;
   }
 
   async deleteMyAccount(id: number) {

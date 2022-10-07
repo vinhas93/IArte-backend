@@ -1,8 +1,4 @@
 import { UserController } from './user.controller';
-/*
-https://docs.nestjs.com/modules
-*/
-
 import { Module } from '@nestjs/common';
 import {
   CreateUserService,
@@ -12,6 +8,7 @@ import {
   RecoveryPasswordByEmail,
   UpdateMyAccountService,
   UpdateMyPasswordService,
+  UpdatePasswordByEmailService,
   UpdateUserRoleById,
 } from './services';
 import { UserRepository } from './repository/user.repository';
@@ -33,6 +30,7 @@ import { MailModule } from '../mails/mail.module';
     FindAllUsersService,
     UpdateUserRoleById,
     RecoveryPasswordByEmail,
+    UpdatePasswordByEmailService,
   ],
 })
 export class UserModule {}

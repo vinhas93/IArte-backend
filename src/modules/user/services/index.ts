@@ -7,3 +7,4 @@ export * from './find-user-by-id.service';
 export * from './find-all-users.service';
 export * from './update-user-role-by-id.service';
 export * from './recovery-password-by-email.service';
+export * from './update-password-by-email.service';
