@@ -6,6 +6,8 @@ https://docs.nestjs.com/modules
 import { Module } from '@nestjs/common';
 import {
   CreateUserService,
+  FindAllUsersService,
+  FindUserByIdService,
   MyAccountService,
   UpdateMyAccountService,
   UpdateMyPasswordService,
@@ -24,6 +26,8 @@ import { DeleteMyAccountService } from './services/delete-my-account.service';
     UpdateMyAccountService,
     UpdateMyPasswordService,
     DeleteMyAccountService,
+    FindUserByIdService,
+    FindAllUsersService,
   ],
 })
 export class UserModule {}

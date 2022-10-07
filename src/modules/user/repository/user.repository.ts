@@ -12,6 +12,10 @@ export class UserRepository extends PrismaClient {
     return createUser;
   }
 
+  async findAllUser(): Promise<UserEntity[]> {
+    return this.user.findMany();
+  }
+
   async findUserByEmail(email: string): Promise<UserEntity> {
     return this.user.findUnique({ where: { email } }).catch(handleError);
   }

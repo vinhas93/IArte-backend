@@ -7,6 +7,7 @@ import {
   Controller,
   Delete,
   Get,
+  Param,
   Patch,
   Post,
   Put,
@@ -19,12 +20,15 @@ import { Response } from 'express';
 import { LoggedManager } from '../auth/decorator/logged-manager.decorator';
 import { LoggedUser } from '../auth/decorator/logged-user.decorator';
 import { CreateUserDto } from './dto/create-user.dto';
+import { GetUserByIdDto } from './dto/get-user.dto';
 import { UpdateMyAccountDto } from './dto/update-my-account.dto';
 import { UpdateMyPasswordDto } from './dto/update-my-password.dto';
 import { UserEntity } from './entity/user.entity';
 import {
   CreateUserService,
   DeleteMyAccountService,
+  FindAllUsersService,
+  FindUserByIdService,
   MyAccountService,
   UpdateMyAccountService,
   UpdateMyPasswordService,
@@ -39,6 +43,8 @@ export class UserController {
     private updateMyPasswordService: UpdateMyPasswordService,
     private updateMyAccountService: UpdateMyAccountService,
     private deleteMyAccountService: DeleteMyAccountService,
+    private findUserByIdService: FindUserByIdService,
+    private findAllUsersService: FindAllUsersService,
   ) {}
 
   // ============================ Permissões LoggedManager ==========================
@@ -59,8 +65,29 @@ export class UserController {
     return res.status(status).send(data);
   }
 
-  // ============================ Permissões LoggedUser ==========================
+  @Get('/user/:id')
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Get an User by id. - (Manager)',
+  })
+  async getUserById(@Param() { id }: GetUserByIdDto, @Res() res: Response) {
+    const { status, data } = await this.findUserByIdService.execute(+id);
 
+    return res.status(status).send(data);
+  }
+
+  @Get('user')
+  @ApiOperation({
+    summary: 'Get all Users. - (Manager)',
+  })
+  async findAllUsers(@Res() res: Response) {
+    const { status, data } = await this.findAllUsersService.execute();
+
+    return res.status(status).send(data);
+  }
+
+  // ============================ Permissões LoggedUser ==========================
   @ApiTags('My account')
   @Get('/my-account') //Perfil de quem está logado
   @UseGuards(AuthGuard())
