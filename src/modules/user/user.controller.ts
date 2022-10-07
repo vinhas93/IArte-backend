@@ -20,7 +20,11 @@ import { Response } from 'express';
 import { LoggedManager } from '../auth/decorator/logged-manager.decorator';
 import { LoggedUser } from '../auth/decorator/logged-user.decorator';
 import { CreateUserDto } from './dto/create-user.dto';
-import { GetUserByIdDto, UpdateUserRole } from './dto/get-user.dto';
+import {
+  GetUserByIdDto,
+  UpdateUserRole,
+  UserEmailDto,
+} from './dto/get-user.dto';
 import { UpdateMyAccountDto } from './dto/update-my-account.dto';
 import { UpdateMyPasswordDto } from './dto/update-my-password.dto';
 import { UserEntity } from './entity/user.entity';
@@ -30,6 +34,7 @@ import {
   FindAllUsersService,
   FindUserByIdService,
   MyAccountService,
+  RecoveryPasswordByEmail,
   UpdateMyAccountService,
   UpdateMyPasswordService,
   UpdateUserRoleById,
@@ -47,6 +52,7 @@ export class UserController {
     private findUserByIdService: FindUserByIdService,
     private findAllUsersService: FindAllUsersService,
     private updateUserRoleById: UpdateUserRoleById,
+    private recoveryPasswordByEmail: RecoveryPasswordByEmail,
   ) {}
 
   // ============================ Permissões LoggedManager ==========================
@@ -174,6 +180,19 @@ export class UserController {
       dto,
       user.id,
     );
+    return res.status(status).send(data);
+  }
+
+  @Patch('recovery-password')
+  @ApiOperation({
+    summary: 'Send email to recovery password',
+  })
+  async recoveryPasswordSendEmail(
+    @Body() { email }: UserEmailDto,
+    @Res() res: Response,
+  ) {
+    const { status, data } = await this.recoveryPasswordByEmail.execute(email);
+
     return res.status(status).send(data);
   }
 

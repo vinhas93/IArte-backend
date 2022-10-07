@@ -9,6 +9,7 @@ import {
   FindAllUsersService,
   FindUserByIdService,
   MyAccountService,
+  RecoveryPasswordByEmail,
   UpdateMyAccountService,
   UpdateMyPasswordService,
   UpdateUserRoleById,
@@ -16,9 +17,10 @@ import {
 import { UserRepository } from './repository/user.repository';
 import { PassportModule } from '@nestjs/passport';
 import { DeleteMyAccountService } from './services/delete-my-account.service';
+import { MailModule } from '../mails/mail.module';
 
 @Module({
-  imports: [PassportModule.register({ defaultStrategy: 'jwt' })],
+  imports: [PassportModule.register({ defaultStrategy: 'jwt' }), MailModule],
   controllers: [UserController],
   providers: [
     CreateUserService,
@@ -30,6 +32,7 @@ import { DeleteMyAccountService } from './services/delete-my-account.service';
     FindUserByIdService,
     FindAllUsersService,
     UpdateUserRoleById,
+    RecoveryPasswordByEmail,
   ],
 })
 export class UserModule {}

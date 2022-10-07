@@ -1,6 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { UserRole } from '@prisma/client';
-import { IsEnum, IsIn, IsNotEmpty, IsNumberString } from 'class-validator';
+import {
+  IsEmail,
+  IsEnum,
+  IsIn,
+  IsNotEmpty,
+  IsNumberString,
+  IsString,
+} from 'class-validator';
 
 export class GetUserByIdDto {
   @IsNumberString()
@@ -16,4 +23,15 @@ export class UpdateUserRole {
     example: 'Owner',
   })
   role: UserRole;
+}
+
+export class UserEmailDto {
+  @IsString()
+  @IsEmail()
+  @IsNotEmpty()
+  @ApiProperty({
+    description: "User's email address",
+    example: 'owner@iarte.com',
+  })
+  email: string;
 }

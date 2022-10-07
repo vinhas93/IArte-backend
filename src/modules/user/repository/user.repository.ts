@@ -43,6 +43,15 @@ export class UserRepository extends PrismaClient {
     return this.user.update({ where: { id }, data }).catch(handleError);
   }
 
+  async updateRecoveryPassword(id, recoverPasswordToken) {
+    return this.user
+      .update({
+        where: { id },
+        data: { recoverPasswordToken },
+      })
+      .catch(handleError);
+  }
+
   async deleteMyAccount(id: number) {
     return this.user.delete({ where: { id } }).catch(handleError);
   }

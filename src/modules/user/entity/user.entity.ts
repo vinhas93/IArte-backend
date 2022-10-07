@@ -5,6 +5,7 @@ export class UserEntity {
   password: string;
   email: string;
   role: string;
+  recoverPasswordToken?: string;
   createdAt?: string | Date;
   updatedAt?: string | Date;
 }
