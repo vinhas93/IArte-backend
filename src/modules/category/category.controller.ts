@@ -74,16 +74,16 @@ export class CategoryController {
     return res.status(status).send(data);
   }
 
-  @Get('/dropdown')
-  @ApiOperation({
-    summary: 'Return all categories registered.',
-  })
-  async findAllCategoriesDropdown(@Res() res: Response) {
-    const { status, data } =
-      await this.findAllCategoriesDropdownService.execute();
+  // @Get('/dropdown')
+  // @ApiOperation({
+  //   summary: 'Return all categories registered.',
+  // })
+  // async findAllCategoriesDropdown(@Res() res: Response) {
+  //   const { status, data } =
+  //     await this.findAllCategoriesDropdownService.execute();
 
-    return res.status(status).send(data);
-  }
+  //   return res.status(status).send(data);
+  // }
 
   @Get('/:name')
   @ApiOperation({
