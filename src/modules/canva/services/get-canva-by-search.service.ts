@@ -24,7 +24,7 @@ export class GetCanvaBySearchService {
     if (canvas.length <= 0) {
       return {
         status: 200,
-        data: { message: 'Canvas is empty' },
+        data: response,
       };
     }
 
