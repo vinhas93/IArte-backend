@@ -23,7 +23,7 @@ export class MailService {
       to: email,
       from: process.env.MAIL_FROM,
       subject: 'I Art',
-      template: './send.hbs',
+      template: './recoveryPassword.hbs',
       context: {
         name,
         url,
@@ -38,9 +38,10 @@ export class MailService {
       to: process.env.MAIL_LOGS,
       from: process.env.MAIL_LOGS_FROM,
       subject: local,
-      template: './logError',
+      template: './logError.hbs',
       context: {
-        log_error: message,
+        local,
+        message,
       },
     });
     return;
