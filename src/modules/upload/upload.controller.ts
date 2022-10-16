@@ -20,7 +20,7 @@ import { FileUploadService } from './services/upload-image.service';
 export class UploadController {
   constructor(private fileUploadService: FileUploadService) {}
 
-  @Post('')
+  @Post()
   @ApiConsumes('multipart/form-data')
   @ApiBody({
     description: 'Upload images',

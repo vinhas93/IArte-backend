@@ -1,8 +1,7 @@
 import { S3 } from 'aws-sdk';
-import { Logger, Injectable } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import { ResponseS3 } from '../types/response-s3.types';
 
-@Injectable()
 export class FileUploadService {
   async upload(file): Promise<ResponseS3> {
     const { originalname } = file;
