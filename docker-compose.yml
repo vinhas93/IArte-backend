@@ -14,11 +14,11 @@ services:
     environment:
       - DATABASE_URL=postgres://docker:ignite@database_cloud_walker:5432/cloud_walker?reconnect=true
 
-  database_cloud_walker: 
+  database_cloud_walker:
     image: postgres
     container_name: database_ignite
     restart: always
-    ports: 
+    ports:
       - 5432:5432
     environment:
       - POSTGRES_USER=docker

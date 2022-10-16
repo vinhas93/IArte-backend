@@ -1,20 +1,24 @@
 import {
+  BadRequestException,
   Controller,
   Post,
-  Res,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { Response } from 'express';
+import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiConsumes, ApiBody } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { User } from '@prisma/client';
 import { LoggedUser } from '../auth/decorator/logged-user.decorator';
-import { UploadImageService } from './services/upload-image.service';
+import { FileUploadService } from './services/upload-image.service';
 
+@ApiTags('Upload')
+@UseGuards(AuthGuard())
+@ApiBearerAuth()
 @Controller('upload')
 export class UploadController {
-  constructor(private uploadImageService: UploadImageService) {}
+  constructor(private fileUploadService: FileUploadService) {}
 
   @Post('')
   @ApiConsumes('multipart/form-data')
@@ -30,10 +34,29 @@ export class UploadController {
       },
     },
   })
-  @UseInterceptors(FileInterceptor('file'))
-  async upload(@UploadedFile() file, @Res() res: Response) {
-    const { status, data } = await this.uploadImageService.execute(file);
+  @UseInterceptors(
+    FileInterceptor('file', {
+      limits: { fileSize: 10 * 1024 * 1024 },
+      fileFilter: (
+        req: any,
+        file: { mimetype: string },
+        cb: (error: Error | null, acceptFile: boolean) => void,
+      ) => {
+        if (['image/png', 'image/jpg', 'image/jpeg'].includes(file.mimetype)) {
+          cb(null, true);
+        } else {
+          cb(new BadRequestException('Only use jpg or png files'), false);
+        }
+      },
+    }),
+  )
+  async upload(@LoggedUser() user: User, @UploadedFile() file) {
+    const response = await this.fileUploadService.upload(file);
 
-    return res.status(status).send(data);
+    if (response.Location) {
+      return { url: response.Location };
+    }
+
+    return response;
   }
 }

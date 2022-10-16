@@ -1,48 +1,45 @@
-import { Injectable } from '@nestjs/common';
-import axios from 'axios';
-import * as FormData from 'form-data';
-
-import { AxiosProvider } from 'src/shared/providers/axios/axios.provider';
-import { ConvertLinkHelper } from '../helpers/convert-link.helper';
+import { S3 } from 'aws-sdk';
+import { Logger, Injectable } from '@nestjs/common';
+import { ResponseS3 } from '../types/response-s3.types';
 
 @Injectable()
-export class UploadImageService {
-  constructor(
-    private axiosProvider: AxiosProvider,
-    private convertLinkHelper: ConvertLinkHelper,
-  ) {}
+export class FileUploadService {
+  async upload(file): Promise<ResponseS3> {
+    const { originalname } = file;
+    const bucketS3 = process.env.AWS_S3_BUCKET_NAME;
+    const result = await this.uploadS3(file.buffer, bucketS3, originalname);
 
-  async execute(file) {
-    const formData = new FormData();
+    return result as ResponseS3;
+  }
 
-    formData.append('filename', file.originalname);
-    formData.append('destination', 'images');
-    formData.append('create_thumbnail', true);
+  async uploadS3(file, bucket, name) {
+    const s3 = this.getS3();
+    const newName = Date.now() + name.replace(' ', '');
 
-    const options = {
-      headers: {
-        Autorization: process.env.CLIENT_ID,
-        'content-type': 'multipart/form-data',
-      },
+    const params = {
+      Bucket: bucket,
+      Key: String(newName),
+      Body: file,
+      ContentEncoding: 'base64',
+      ContentType: 'image/jpeg',
+      ACL: 'public-read',
     };
 
-    const response = await axios.post(process.env.URL, formData, options);
+    return new Promise((resolve, reject) => {
+      s3.upload(params, (err, data) => {
+        if (err) {
+          Logger.error(err);
+          reject(err.message);
+        }
+        resolve(data);
+      });
+    });
+  }
 
-    const { status, data } = await this.axiosProvider.execute(options);
-
-    if (status != 200) {
-      return { status, data };
-    }
-
-    const { link } = data.data;
-
-    const base64Link = await this.convertLinkHelper.execute(link);
-
-    return {
-      status: 200,
-      data: {
-        link: base64Link,
-      },
-    };
+  getS3() {
+    return new S3({
+      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    });
   }
 }
