@@ -83,11 +83,11 @@ export class CanvaController {
     return res.status(status).send(data);
   }
 
-  @Get('/name/:name')
+  @Get('/name/:search')
   @ApiOperation({
-    summary: 'Search canva by name or id.',
+    summary: 'Search canva by name or id and filter by genre and/or category.',
   })
-  async getCanvaByName(
+  async searchCanva(
     @Param() search: FilterBySearchDto,
     @Query() pageOptionsDto: PageOptionsDto,
     @Res() res: Response,
