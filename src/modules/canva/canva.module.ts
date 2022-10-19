@@ -3,6 +3,7 @@ import { PassportModule } from '@nestjs/passport';
 import { CategoryRepository } from '../category/repository/category.repository';
 import { CanvaController } from './canva.controller';
 import { CreateCanvaHelper } from './helpers/create-canva.helper';
+import { SearchHelper } from './helpers/search.helper';
 import { UpdateCanvaHelper } from './helpers/update-canva.helper';
 import { CanvaRepository } from './repository/canva.repository';
 import {
@@ -28,6 +29,7 @@ import {
     CategoryRepository,
     CreateCanvaHelper,
     UpdateCanvaHelper,
+    SearchHelper,
   ],
 })
 export class CanvaModule {}
