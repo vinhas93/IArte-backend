@@ -78,6 +78,7 @@ export class UserController {
     return res.status(status).send(data);
   }
 
+  @ApiTags('User')
   @Get('/user/:id')
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
@@ -94,6 +95,7 @@ export class UserController {
     return res.status(status).send(data);
   }
 
+  @ApiTags('User')
   @Get('user')
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
@@ -106,6 +108,7 @@ export class UserController {
     return res.status(status).send(data);
   }
 
+  @ApiTags('User')
   @Delete('user/:id')
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
@@ -122,6 +125,7 @@ export class UserController {
     return res.status(status).send(data);
   }
 
+  @ApiTags('User')
   @Patch('update-role/:id')
   @ApiOperation({
     summary: 'Update user role. - (Manager)',
@@ -188,9 +192,10 @@ export class UserController {
     return res.status(status).send(data);
   }
 
+  @ApiTags('My account')
   @Patch('recovery-password')
   @ApiOperation({
-    summary: 'Send email to recovery password',
+    summary: 'Send email to recovery password. - (User`s but Customer)',
   })
   async recoveryPasswordSendEmail(
     @Body() { email }: UserEmailDto,
@@ -201,9 +206,10 @@ export class UserController {
     return res.status(status).send(data);
   }
 
+  @ApiTags('My account')
   @Patch('update_password')
   @ApiOperation({
-    summary: 'User update password- (FOR ALL USERS).',
+    summary: 'User update password. - (User`s but Customer)',
   })
   updatePassword(@Body() updatePassword: CreatePasswordHashDto) {
     return this.updatePasswordByEmailService.execute(updatePassword);
@@ -214,7 +220,7 @@ export class UserController {
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
   @ApiOperation({
-    summary: 'Delete logged user`s account - (User`s but Customer)',
+    summary: 'Delete logged user`s account. - (User`s but Customer)',
   })
   async DeleteMyAccount(@LoggedUser() user: UserEntity, @Res() res: Response) {
     const { status, data } = await this.deleteMyAccountService.execute(user.id);

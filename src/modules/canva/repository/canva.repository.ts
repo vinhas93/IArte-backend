@@ -52,11 +52,247 @@ export class CanvaRepository extends PrismaClient {
       .catch(handleError);
   }
 
-  async filterCanvasByGenre(genre: CanvaGenre): Promise<any> {
+  async getAllCanvasPaginated(
+    name: string,
+    { skip, order, take, orderByColumn }: PageOptionsDto,
+  ): Promise<CanvaEntity[]> {
     return this.canva
       .findMany({
         where: {
+          name: {
+            contains: name,
+            mode: 'insensitive',
+          },
+        },
+        skip,
+        take,
+        orderBy: {
+          [orderByColumn]: order,
+        },
+      })
+      .catch(handleError);
+  }
+
+  async filterCanvasByGenrePaginated(
+    name: string,
+    genre: CanvaGenre,
+    { skip, order, take, orderByColumn }: PageOptionsDto,
+  ) {
+    if (name == '') {
+      return this.canva
+        .findMany({
+          where: {
+            genre,
+          },
+          select: {
+            id: true,
+          },
+          skip,
+          take,
+          orderBy: {
+            [orderByColumn]: order,
+          },
+        })
+        .catch(handleError);
+    }
+    return this.canva
+      .findMany({
+        where: {
+          name: {
+            contains: name,
+            mode: 'insensitive',
+          },
           genre,
+        },
+        select: {
+          id: true,
+        },
+        skip,
+        take,
+        orderBy: {
+          [orderByColumn]: order,
+        },
+      })
+      .catch(handleError);
+  }
+
+  async filterCanvasByGenreComplete(name: string, genre: CanvaGenre) {
+    if (name == '') {
+      return this.canva
+        .findMany({
+          where: {
+            genre,
+          },
+          select: {
+            id: true,
+          },
+        })
+        .catch(handleError);
+    }
+    return this.canva
+      .findMany({
+        where: {
+          name: {
+            contains: name,
+            mode: 'insensitive',
+          },
+          genre,
+        },
+        select: {
+          id: true,
+        },
+      })
+      .catch(handleError);
+  }
+
+  async filterCanvasByCategoryPaginated(
+    name: string,
+    categoryName: string,
+    { skip, order, take, orderByColumn }: PageOptionsDto,
+  ) {
+    if (name == '') {
+      return this.canva
+        .findMany({
+          where: {
+            categoryName,
+          },
+          select: {
+            id: true,
+          },
+          skip,
+          take,
+          orderBy: {
+            [orderByColumn]: order,
+          },
+        })
+        .catch(handleError);
+    }
+    return this.canva
+      .findMany({
+        where: {
+          name: {
+            contains: name,
+            mode: 'insensitive',
+          },
+          categoryName,
+        },
+        select: {
+          id: true,
+        },
+        skip,
+        take,
+        orderBy: {
+          [orderByColumn]: order,
+        },
+      })
+      .catch(handleError);
+  }
+
+  async filterCanvasByCategoryComplete(name: string, categoryName: string) {
+    if (name == '') {
+      return this.canva
+        .findMany({
+          where: {
+            categoryName,
+          },
+          select: {
+            id: true,
+          },
+        })
+        .catch(handleError);
+    }
+    return this.canva
+      .findMany({
+        where: {
+          name: {
+            contains: name,
+            mode: 'insensitive',
+          },
+          categoryName,
+        },
+        select: {
+          id: true,
+        },
+      })
+      .catch(handleError);
+  }
+
+  async filterCanvasDropdownPaginated(
+    name: string,
+    genre: CanvaGenre,
+    categoryName: string,
+    { skip, order, take, orderByColumn }: PageOptionsDto,
+  ) {
+    if (name == '') {
+      return this.canva
+        .findMany({
+          where: {
+            categoryName,
+            genre,
+          },
+          select: {
+            id: true,
+          },
+          skip,
+          take,
+          orderBy: {
+            [orderByColumn]: order,
+          },
+        })
+        .catch(handleError);
+    }
+    return this.canva
+      .findMany({
+        where: {
+          name: {
+            contains: name,
+            mode: 'insensitive',
+          },
+          categoryName,
+          genre,
+        },
+        select: {
+          id: true,
+        },
+        skip,
+        take,
+        orderBy: {
+          [orderByColumn]: order,
+        },
+      })
+      .catch(handleError);
+  }
+
+  async filterCanvasDropdownComplete(
+    name: string,
+    genre: CanvaGenre,
+    categoryName: string,
+  ) {
+    if (name == '') {
+      return this.canva
+        .findMany({
+          where: {
+            categoryName,
+            genre,
+          },
+          select: {
+            id: true,
+          },
+        })
+        .catch(handleError);
+    }
+    return this.canva
+      .findMany({
+        where: {
+          name: {
+            contains: name,
+            mode: 'insensitive',
+          },
+          categoryName,
+          genre,
+        },
+        select: {
+          id: true,
         },
       })
       .catch(handleError);
@@ -78,27 +314,6 @@ export class CanvaRepository extends PrismaClient {
   }: PageOptionsDto): Promise<CanvaEntity[]> {
     return this.canva
       .findMany({
-        skip,
-        take,
-        orderBy: {
-          [orderByColumn]: order,
-        },
-      })
-      .catch(handleError);
-  }
-
-  async search(
-    search: string,
-    { skip, order, take, orderByColumn }: PageOptionsDto,
-  ): Promise<CanvaEntity[]> {
-    return this.canva
-      .findMany({
-        where: {
-          name: {
-            contains: search,
-            mode: 'insensitive',
-          },
-        },
         skip,
         take,
         orderBy: {

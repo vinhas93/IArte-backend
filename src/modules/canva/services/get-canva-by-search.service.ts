@@ -4,29 +4,35 @@ import {
   PageMetaDto,
   PageOptionsDto,
 } from 'src/shared/pagination-dtos';
+import { FilterBySearchDto } from '../dtos/canva-by-id.dto';
+import { SearchHelper } from '../helpers/search.helper';
 import { CanvaRepository } from '../repository/canva.repository';
 
 @Injectable()
 export class GetCanvaBySearchService {
-  constructor(public canvaRepository: CanvaRepository) {}
+  constructor(
+    private canvaRepository: CanvaRepository,
+    private searchHelper: SearchHelper,
+  ) {}
 
-  async execute(search: string, pageOptionsDto: PageOptionsDto) {
-    const canvas = await this.canvaRepository.search(search, pageOptionsDto);
+  async execute(search: FilterBySearchDto, pageOptionsDto: PageOptionsDto) {
+    const { canvaSearchComplete, canvaSearchPaginated } =
+      await this.searchHelper.execute(search, pageOptionsDto);
 
-    const allCanvaSearch = await this.canvaRepository.getAllCanvas(search);
+    const { id } = search;
 
-    const itemCount = allCanvaSearch.length;
+    const canvasById = [await this.canvaRepository.getCanvaById(+id)];
+
+    if (canvasById.length > 0) {
+      canvaSearchComplete.unshift(canvasById[0]);
+      canvaSearchPaginated.unshift(canvasById[0]);
+    }
+
+    const itemCount = canvaSearchComplete.length;
 
     const pageMetaDto = new PageMetaDto({ pageOptionsDto, itemCount });
 
-    const response = new PageDto(canvas, pageMetaDto);
-
-    if (canvas.length <= 0) {
-      return {
-        status: 200,
-        data: response,
-      };
-    }
+    const response = new PageDto(canvaSearchPaginated, pageMetaDto);
 
     return {
       status: 200,
