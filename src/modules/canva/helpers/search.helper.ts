@@ -7,6 +7,9 @@ import { CanvaRepository } from '../repository/canva.repository';
 export class SearchHelper {
   constructor(private canvasRepository: CanvaRepository) {}
   async execute(search: FilterBySearchDto, pageOptionsDto: PageOptionsDto) {
+    /* O objetivo desse Helper é validar quais informações a barra de busca 
+    está enviando pro servidor. Identificando, ele gera uma lista completa e
+    uma lista com a paginação retornando ambas pro service. */
     const data = {
       canvasSearchPaginated: [],
       canvasSearchComplete: [],
