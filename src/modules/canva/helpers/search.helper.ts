@@ -5,54 +5,64 @@ import { CanvaRepository } from '../repository/canva.repository';
 
 @Injectable()
 export class SearchHelper {
-  constructor(private canvasRepositry: CanvaRepository) {}
+  constructor(private canvasRepository: CanvaRepository) {}
   async execute(search: FilterBySearchDto, pageOptionsDto: PageOptionsDto) {
     const data = {
-      canvaSearchPaginated: [],
-      canvaSearchComplete: [],
+      canvasSearchPaginated: [],
+      canvasSearchComplete: [],
     };
-    const { name, genre, categoryName } = search;
+    const { id, name, genre, categoryName } = search;
 
     if (genre && categoryName) {
-      data.canvaSearchComplete =
-        await this.canvasRepositry.filterCanvasDropdownComplete(
+      data.canvasSearchComplete =
+        await this.canvasRepository.filterCanvasDropdownComplete(
           name,
           genre,
           categoryName,
         );
-      data.canvaSearchPaginated =
-        await this.canvasRepositry.filterCanvasDropdownPaginated(
+      data.canvasSearchPaginated =
+        await this.canvasRepository.filterCanvasDropdownPaginated(
           name,
           genre,
           categoryName,
           pageOptionsDto,
         );
     } else if (genre) {
-      data.canvaSearchComplete =
-        await this.canvasRepositry.filterCanvasByGenreComplete(name, genre);
-      data.canvaSearchPaginated =
-        await this.canvasRepositry.filterCanvasByGenrePaginated(
+      data.canvasSearchComplete =
+        await this.canvasRepository.filterCanvasByGenreComplete(name, genre);
+      data.canvasSearchPaginated =
+        await this.canvasRepository.filterCanvasByGenrePaginated(
           name,
           genre,
           pageOptionsDto,
         );
     } else if (categoryName) {
-      data.canvaSearchComplete =
-        await this.canvasRepositry.filterCanvasByCategoryComplete(
+      data.canvasSearchComplete =
+        await this.canvasRepository.filterCanvasByCategoryComplete(
           name,
           categoryName,
         );
-      data.canvaSearchPaginated =
-        await this.canvasRepositry.filterCanvasByCategoryPaginated(
+      data.canvasSearchPaginated =
+        await this.canvasRepository.filterCanvasByCategoryPaginated(
           name,
           categoryName,
           pageOptionsDto,
         );
     } else {
-      data.canvaSearchComplete = await this.canvasRepositry.getAllCanvas(name);
-      data.canvaSearchPaginated =
-        await this.canvasRepositry.getAllCanvasPaginated(name, pageOptionsDto);
+      data.canvasSearchComplete = await this.canvasRepository.getAllCanvas(
+        name,
+      );
+      data.canvasSearchPaginated =
+        await this.canvasRepository.getAllCanvasPaginated(name, pageOptionsDto);
     }
+
+    const canvasById = [await this.canvasRepository.getCanvaById(+id)];
+
+    if (canvasById.length > 0) {
+      data.canvasSearchComplete.unshift(canvasById[0]);
+      data.canvasSearchPaginated.unshift(canvasById[0]);
+    }
+
     return data;
   }
 }
