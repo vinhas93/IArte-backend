@@ -8,6 +8,7 @@ import {
   Put,
   Query,
   Res,
+  UploadedFile,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
