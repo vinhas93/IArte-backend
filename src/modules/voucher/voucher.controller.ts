@@ -13,6 +13,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { Response } from 'express';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { PageOptionsDto } from 'src/shared/pagination-dtos';
 import { LoggedManager } from '../auth/decorator/logged-manager.decorator';
