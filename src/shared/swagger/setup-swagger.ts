@@ -10,6 +10,7 @@ export function setupSwagger(app: INestApplication): void {
     .addTag('Auth')
     .addTag('User')
     .addTag('Category')
+    .addTag('Voucher')
     .addBearerAuth()
     .build();
 

@@ -1,3 +1,5 @@
+import { VoucherModule } from './modules/voucher/voucher.module';
+import { VoucherController } from './modules/voucher/voucher.controller';
 import { Module } from '@nestjs/common';
 import { PrismaService } from 'prisma/service/prisma.service';
 import { AppController } from './app.controller';
@@ -15,12 +17,13 @@ import { ConfigModule } from '@nestjs/config';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    UserModule,
     AuthModule,
-    CategoryModule,
     CanvaModule,
-    UploadModule,
+    CategoryModule,
     MailModule,
+    UploadModule,
+    UserModule,
+    VoucherModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],
