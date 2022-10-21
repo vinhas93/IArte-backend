@@ -1,12 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { PageOptionsDto } from 'src/shared/pagination-dtos';
-import { FilterBySearchDto } from '../dtos/canva-by-id.dto';
+import { DropdownDto } from '../dtos/dropdown.dto';
+import { SearchDto } from '../dtos/search.dto';
+
 import { CanvaRepository } from '../repository/canva.repository';
 
 @Injectable()
 export class SearchHelper {
   constructor(private canvasRepository: CanvaRepository) {}
-  async execute(search: FilterBySearchDto, pageOptionsDto: PageOptionsDto) {
+  async execute(
+    searchDto: SearchDto,
+    dropdownDto: DropdownDto,
+    pageOptionsDto: PageOptionsDto,
+  ) {
     /* O objetivo desse Helper é validar quais informações a barra de busca 
     está enviando pro servidor. Identificando, ele gera uma lista completa e
     uma lista com a paginação retornando ambas pro service. */
@@ -14,52 +20,66 @@ export class SearchHelper {
       canvasSearchPaginated: [],
       canvasSearchComplete: [],
     };
-    const { id, name, genre, categoryName } = search;
+    const canvasById = [];
 
-    if (genre && categoryName) {
-      data.canvasSearchComplete =
-        await this.canvasRepository.filterCanvasDropdownComplete(
-          name,
-          genre,
-          categoryName,
-        );
+    // console.log(`dropdown: ${dropdownDto}`);
+    // console.log(`searchDto: ${searchDto}`);
+    // console.log(`search: ${searchDto[0]} e ${searchDto[1]}`);
+
+    if (!dropdownDto) {
+      data.canvasSearchComplete = await this.canvasRepository.getAllCanvas(
+        searchDto.name,
+      );
       data.canvasSearchPaginated =
-        await this.canvasRepository.filterCanvasDropdownPaginated(
-          name,
-          genre,
-          categoryName,
+        await this.canvasRepository.getAllCanvasPaginated(
+          searchDto.name,
           pageOptionsDto,
         );
-    } else if (genre) {
-      data.canvasSearchComplete =
-        await this.canvasRepository.filterCanvasByGenreComplete(name, genre);
-      data.canvasSearchPaginated =
-        await this.canvasRepository.filterCanvasByGenrePaginated(
-          name,
-          genre,
-          pageOptionsDto,
-        );
-    } else if (categoryName) {
+    } else if (!dropdownDto.genre) {
       data.canvasSearchComplete =
         await this.canvasRepository.filterCanvasByCategoryComplete(
-          name,
-          categoryName,
+          searchDto.name,
+          dropdownDto.categoryName,
         );
       data.canvasSearchPaginated =
         await this.canvasRepository.filterCanvasByCategoryPaginated(
-          name,
-          categoryName,
+          searchDto.name,
+          dropdownDto.categoryName,
+          pageOptionsDto,
+        );
+    } else if (!dropdownDto.categoryName) {
+      data.canvasSearchComplete =
+        await this.canvasRepository.filterCanvasByGenreComplete(
+          searchDto.name,
+          dropdownDto.genre,
+        );
+      data.canvasSearchPaginated =
+        await this.canvasRepository.filterCanvasByGenrePaginated(
+          searchDto.name,
+          dropdownDto.genre,
           pageOptionsDto,
         );
     } else {
-      data.canvasSearchComplete = await this.canvasRepository.getAllCanvas(
-        name,
-      );
+      data.canvasSearchComplete =
+        await this.canvasRepository.filterCanvasDropdownComplete(
+          searchDto.name,
+          dropdownDto.genre,
+          dropdownDto.categoryName,
+        );
       data.canvasSearchPaginated =
-        await this.canvasRepository.getAllCanvasPaginated(name, pageOptionsDto);
+        await this.canvasRepository.filterCanvasDropdownPaginated(
+          searchDto.name,
+          dropdownDto.genre,
+          dropdownDto.categoryName,
+          pageOptionsDto,
+        );
     }
 
-    const canvasById = [await this.canvasRepository.getCanvaById(+id)];
+    if (searchDto.id) {
+      canvasById.push(
+        await this.canvasRepository.getCanvaById(parseInt(searchDto.id)),
+      );
+    }
 
     if (canvasById.length > 0) {
       data.canvasSearchComplete.unshift(canvasById[0]);
