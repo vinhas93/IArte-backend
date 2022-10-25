@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsDateString, IsInt, IsNumber } from 'class-validator';
+import { IsBoolean, IsInt, IsNumber } from 'class-validator';
 
 export class CreateVoucherDto {
   @IsNumber()
@@ -17,7 +17,6 @@ export class CreateVoucherDto {
   })
   active?: boolean;
 
-  @IsDateString()
   @ApiProperty({
     description: 'The date the voucher turns active',
     example: '2023-05-17',
@@ -38,7 +37,6 @@ export class CreateVoucherDto {
   })
   interval: number;
 
-  @IsDateString()
   @ApiProperty({
     description: 'The last day the voucher is active.',
     example: '2023-05-27',

@@ -106,7 +106,7 @@ export class VoucherController {
   })
   async deleteVoucher(
     @LoggedManager() user: UserEntity,
-    @Param('id') id: number,
+    @Param('id') id: string,
     @Res() res: Response,
   ) {
     const { status, data } = await this.deleteVoucherService.execute(+id);

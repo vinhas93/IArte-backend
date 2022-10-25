@@ -6,7 +6,7 @@ export class FindVoucherByIdService {
   constructor(private voucherRepository: VoucherRepository) {}
 
   async execute(id: number) {
-    const voucherExists = await this.voucherRepository.findVoucherById(id);
+    const voucherExists = await this.voucherRepository.findVoucherById(+id);
 
     if (!voucherExists) {
       return {

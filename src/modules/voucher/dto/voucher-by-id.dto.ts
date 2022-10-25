@@ -1,12 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber } from 'class-validator';
+import { IsNotEmpty, IsNumberString } from 'class-validator';
 
 export class VoucherByIdDto {
-  @IsNumber()
+  @IsNumberString()
   @IsNotEmpty()
   @ApiProperty({
     description: "Voucher's Id",
     example: 1,
   })
-  id: number;
+  id: string;
 }
