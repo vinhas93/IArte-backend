@@ -1,12 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { PageOptionsDto } from 'src/shared/pagination-dtos';
-import { FilterBySearchDto } from '../dtos/canva-by-id.dto';
+import { DropdownDto } from '../dtos/dropdown.dto';
+import { SearchDto } from '../dtos/search.dto';
 import { CanvaRepository } from '../repository/canva.repository';
 
 @Injectable()
 export class SearchHelper {
   constructor(private canvasRepository: CanvaRepository) {}
-  async execute(search: FilterBySearchDto, pageOptionsDto: PageOptionsDto) {
+  async execute(
+    dropdown: DropdownDto,
+    search: SearchDto,
+    pageOptionsDto: PageOptionsDto,
+  ) {
     /* O objetivo desse Helper é validar quais informações a barra de busca 
     está enviando pro servidor. Identificando, ele gera uma lista completa e
     uma lista com a paginação retornando ambas pro service. */
@@ -14,7 +19,8 @@ export class SearchHelper {
       canvasSearchPaginated: [],
       canvasSearchComplete: [],
     };
-    const { id, name, genre, categoryName } = search;
+    const { categoryName, genre } = dropdown;
+    const { id, name } = search;
 
     if (genre && categoryName) {
       data.canvasSearchComplete =

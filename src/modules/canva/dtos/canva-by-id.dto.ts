@@ -17,37 +17,3 @@ export class CanvaByIdDto {
   })
   id: string;
 }
-
-export class FilterBySearchDto {
-  @IsNumberString()
-  @IsNotEmpty()
-  @ApiProperty({
-    description: "Canva's id",
-    example: '1',
-  })
-  id?: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty({
-    description: "Canva's name",
-    example: 'John Smith',
-  })
-  name?: string;
-
-  @IsEnum(['Realism', 'Abstract', 'Fantasy', 'Gothic', 'PopArt', 'Others'])
-  @IsIn(['Realism', 'Abstract', 'Fantasy', 'Gothic', 'PopArt', 'Others'])
-  @ApiProperty({
-    description: "Canva's genre",
-    example: 'Others',
-  })
-  genre?: CanvaGenre;
-
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty({
-    description: 'Name of the category the canva belongs to',
-    example: 'tshirt',
-  })
-  categoryName?: string;
-}
