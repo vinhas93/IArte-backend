@@ -1,12 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { CanvaGenre } from '@prisma/client';
-import {
-  IsEnum,
-  IsIn,
-  IsNotEmpty,
-  IsNumberString,
-  IsString,
-} from 'class-validator';
+import { IsNotEmpty, IsNumberString } from 'class-validator';
 
 export class CanvaByIdDto {
   @IsNumberString()

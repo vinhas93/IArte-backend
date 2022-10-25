@@ -17,6 +17,7 @@ import {
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
+import { CanvaGenre } from '@prisma/client';
 import { Response } from 'express';
 import { PageOptionsDto } from 'src/shared/pagination-dtos/pageOptions.dto';
 import { LoggedSalesPerson } from '../auth/decorator/logged-sales-person.decorator';
@@ -99,22 +100,24 @@ export class CanvaController {
     description: 'Filter search results by category.',
     allowEmptyValue: true,
     example: 'wolf',
+    required: false,
   })
   @ApiQuery({
     name: 'genre',
     description: 'Filter search results by genre.',
     allowEmptyValue: true,
-    example: 'Fantasy',
+    enum: CanvaGenre,
+    required: false,
   })
   async searchCanva(
+    @Param('search') searchDto: SearchDto,
     @Query() pageOptionsDto: PageOptionsDto,
-    { categoryName, genre }: DropdownDto,
-    @Param('search') { id, name }: SearchDto,
+    dropdownDto: DropdownDto,
     @Res() res: Response,
   ) {
     const { status, data } = await this.getCanvaBySearchService.execute(
-      { categoryName, genre },
-      { id, name },
+      dropdownDto,
+      searchDto,
       pageOptionsDto,
     );
 

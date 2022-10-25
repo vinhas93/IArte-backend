@@ -1,20 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumberString, IsNotEmpty, IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 
 export class SearchDto {
-  @IsNumberString()
-  @IsNotEmpty()
-  @ApiProperty({
-    description: "Canva's id",
-    example: '1',
-  })
-  id?: string;
-
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   @ApiProperty({
-    description: "Canva's name",
-    example: 'John Smith',
+    description: 'Search params',
+    example: 'Karleigh Wright',
   })
-  name?: string;
+  search?: string;
 }
