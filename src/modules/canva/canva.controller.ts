@@ -8,16 +8,25 @@ import {
   Put,
   Query,
   Res,
+  UploadedFile,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiQuery,
+  ApiTags,
+} from '@nestjs/swagger';
+import { CanvaGenre } from '@prisma/client';
 import { Response } from 'express';
 import { PageOptionsDto } from 'src/shared/pagination-dtos/pageOptions.dto';
 import { LoggedSalesPerson } from '../auth/decorator/logged-sales-person.decorator';
 import { UserEntity } from '../user/entity/user.entity';
-import { CanvaByIdDto, FilterBySearchDto } from './dtos/canva-by-id.dto';
+import { CanvaByIdDto } from './dtos/canva-by-id.dto';
 import { CreateCanvaDto } from './dtos/create-canva.dto';
+import { DropdownDto } from './dtos/dropdown.dto';
+import { SearchDto } from './dtos/search.dto';
 import { UpdateCanvaDto } from './dtos/update-canva.dto';
 import {
   CreateCanvaService,
@@ -83,17 +92,31 @@ export class CanvaController {
     return res.status(status).send(data);
   }
 
-  @Get('/search')
+  @Get('/search/:search')
   @ApiOperation({
     summary: 'Search canva by name or id and filter by genre and/or category.',
   })
+  @ApiQuery({
+    name: 'Genre',
+    enum: CanvaGenre,
+    allowEmptyValue: true,
+    required: false,
+  })
+  @ApiQuery({
+    name: 'CategoryName',
+    allowEmptyValue: true,
+    type: 'string',
+    required: false,
+  })
   async searchCanva(
     @Query() pageOptionsDto: PageOptionsDto,
-    search: FilterBySearchDto,
+    dropdownDto: DropdownDto,
+    @Param() searchDto: SearchDto,
     @Res() res: Response,
   ) {
     const { status, data } = await this.getCanvaBySearchService.execute(
-      search,
+      searchDto,
+      dropdownDto,
       pageOptionsDto,
     );
 

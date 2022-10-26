@@ -32,5 +32,6 @@ import { MailModule } from '../mails/mail.module';
     RecoveryPasswordByEmail,
     UpdatePasswordByEmailService,
   ],
+  exports: [UserRepository],
 })
 export class UserModule {}

@@ -31,5 +31,6 @@ import {
     UpdateCanvaHelper,
     SearchHelper,
   ],
+  exports: [CanvaRepository, UpdateCanvaByIdService],
 })
 export class CanvaModule {}

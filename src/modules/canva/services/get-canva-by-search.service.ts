@@ -4,16 +4,26 @@ import {
   PageMetaDto,
   PageOptionsDto,
 } from 'src/shared/pagination-dtos';
-import { FilterBySearchDto } from '../dtos/canva-by-id.dto';
+import { DropdownDto } from '../dtos/dropdown.dto';
+import { SearchDto } from '../dtos/search.dto';
+
 import { SearchHelper } from '../helpers/search.helper';
 
 @Injectable()
 export class GetCanvaBySearchService {
   constructor(private searchHelper: SearchHelper) {}
 
-  async execute(search: FilterBySearchDto, pageOptionsDto: PageOptionsDto) {
+  async execute(
+    searchDto: SearchDto,
+    dropdownDto: DropdownDto,
+    pageOptionsDto: PageOptionsDto,
+  ) {
+    console.log(`dropdown: ${dropdownDto}`);
+    console.log(`searchDto: ${searchDto}`);
+    console.log(`search: ${searchDto[0]} e ${searchDto[1]}`);
+
     const { canvasSearchComplete, canvasSearchPaginated } =
-      await this.searchHelper.execute(search, pageOptionsDto);
+      await this.searchHelper.execute(searchDto, dropdownDto, pageOptionsDto);
 
     const itemCount = canvasSearchComplete.length;
 

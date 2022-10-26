@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Controller,
+  Patch,
   Post,
   UploadedFile,
   UseGuards,
@@ -10,7 +11,11 @@ import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { User } from '@prisma/client';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
+import { encode } from 'punycode';
 import { LoggedUser } from '../auth/decorator/logged-user.decorator';
+import { BatchUpdateCanvasService } from './services/batch-update-canvas.service';
 import { FileUploadService } from './services/upload-image.service';
 
 @ApiTags('Upload')
@@ -18,7 +23,10 @@ import { FileUploadService } from './services/upload-image.service';
 @ApiBearerAuth()
 @Controller('upload')
 export class UploadController {
-  constructor(private fileUploadService: FileUploadService) {}
+  constructor(
+    private fileUploadService: FileUploadService,
+    private batchUpdateCanvasService: BatchUpdateCanvasService,
+  ) {}
 
   @Post()
   @ApiConsumes('multipart/form-data')
@@ -56,6 +64,27 @@ export class UploadController {
     if (response.Location) {
       return { url: response.Location };
     }
+
+    return response;
+  }
+
+  @Patch('batch_update')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './files',
+        filename: (req, file, cb) => {
+          const randomName = Array(32)
+            .fill(null)
+            .map(() => Math.round(Math.random() * 16).toString(16))
+            .join('');
+          cb(null, `${randomName}${extname(file.originalname)}`);
+        },
+      }),
+    }),
+  )
+  async uploadFile(@LoggedUser() user: User, @UploadedFile() file) {
+    const response = await this.batchUpdateCanvasService.execute(file, user);
 
     return response;
   }
