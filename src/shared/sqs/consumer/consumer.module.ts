@@ -4,6 +4,7 @@ import { MessageHandler } from './messageHandler';
 import * as AWS from 'aws-sdk';
 import { SwitchService } from 'src/shared/services/switch.service';
 import { CanvaModule } from 'src/modules/canva/canva.module';
+import { HistoricModule } from 'src/modules/historic/historic.module';
 
 AWS.config.update({
   region: process.env.AWS_REGION,
@@ -14,6 +15,7 @@ AWS.config.update({
 @Module({
   imports: [
     CanvaModule,
+    HistoricModule,
     SqsModule.register({
       consumers: [
         {

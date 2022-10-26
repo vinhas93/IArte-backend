@@ -16,11 +16,11 @@ export class MessageHandler {
   async handleMessage(message: AWS.SQS.Message) {
     const obj = JSON.parse(message.Body) as Message;
 
-    await this.switchService.execute(obj);
+    const { data, status } = await this.switchService.execute(obj);
 
     return {
-      status: 200,
-      message: 'ok',
+      status,
+      data,
     };
   }
 }
