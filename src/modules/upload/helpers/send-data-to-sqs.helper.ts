@@ -37,10 +37,10 @@ export class SendDataToSqsHelper {
           genre: canvaExists.genre,
         },
         createHistory: {
-          old_price: +canvaExists.price,
-          new_price: +newPrice.toFixed(2),
-          user_id: +user.id,
-          canva_id: +canva.id,
+          oldPrice: +canvaExists.price,
+          newPrice: +newPrice.toFixed(2),
+          userId: +user.id,
+          canvaId: +canva.id,
         },
       },
     };
