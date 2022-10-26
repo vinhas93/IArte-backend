@@ -2,15 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { PageOptionsDto } from 'src/shared/pagination-dtos';
 import { DropdownDto } from '../dtos/dropdown.dto';
 import { SearchDto } from '../dtos/search.dto';
-
 import { CanvaRepository } from '../repository/canva.repository';
 
 @Injectable()
 export class SearchHelper {
   constructor(private canvasRepository: CanvaRepository) {}
   async execute(
+    dropdown: DropdownDto,
     searchDto: SearchDto,
-    dropdownDto: DropdownDto,
     pageOptionsDto: PageOptionsDto,
   ) {
     /* O objetivo desse Helper é validar quais informações a barra de busca 
@@ -20,70 +19,75 @@ export class SearchHelper {
       canvasSearchPaginated: [],
       canvasSearchComplete: [],
     };
-    const canvasById = [];
+    const { search } = searchDto;
 
-    // console.log(`dropdown: ${dropdownDto}`);
-    // console.log(`searchDto: ${searchDto}`);
-    // console.log(`search: ${searchDto[0]} e ${searchDto[1]}`);
+    // console.log(dropdown);
+    // console.log(search);
 
-    if (!dropdownDto) {
-      data.canvasSearchComplete = await this.canvasRepository.getAllCanvas(
-        searchDto.name,
-      );
-      data.canvasSearchPaginated =
-        await this.canvasRepository.getAllCanvasPaginated(
-          searchDto.name,
-          pageOptionsDto,
-        );
-    } else if (!dropdownDto.genre) {
-      data.canvasSearchComplete =
-        await this.canvasRepository.filterCanvasByCategoryComplete(
-          searchDto.name,
-          dropdownDto.categoryName,
-        );
-      data.canvasSearchPaginated =
-        await this.canvasRepository.filterCanvasByCategoryPaginated(
-          searchDto.name,
-          dropdownDto.categoryName,
-          pageOptionsDto,
-        );
-    } else if (!dropdownDto.categoryName) {
-      data.canvasSearchComplete =
-        await this.canvasRepository.filterCanvasByGenreComplete(
-          searchDto.name,
-          dropdownDto.genre,
-        );
-      data.canvasSearchPaginated =
-        await this.canvasRepository.filterCanvasByGenrePaginated(
-          searchDto.name,
-          dropdownDto.genre,
-          pageOptionsDto,
-        );
+    const searchIsANumber = parseInt(search);
+
+    console.log(searchIsANumber);
+
+    if (!isNaN(searchIsANumber)) {
+      const canvasById = [
+        await this.canvasRepository.getCanvaById(searchIsANumber),
+      ];
+
+      if (canvasById[0] != null) {
+        data.canvasSearchComplete.unshift(canvasById[0]);
+        data.canvasSearchPaginated.unshift(canvasById[0]);
+      } else {
+        return false;
+      }
     } else {
-      data.canvasSearchComplete =
-        await this.canvasRepository.filterCanvasDropdownComplete(
-          searchDto.name,
-          dropdownDto.genre,
-          dropdownDto.categoryName,
+      if (dropdown.genre && dropdown.categoryName) {
+        data.canvasSearchComplete =
+          await this.canvasRepository.filterCanvasDropdownComplete(
+            search,
+            dropdown.genre,
+            dropdown.categoryName,
+          );
+        data.canvasSearchPaginated =
+          await this.canvasRepository.filterCanvasDropdownPaginated(
+            search,
+            dropdown.genre,
+            dropdown.categoryName,
+            pageOptionsDto,
+          );
+      } else if (dropdown.genre) {
+        data.canvasSearchComplete =
+          await this.canvasRepository.filterCanvasByGenreComplete(
+            search,
+            dropdown.genre,
+          );
+        data.canvasSearchPaginated =
+          await this.canvasRepository.filterCanvasByGenrePaginated(
+            search,
+            dropdown.genre,
+            pageOptionsDto,
+          );
+      } else if (dropdown.categoryName) {
+        data.canvasSearchComplete =
+          await this.canvasRepository.filterCanvasByCategoryComplete(
+            search,
+            dropdown.categoryName,
+          );
+        data.canvasSearchPaginated =
+          await this.canvasRepository.filterCanvasByCategoryPaginated(
+            search,
+            dropdown.categoryName,
+            pageOptionsDto,
+          );
+      } else {
+        data.canvasSearchComplete = await this.canvasRepository.getAllCanvas(
+          search,
         );
-      data.canvasSearchPaginated =
-        await this.canvasRepository.filterCanvasDropdownPaginated(
-          searchDto.name,
-          dropdownDto.genre,
-          dropdownDto.categoryName,
-          pageOptionsDto,
-        );
-    }
-
-    if (searchDto.id) {
-      canvasById.push(
-        await this.canvasRepository.getCanvaById(parseInt(searchDto.id)),
-      );
-    }
-
-    if (canvasById.length > 0) {
-      data.canvasSearchComplete.unshift(canvasById[0]);
-      data.canvasSearchPaginated.unshift(canvasById[0]);
+        data.canvasSearchPaginated =
+          await this.canvasRepository.getAllCanvasPaginated(
+            search,
+            pageOptionsDto,
+          );
+      }
     }
 
     return data;

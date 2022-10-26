@@ -8,7 +8,6 @@ import {
   Put,
   Query,
   Res,
-  UploadedFile,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
@@ -38,7 +37,7 @@ import {
 } from './services';
 
 @ApiTags('Canva')
-@Controller('canva')
+@Controller()
 export class CanvaController {
   constructor(
     private createCanvaService: CreateCanvaService,
@@ -49,7 +48,7 @@ export class CanvaController {
     private getCanvaBySearchService: GetCanvaBySearchService,
   ) {}
 
-  @Post()
+  @Post('canva')
   @ApiOperation({
     summary: 'Create a canva. - (User`s but Customer)',
   })
@@ -67,7 +66,7 @@ export class CanvaController {
     return res.status(status).send(data);
   }
 
-  @Get()
+  @Get('canva')
   @ApiOperation({
     summary: 'Find all canvas.',
   })
@@ -82,7 +81,7 @@ export class CanvaController {
     return res.status(status).send(data);
   }
 
-  @Get(':id')
+  @Get('canva/:id')
   @ApiOperation({
     summary: 'Find canva by id.',
   })
@@ -92,26 +91,29 @@ export class CanvaController {
     return res.status(status).send(data);
   }
 
-  @Get('/search/:search')
+  @Get('search')
   @ApiOperation({
     summary: 'Search canva by name or id and filter by genre and/or category.',
   })
   @ApiQuery({
-    name: 'Genre',
-    enum: CanvaGenre,
+    name: 'categoryName',
+    description: 'Filter search results by category.',
     allowEmptyValue: true,
+    example: 'wolf',
     required: false,
   })
   @ApiQuery({
-    name: 'CategoryName',
+    name: 'genre',
+    description: 'Filter search results by genre.',
     allowEmptyValue: true,
-    type: 'string',
+    enum: CanvaGenre,
     required: false,
   })
   async searchCanva(
+    @Query() searchDto: SearchDto,
+    @Query() dropdownDto: DropdownDto,
     @Query() pageOptionsDto: PageOptionsDto,
-    dropdownDto: DropdownDto,
-    @Param() searchDto: SearchDto,
+
     @Res() res: Response,
   ) {
     const { status, data } = await this.getCanvaBySearchService.execute(
@@ -123,7 +125,7 @@ export class CanvaController {
     return res.status(status).send(data);
   }
 
-  @Put(':id')
+  @Put('canva/:id')
   @ApiOperation({
     summary: 'Update a canva. - (User`s but Customer)',
   })
@@ -143,7 +145,7 @@ export class CanvaController {
     return res.status(status).send(data);
   }
 
-  @Delete(':id')
+  @Delete('canva/:id')
   @ApiOperation({
     summary: 'Delete a canva. - (User`s but Customer)',
   })
