@@ -21,61 +21,74 @@ export class SearchHelper {
     };
     const { search } = searchDto;
 
-    if (dropdown.genre && dropdown.categoryName) {
-      data.canvasSearchComplete =
-        await this.canvasRepository.filterCanvasDropdownComplete(
-          search,
-          dropdown.genre,
-          dropdown.categoryName,
-        );
-      data.canvasSearchPaginated =
-        await this.canvasRepository.filterCanvasDropdownPaginated(
-          search,
-          dropdown.genre,
-          dropdown.categoryName,
-          pageOptionsDto,
-        );
-    } else if (dropdown.genre) {
-      data.canvasSearchComplete =
-        await this.canvasRepository.filterCanvasByGenreComplete(
-          search,
-          dropdown.genre,
-        );
-      data.canvasSearchPaginated =
-        await this.canvasRepository.filterCanvasByGenrePaginated(
-          search,
-          dropdown.genre,
-          pageOptionsDto,
-        );
-    } else if (dropdown.categoryName) {
-      data.canvasSearchComplete =
-        await this.canvasRepository.filterCanvasByCategoryComplete(
-          search,
-          dropdown.categoryName,
-        );
-      data.canvasSearchPaginated =
-        await this.canvasRepository.filterCanvasByCategoryPaginated(
-          search,
-          dropdown.categoryName,
-          pageOptionsDto,
-        );
+    // console.log(dropdown);
+    // console.log(search);
+
+    const searchIsANumber = parseInt(search);
+
+    console.log(searchIsANumber);
+
+    if (!isNaN(searchIsANumber)) {
+      const canvasById = [
+        await this.canvasRepository.getCanvaById(searchIsANumber),
+      ];
+
+      if (canvasById[0] != null) {
+        data.canvasSearchComplete.unshift(canvasById[0]);
+        data.canvasSearchPaginated.unshift(canvasById[0]);
+      } else {
+        return false;
+      }
     } else {
-      data.canvasSearchComplete = await this.canvasRepository.getAllCanvas(
-        search,
-      );
-      data.canvasSearchPaginated =
-        await this.canvasRepository.getAllCanvasPaginated(
+      if (dropdown.genre && dropdown.categoryName) {
+        data.canvasSearchComplete =
+          await this.canvasRepository.filterCanvasDropdownComplete(
+            search,
+            dropdown.genre,
+            dropdown.categoryName,
+          );
+        data.canvasSearchPaginated =
+          await this.canvasRepository.filterCanvasDropdownPaginated(
+            search,
+            dropdown.genre,
+            dropdown.categoryName,
+            pageOptionsDto,
+          );
+      } else if (dropdown.genre) {
+        data.canvasSearchComplete =
+          await this.canvasRepository.filterCanvasByGenreComplete(
+            search,
+            dropdown.genre,
+          );
+        data.canvasSearchPaginated =
+          await this.canvasRepository.filterCanvasByGenrePaginated(
+            search,
+            dropdown.genre,
+            pageOptionsDto,
+          );
+      } else if (dropdown.categoryName) {
+        data.canvasSearchComplete =
+          await this.canvasRepository.filterCanvasByCategoryComplete(
+            search,
+            dropdown.categoryName,
+          );
+        data.canvasSearchPaginated =
+          await this.canvasRepository.filterCanvasByCategoryPaginated(
+            search,
+            dropdown.categoryName,
+            pageOptionsDto,
+          );
+      } else {
+        data.canvasSearchComplete = await this.canvasRepository.getAllCanvas(
           search,
-          pageOptionsDto,
         );
+        data.canvasSearchPaginated =
+          await this.canvasRepository.getAllCanvasPaginated(
+            search,
+            pageOptionsDto,
+          );
+      }
     }
-
-    // const canvasById = [await this.canvasRepository.getCanvaById()];
-
-    // if (canvasById.length > 0) {
-    //   data.canvasSearchComplete.unshift(canvasById[0]);
-    //   data.canvasSearchPaginated.unshift(canvasById[0]);
-    // }
 
     return data;
   }

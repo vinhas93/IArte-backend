@@ -17,8 +17,18 @@ export class GetCanvaBySearchService {
     searchDto: SearchDto,
     pageOptionsDto: PageOptionsDto,
   ) {
-    const { canvasSearchComplete, canvasSearchPaginated } =
-      await this.searchHelper.execute(dropdownDto, searchDto, pageOptionsDto);
+    const data = await this.searchHelper.execute(
+      dropdownDto,
+      searchDto,
+      pageOptionsDto,
+    );
+    if (!data) {
+      return {
+        status: 200,
+        data: { message: 'There is no such product code.' },
+      };
+    }
+    const { canvasSearchComplete, canvasSearchPaginated } = data;
 
     const itemCount = canvasSearchComplete.length;
 

@@ -37,7 +37,7 @@ import {
 } from './services';
 
 @ApiTags('Canva')
-@Controller('canva')
+@Controller()
 export class CanvaController {
   constructor(
     private createCanvaService: CreateCanvaService,
@@ -48,7 +48,7 @@ export class CanvaController {
     private getCanvaBySearchService: GetCanvaBySearchService,
   ) {}
 
-  @Post()
+  @Post('canva')
   @ApiOperation({
     summary: 'Create a canva. - (User`s but Customer)',
   })
@@ -66,7 +66,7 @@ export class CanvaController {
     return res.status(status).send(data);
   }
 
-  @Get()
+  @Get('canva')
   @ApiOperation({
     summary: 'Find all canvas.',
   })
@@ -81,7 +81,7 @@ export class CanvaController {
     return res.status(status).send(data);
   }
 
-  @Get(':id')
+  @Get('canva/:id')
   @ApiOperation({
     summary: 'Find canva by id.',
   })
@@ -91,7 +91,7 @@ export class CanvaController {
     return res.status(status).send(data);
   }
 
-  @Get('/search/:search')
+  @Get('search')
   @ApiOperation({
     summary: 'Search canva by name or id and filter by genre and/or category.',
   })
@@ -110,9 +110,10 @@ export class CanvaController {
     required: false,
   })
   async searchCanva(
-    @Param('search') searchDto: SearchDto,
+    @Query() searchDto: SearchDto,
+    @Query() dropdownDto: DropdownDto,
     @Query() pageOptionsDto: PageOptionsDto,
-    dropdownDto: DropdownDto,
+
     @Res() res: Response,
   ) {
     const { status, data } = await this.getCanvaBySearchService.execute(
@@ -124,7 +125,7 @@ export class CanvaController {
     return res.status(status).send(data);
   }
 
-  @Put(':id')
+  @Put('canva/:id')
   @ApiOperation({
     summary: 'Update a canva. - (User`s but Customer)',
   })
@@ -144,7 +145,7 @@ export class CanvaController {
     return res.status(status).send(data);
   }
 
-  @Delete(':id')
+  @Delete('canva/:id')
   @ApiOperation({
     summary: 'Delete a canva. - (User`s but Customer)',
   })

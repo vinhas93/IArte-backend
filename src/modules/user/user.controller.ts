@@ -67,7 +67,7 @@ export class UserController {
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
   @ApiOperation({
-    summary: 'Create an User. - (Manager)',
+    summary: 'Create a User. - (Manager)',
   })
   async createUser(
     @LoggedManager() user: UserEntity,
@@ -83,7 +83,7 @@ export class UserController {
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
   @ApiOperation({
-    summary: 'Get an User by id. - (Manager)',
+    summary: 'Get a User by id. - (Manager)',
   })
   async getUserById(
     @LoggedManager() user: UserEntity,
