@@ -9,6 +9,9 @@ import { UserModule } from './modules/user/user.module';
 import { UploadModule } from './modules/upload/upload.module';
 import { MailModule } from './modules/mails/mail.module';
 import { ConfigModule } from '@nestjs/config';
+import { ProducerModule } from './shared/sqs/producer/producer.module';
+import { ConsumerModule } from './shared/sqs/consumer/consumer.module';
+import { UpdateCanvaByIdService } from './modules/canva/services';
 
 @Module({
   imports: [
@@ -21,6 +24,8 @@ import { ConfigModule } from '@nestjs/config';
     CanvaModule,
     UploadModule,
     MailModule,
+    ProducerModule,
+    ConsumerModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],

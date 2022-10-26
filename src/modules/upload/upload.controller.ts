@@ -83,8 +83,8 @@ export class UploadController {
       }),
     }),
   )
-  async uploadFile(@UploadedFile() file) {
-    const response = await this.batchUpdateCanvasService.execute(file);
+  async uploadFile(@LoggedUser() user: User, @UploadedFile() file) {
+    const response = await this.batchUpdateCanvasService.execute(file, user);
 
     return response;
   }
