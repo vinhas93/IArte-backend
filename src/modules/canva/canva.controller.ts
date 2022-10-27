@@ -117,8 +117,8 @@ export class CanvaController {
     @Res() res: Response,
   ) {
     const { status, data } = await this.getCanvaBySearchService.execute(
-      searchDto,
       dropdownDto,
+      searchDto,
       pageOptionsDto,
     );
 
