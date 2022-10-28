@@ -56,6 +56,9 @@ export class CanvaRepository extends PrismaClient {
     name: string,
     { skip, order, take, orderByColumn }: PageOptionsDto,
   ): Promise<CanvaEntity[]> {
+    if (name == '') {
+      return this.canva.findMany().catch(handleError);
+    }
     return this.canva
       .findMany({
         where: {
@@ -84,9 +87,6 @@ export class CanvaRepository extends PrismaClient {
           where: {
             genre,
           },
-          select: {
-            id: true,
-          },
           skip,
           take,
           orderBy: {
@@ -103,9 +103,6 @@ export class CanvaRepository extends PrismaClient {
             mode: 'insensitive',
           },
           genre,
-        },
-        select: {
-          id: true,
         },
         skip,
         take,
@@ -156,9 +153,6 @@ export class CanvaRepository extends PrismaClient {
           where: {
             categoryName,
           },
-          select: {
-            id: true,
-          },
           skip,
           take,
           orderBy: {
@@ -175,9 +169,6 @@ export class CanvaRepository extends PrismaClient {
             mode: 'insensitive',
           },
           categoryName,
-        },
-        select: {
-          id: true,
         },
         skip,
         take,
@@ -230,9 +221,6 @@ export class CanvaRepository extends PrismaClient {
             categoryName,
             genre,
           },
-          select: {
-            id: true,
-          },
           skip,
           take,
           orderBy: {
@@ -250,9 +238,6 @@ export class CanvaRepository extends PrismaClient {
           },
           categoryName,
           genre,
-        },
-        select: {
-          id: true,
         },
         skip,
         take,
@@ -330,7 +315,7 @@ export class CanvaRepository extends PrismaClient {
     return this.canva.update({ where: { id }, data }).catch(handleError);
   }
 
-  async deleteCava(id: number) {
+  async deleteCanva(id: number) {
     return this.canva.delete({ where: { id } }).catch(handleError);
   }
 }

@@ -15,7 +15,7 @@ export class DeleteCanvaService {
       };
     }
 
-    await this.canvaRepository.deleteCava(id);
+    await this.canvaRepository.deleteCanva(id);
 
     return {
       status: 200,

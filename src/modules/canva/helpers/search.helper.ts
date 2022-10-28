@@ -21,12 +21,7 @@ export class SearchHelper {
     };
     const { search } = searchDto;
 
-    // console.log(dropdown);
-    // console.log(search);
-
     const searchIsANumber = parseInt(search);
-
-    console.log(searchIsANumber);
 
     if (!isNaN(searchIsANumber)) {
       const canvasById = [
