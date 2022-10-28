@@ -12,7 +12,7 @@ import { ConfigModule } from '@nestjs/config';
 import { ProducerModule } from './shared/sqs/producer/producer.module';
 import { ConsumerModule } from './shared/sqs/consumer/consumer.module';
 import { UpdateCanvaByIdService } from './modules/canva/services';
-import { HistoricModule } from './modules/historic/historic.module';
+import { RecordModule } from './modules/historic/record.module';
 
 @Module({
   imports: [
@@ -27,7 +27,7 @@ import { HistoricModule } from './modules/historic/historic.module';
     MailModule,
     ProducerModule,
     ConsumerModule,
-    HistoricModule,
+    RecordModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],

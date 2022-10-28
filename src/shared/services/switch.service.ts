@@ -1,8 +1,8 @@
-import { CreateHistoryDto } from './../../modules/historic/dtos/create-history.dto';
+import { CreateRecordDto } from '../../modules/historic/dtos/create-record.dto';
 import { Injectable } from '@nestjs/common';
 import { UpdateCanvaDto } from 'src/modules/canva/dtos/update-canva.dto';
 import { UpdateCanvaByIdService } from 'src/modules/canva/services';
-import { CreateHistoryService } from 'src/modules/historic/services/create-history.service';
+import { CreateRecordService } from 'src/modules/historic/services/create-record.service';
 
 type Message = {
   event: string;
@@ -11,14 +11,14 @@ type Message = {
 
 type Data = {
   updateCanva: UpdateCanvaDto;
-  createHistory: CreateHistoryDto;
+  createHistory: CreateRecordDto;
 };
 
 @Injectable()
 export class SwitchService {
   constructor(
     private updateCanvaByIdService: UpdateCanvaByIdService,
-    private createHistoryService: CreateHistoryService,
+    private createHistoryService: CreateRecordService,
   ) {}
   async execute(message: Message) {
     const { event, data } = message;
