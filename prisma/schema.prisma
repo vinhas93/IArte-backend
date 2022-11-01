@@ -9,19 +9,19 @@ datasource db {
 }
 
 model Canva {
-  id                Int                 @id @default(autoincrement())
-  name              String              @db.VarChar(30)
-  price             Float
-  description       String?             @db.VarChar(300)
-  inStock           Boolean             @default(true) @map("in_stock")
-  image             String
-  categoryName      String              @map("category_name") @db.VarChar(255)
-  createdAt         DateTime            @default(now()) @map("created_at")
-  updatedAt         DateTime            @updatedAt @map("updated_at")
-  genre             CanvaGenre          @default(Others)
-  category          Category            @relation(fields: [categoryName], references: [name], onDelete: Cascade)
-  bulkUpdateRecords BulkUpdateRecords[]
-  product           Product[]
+  id                 Int                  @id @default(autoincrement())
+  name               String               @db.VarChar(30)
+  price              Float
+  description        String?              @db.VarChar(300)
+  inStock            Boolean              @default(true) @map("in_stock")
+  image              String
+  categoryName       String               @map("category_name") @db.VarChar(255)
+  createdAt          DateTime             @default(now()) @map("created_at")
+  updatedAt          DateTime             @updatedAt @map("updated_at")
+  genre              CanvaGenre           @default(Others)
+  category           Category             @relation(fields: [categoryName], references: [name], onDelete: Cascade)
+  batchUpdateRecords BatchUpdateRecords[]
+  product            Product[]
 
   @@map("canvas")
 }
@@ -94,30 +94,41 @@ model Product {
   @@map("products")
 }
 
-model BulkUpdateRecords {
+model BatchUpdateRecords {
   id        Int      @id @default(autoincrement())
   oldPrice  Float    @map("old_price")
   newPrice  Float    @map("new_price")
   userId    Int      @map("user_id")
   canvaId   Int      @map("canva_id")
   createdAt DateTime @default(now()) @map("created_at")
-  user      User     @relation(fields: [userId], references: [id], onDelete: SetNull, map: "bulk_update_records_fk0")
-  canva     Canva    @relation(fields: [canvaId], references: [id], onDelete: Cascade, map: "bulk_update_records_fk1")
+  user      User     @relation(fields: [userId], references: [id], onDelete: SetNull, map: "batch_update_records_fk0")
+  canva     Canva    @relation(fields: [canvaId], references: [id], onDelete: Cascade, map: "batch_update_records_fk1")
 
-  @@map("bulk_update_records")
+  @@map("batch_update_records")
+}
+
+model BatchUpdateStatus {
+  id               Int      @id @default(autoincrement())
+  totalItensUpdate Int      @map("total_itens_update")
+  successes        Int      @default(0)
+  failures         Int      @default(0)
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  @@map("batch_update_status")
 }
 
 model User {
-  id                   Int                 @id() @default(autoincrement())
-  name                 String              @db.VarChar(25)
-  image                String?             @db.VarChar(255)
-  password             String              @db.VarChar(255)
-  email                String              @unique @db.VarChar(50)
+  id                   Int                  @id() @default(autoincrement())
+  name                 String               @db.VarChar(25)
+  image                String?              @db.VarChar(255)
+  password             String               @db.VarChar(255)
+  email                String               @unique @db.VarChar(50)
   recoverPasswordToken String?
-  role                 UserRole            @default(SalesPerson)
-  bulkUpdateRecords    BulkUpdateRecords[]
-  createdAt            DateTime            @default(now()) @map("created_at")
-  updatedAt            DateTime            @updatedAt @map("updated_at")
+  role                 UserRole             @default(SalesPerson)
+  batchUpdateRecords   BatchUpdateRecords[]
+  createdAt            DateTime             @default(now()) @map("created_at")
+  updatedAt            DateTime             @updatedAt @map("updated_at")
 
   @@map("users")
 }
