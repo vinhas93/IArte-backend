@@ -5,7 +5,7 @@ generator client {
 datasource db {
   provider          = "postgresql"
   url               = env("DATABASE_URL")
-  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+  // shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
 model Canva {
@@ -101,8 +101,8 @@ model BulkUpdateRecords {
   userId    Int      @map("user_id")
   canvaId   Int      @map("canva_id")
   createdAt DateTime @default(now()) @map("created_at")
-  user      User     @relation(fields: [userId], references: [id], onDelete: NoAction, map: "bulk_update_records_fk0")
-  canva     Canva    @relation(fields: [canvaId], references: [id], onDelete: NoAction, map: "bulk_update_records_fk1")
+  user      User     @relation(fields: [userId], references: [id], onDelete: SetNull, map: "bulk_update_records_fk0")
+  canva     Canva    @relation(fields: [canvaId], references: [id], onDelete: Cascade, map: "bulk_update_records_fk1")
 
   @@map("bulk_update_records")
 }

@@ -67,12 +67,4 @@ export class CreateCanvaDto {
     example: 'tshirt',
   })
   categoryName: string;
-
-  @IsNumber()
-  @IsOptional()
-  @ApiProperty({
-    description: 'history mass update canva',
-    example: 1,
-  })
-  updateCanva?: number;
 }
