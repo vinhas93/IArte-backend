@@ -5,10 +5,10 @@ import { RecordEntity } from '../entity/record.entity';
 
 export class RecordRepository extends PrismaClient {
   async createRecord(data: CreateRecordDto): Promise<RecordEntity> {
-    return this.bulkUpdateRecords.create({ data }).catch(handleError);
+    return this.batchUpdateRecords.create({ data }).catch(handleError);
   }
 
   async findAllRecords(): Promise<RecordEntity[]> {
-    return this.bulkUpdateRecords.findMany().catch(handleError);
+    return this.batchUpdateRecords.findMany().catch(handleError);
   }
 }

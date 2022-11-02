@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { UserRepository } from './../../user/repository/user.repository';
 import { CanvaRepository } from '../../../modules/canva/repository/canva.repository';
 import { MessageProducer } from '../../../shared/sqs/producer/producer.service';
+import { BatchUpdateStatusRepository } from '../repository/batch-update-status.repository';
 
 @Injectable()
 export class SendDataToSqsHelper {
@@ -12,7 +13,7 @@ export class SendDataToSqsHelper {
     private userRepository: UserRepository,
   ) {}
 
-  async execute(canva, user) {
+  async execute(canva, user, batchUpdateStatusId) {
     const userExists = await this.userRepository.findUserById(+user.id);
 
     if (!userExists) {
@@ -41,6 +42,9 @@ export class SendDataToSqsHelper {
           newPrice: +newPrice.toFixed(2),
           userId: +user.id,
           canvaId: +canva.id,
+        },
+        batchUpdateStatus: {
+          id: batchUpdateStatusId,
         },
       },
     };

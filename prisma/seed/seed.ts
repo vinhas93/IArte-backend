@@ -8,6 +8,8 @@ async function main() {
     await prisma.$queryRaw(
       Prisma.sql`INSERT INTO users(id,name,image,password,email,role)
     VALUES
+      (1,'Daniel Vinhas','https://img.freepik.com/vetores-premium/rosto-de-jovem-negro-com-bigode-retrato-masculino-ou-avatar-em-estilo-simples-vista-frontal-vetor_497399-233.jpg?w=500','$2b$10$uabs/U9gibQFEXdbjxjaWuUr58ss1EX.XnKfXdCo.1n2.n3oHx/rS','vinhas.daniel@gmail.com','Owner'),
+      (2,'Henrique Gomes','https://img.freepik.com/vetores-premium/rosto-de-jovem-negro-com-bigode-retrato-masculino-ou-avatar-em-estilo-simples-vista-frontal-vetor_497399-233.jpg?w=500','$2b$10$uabs/U9gibQFEXdbjxjaWuUr58ss1EX.XnKfXdCo.1n2.n3oHx/rS','henriqquegperes@gmail.com','Owner'),
       (10,'Robin Hawkins','https://img.freepik.com/vetores-premium/rosto-de-jovem-negro-com-bigode-retrato-masculino-ou-avatar-em-estilo-simples-vista-frontal-vetor_497399-233.jpg?w=500','$2b$10$uabs/U9gibQFEXdbjxjaWuUr58ss1EX.XnKfXdCo.1n2.n3oHx/rS','robinhawkins@iart.org','Manager'),
       (11,'Benjamin Jensen','https://img.freepik.com/vetores-premium/rosto-de-jovem-negro-com-bigode-retrato-masculino-ou-avatar-em-estilo-simples-vista-frontal-vetor_497399-233.jpg?w=500','$2b$10$uabs/U9gibQFEXdbjxjaWuUr58ss1EX.XnKfXdCo.1n2.n3oHx/rS','benjaminjensen4709@iart.edu','SalesPerson'),
       (12,'Trevor Odom','https://img.freepik.com/vetores-premium/rosto-de-jovem-negro-com-bigode-retrato-masculino-ou-avatar-em-estilo-simples-vista-frontal-vetor_497399-233.jpg?w=500','$2b$10$uabs/U9gibQFEXdbjxjaWuUr58ss1EX.XnKfXdCo.1n2.n3oHx/rS','trevorodom@iart.org','Manager'),

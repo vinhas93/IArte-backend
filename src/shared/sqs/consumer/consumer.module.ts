@@ -1,10 +1,14 @@
 import { Module } from '@nestjs/common';
 import { SqsModule } from '@ssut/nestjs-sqs';
-import { MessageHandler } from './messageHandler';
 import * as AWS from 'aws-sdk';
-import { SwitchService } from 'src/shared/services/switch.service';
 import { CanvaModule } from 'src/modules/canva/canva.module';
 import { RecordModule } from 'src/modules/historic/record.module';
+import { MailModule } from 'src/modules/mails/mail.module';
+import { UploadModule } from 'src/modules/upload/upload.module';
+import { UserModule } from 'src/modules/user/user.module';
+import { SendEmailBatchStatusUpdate } from 'src/shared/services/send-email-batch-status-update.service';
+import { SwitchService } from 'src/shared/services/switch.service';
+import { MessageHandler } from './messageHandler';
 
 AWS.config.update({
   region: process.env.AWS_REGION,
@@ -14,8 +18,11 @@ AWS.config.update({
 
 @Module({
   imports: [
+    MailModule,
+    UploadModule,
     CanvaModule,
     RecordModule,
+    UserModule,
     SqsModule.register({
       consumers: [
         {
@@ -28,6 +35,6 @@ AWS.config.update({
     }),
   ],
   controllers: [],
-  providers: [MessageHandler, SwitchService],
+  providers: [MessageHandler, SwitchService, SendEmailBatchStatusUpdate],
 })
 export class ConsumerModule {}

@@ -45,4 +45,26 @@ export class MailService {
     });
     return;
   }
+
+  async sendStatusBatchUpdate(
+    totalItensUpdate,
+    successes,
+    failures,
+    email,
+    name,
+  ) {
+    await this.mailerService.sendMail({
+      to: email,
+      from: process.env.MAIL_FROM,
+      subject: 'Relatório das atualizações',
+      template: './result-updates',
+      context: {
+        totalItensUpdate,
+        successes,
+        failures,
+        name,
+      },
+    });
+    return;
+  }
 }
