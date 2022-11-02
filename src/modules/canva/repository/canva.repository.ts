@@ -57,7 +57,15 @@ export class CanvaRepository extends PrismaClient {
     { skip, order, take, orderByColumn }: PageOptionsDto,
   ): Promise<CanvaEntity[]> {
     if (name == '') {
-      return this.canva.findMany().catch(handleError);
+      return this.canva
+        .findMany({
+          skip,
+          take,
+          orderBy: {
+            [orderByColumn]: order,
+          },
+        })
+        .catch(handleError);
     }
     return this.canva
       .findMany({
