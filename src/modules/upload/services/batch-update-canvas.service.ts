@@ -17,14 +17,15 @@ export class BatchUpdateCanvasService {
     const batchUpdate: Array<any> = await new Promise((resolve) => {
       Papa.parse(csvData, {
         header: true,
-        delimitersToGuess: [
-          ',',
-          '\t',
-          '|',
-          ';',
-          Papa.RECORD_SEP,
-          Papa.UNIT_SEP,
-        ],
+        delimiter: ';',
+        // delimitersToGuess: [
+        //   ',',
+        //   '\t',
+        //   '|',
+        //   ';',
+        //   Papa.RECORD_SEP,
+        //   Papa.UNIT_SEP,
+        // ],
         complete: async (results) => {
           resolve(results.data);
         },
