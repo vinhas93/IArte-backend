@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "batch_update_status" ALTER COLUMN "successes" DROP NOT NULL,
+ALTER COLUMN "failures" DROP NOT NULL,
+ALTER COLUMN "updated_at" SET DEFAULT CURRENT_TIMESTAMP;

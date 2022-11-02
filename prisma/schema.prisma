@@ -5,7 +5,7 @@ generator client {
 datasource db {
   provider          = "postgresql"
   url               = env("DATABASE_URL")
-  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+  // shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
 model Canva {
@@ -110,10 +110,10 @@ model BatchUpdateRecords {
 model BatchUpdateStatus {
   id               Int      @id @default(autoincrement())
   totalItensUpdate Int      @map("total_itens_update")
-  successes        Int      @default(0)
-  failures         Int      @default(0)
+  successes        Int?     @default(0)
+  failures         Int?     @default(0)
   createdAt        DateTime @default(now()) @map("created_at")
-  updatedAt        DateTime @updatedAt @map("updated_at")
+  updatedAt        DateTime @default(now()) @updatedAt @map("updated_at")
 
   @@map("batch_update_status")
 }
