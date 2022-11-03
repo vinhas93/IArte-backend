@@ -19,7 +19,7 @@ model Canva {
   createdAt          DateTime             @default(now()) @map("created_at")
   updatedAt          DateTime             @updatedAt @map("updated_at")
   genre              CanvaGenre           @default(Others)
-  category           Category             @relation(fields: [categoryName], references: [name], onDelete: Cascade)
+  category           Category             @relation(fields: [categoryName], references: [name], onDelete: Cascade, onUpdate: Cascade)
   batchUpdateRecords BatchUpdateRecords[]
   product            Product[]
 
