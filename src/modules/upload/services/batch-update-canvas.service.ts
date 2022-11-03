@@ -18,14 +18,6 @@ export class BatchUpdateCanvasService {
       Papa.parse(csvData, {
         header: true,
         delimiter: ';',
-        // delimitersToGuess: [
-        //   ',',
-        //   '\t',
-        //   '|',
-        //   ';',
-        //   Papa.RECORD_SEP,
-        //   Papa.UNIT_SEP,
-        // ],
         complete: async (results) => {
           resolve(results.data);
         },

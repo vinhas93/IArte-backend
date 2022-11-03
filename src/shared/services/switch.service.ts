@@ -1,9 +1,8 @@
-import { CreateRecordDto } from '../../modules/historic/dtos/create-record.dto';
 import { Injectable } from '@nestjs/common';
 import { UpdateCanvaDto } from 'src/modules/canva/dtos/update-canva.dto';
 import { UpdateCanvaByIdService } from 'src/modules/canva/services';
 import { CreateRecordService } from 'src/modules/historic/services/create-record.service';
-import { BatchUpdateStatusRepository } from 'src/modules/upload/repository/batch-update-status.repository';
+import { CreateRecordDto } from '../../modules/historic/dtos/create-record.dto';
 import { SendEmailBatchStatusUpdate } from './send-email-batch-status-update.service';
 
 type Message = {
@@ -24,7 +23,6 @@ export class SwitchService {
   constructor(
     private updateCanvaByIdService: UpdateCanvaByIdService,
     private createHistoryService: CreateRecordService,
-    private batchUpdateStatusRepository: BatchUpdateStatusRepository,
     private sendEmailBatchStatusUpdate: SendEmailBatchStatusUpdate,
   ) {}
   async execute(message: Message) {

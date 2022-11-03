@@ -19,7 +19,7 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
           },
         },
         defaults: {
-          from: 'no-reply <no-reply@iart.com>',
+          from: 'no-reply <no-reply@iarte.com>',
         },
         template: {
           dir: __dirname + '../../../../templates',
