@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { UpdateCanvaDto } from 'src/modules/canva/dtos/update-canva.dto';
 import { UpdateCanvaByIdService } from 'src/modules/canva/services';
-import { CreateRecordService } from 'src/modules/historic/services/create-record.service';
-import { CreateRecordDto } from '../../modules/historic/dtos/create-record.dto';
+import { CreateRecordDto } from 'src/modules/record/dtos/create-record.dto';
+import { CreateRecordService } from 'src/modules/record/services/create-record.service';
+
 import { SendEmailBatchStatusUpdate } from './send-email-batch-status-update.service';
 
 type Message = {
@@ -12,7 +13,7 @@ type Message = {
 
 type Data = {
   updateCanva: UpdateCanvaDto;
-  createHistory: CreateRecordDto;
+  createRecord: CreateRecordDto;
   batchUpdateStatus: {
     id: number;
   };
@@ -22,7 +23,7 @@ type Data = {
 export class SwitchService {
   constructor(
     private updateCanvaByIdService: UpdateCanvaByIdService,
-    private createHistoryService: CreateRecordService,
+    private createRecordService: CreateRecordService,
     private sendEmailBatchStatusUpdate: SendEmailBatchStatusUpdate,
   ) {}
   async execute(message: Message) {
@@ -30,16 +31,21 @@ export class SwitchService {
 
     switch (event) {
       case 'updateCanvas':
-        const { createHistory, updateCanva, batchUpdateStatus } = data as Data;
+        const { createRecord, updateCanva, batchUpdateStatus } = data as Data;
 
         const { status } = await this.updateCanvaByIdService.execute(
           updateCanva.id,
           updateCanva,
         );
 
-        if (status == 200) {
+        if (
+          status == 200 &&
+          updateCanva.id != undefined &&
+          updateCanva.id != 0
+        ) {
+          createRecord.statusMessage = 'Updated successfully.';
           await this.sendEmailBatchStatusUpdate.execute(
-            createHistory,
+            createRecord,
             batchUpdateStatus,
             {
               successes: {
@@ -47,11 +53,20 @@ export class SwitchService {
               },
             },
           );
-          return this.createHistoryService.execute(createHistory);
+          return this.createRecordService.execute(createRecord);
         }
 
+        const failedRecord: CreateRecordDto = {
+          atStatus: createRecord.atStatus,
+          canvaId: 0,
+          newPrice: 0,
+          oldPrice: 0,
+          userId: createRecord.userId,
+          statusMessage: 'Canva not found',
+        };
+
         await this.sendEmailBatchStatusUpdate.execute(
-          createHistory,
+          createRecord,
           batchUpdateStatus,
           {
             failures: {
@@ -60,10 +75,7 @@ export class SwitchService {
           },
         );
 
-        return {
-          status: 400,
-          data: 'Fail to create or update',
-        };
+        return this.createRecordService.execute(failedRecord);
 
       default:
         break;

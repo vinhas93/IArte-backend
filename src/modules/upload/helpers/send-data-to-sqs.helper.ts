@@ -1,31 +1,34 @@
 import { Injectable } from '@nestjs/common';
+import { CategoryRepository } from 'src/modules/category/repository/category.repository';
 import { CanvaRepository } from '../../../modules/canva/repository/canva.repository';
 import { MessageProducer } from '../../../shared/sqs/producer/producer.service';
-import { UserRepository } from './../../user/repository/user.repository';
 
 @Injectable()
 export class SendDataToSqsHelper {
   constructor(
     private messageProducer: MessageProducer,
     private canvaRepository: CanvaRepository,
-    private userRepository: UserRepository,
+    private categoryRepository: CategoryRepository,
   ) {}
 
   async execute(canva, user, batchUpdateStatusId) {
-    const userExists = await this.userRepository.findUserById(+user.id);
-
-    if (!userExists) {
-      return;
+    if (isNaN(canva.id)) {
+      canva.id = 0;
     }
-
     const canvaExists = await this.canvaRepository.getCanvaById(+canva.id);
+    let newPrice = 0;
 
-    if (!canvaExists) {
-      return;
+    if (canvaExists) {
+      const category = await this.categoryRepository.findCategoryByName(
+        canvaExists.categoryName,
+      );
+
+      newPrice = canvaExists.price * ((100 - canva.percentualDesconto) / 100);
+
+      if (newPrice < category.price) {
+        newPrice = category.price;
+      }
     }
-
-    const newPrice =
-      canvaExists.price * ((100 - canva.percentualDesconto) / 100);
 
     const producerSqsMessage = {
       event: 'updateCanvas',
@@ -33,13 +36,14 @@ export class SendDataToSqsHelper {
         updateCanva: {
           id: +canva.id,
           price: +newPrice.toFixed(2),
-          genre: canvaExists.genre,
+          genre: canvaExists ? canvaExists.genre : '',
         },
-        createHistory: {
-          oldPrice: +canvaExists.price,
+        createRecord: {
+          oldPrice: canvaExists ? +canvaExists.price : 0,
           newPrice: +newPrice.toFixed(2),
           userId: +user.id,
           canvaId: +canva.id,
+          atStatus: batchUpdateStatusId,
         },
         batchUpdateStatus: {
           id: batchUpdateStatusId,

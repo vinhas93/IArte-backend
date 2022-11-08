@@ -6,7 +6,7 @@ import { AppService } from './app.service';
 import { AuthModule } from './modules/auth/auth.module';
 import { CanvaModule } from './modules/canva/canva.module';
 import { CategoryModule } from './modules/category/category.module';
-import { RecordModule } from './modules/historic/record.module';
+import { RecordModule } from './modules/record/record.module';
 import { MailModule } from './modules/mails/mail.module';
 import { UploadModule } from './modules/upload/upload.module';
 import { UserModule } from './modules/user/user.module';

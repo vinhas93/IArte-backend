@@ -13,7 +13,6 @@ import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { User } from '@prisma/client';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
-import { encode } from 'punycode';
 import { LoggedUser } from '../auth/decorator/logged-user.decorator';
 import { BatchUpdateCanvasService } from './services/batch-update-canvas.service';
 import { FileUploadService } from './services/upload-image.service';
@@ -69,6 +68,8 @@ export class UploadController {
   }
 
   @Patch('batch_update')
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({

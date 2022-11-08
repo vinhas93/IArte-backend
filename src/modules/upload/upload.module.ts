@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 import { ProducerModule } from 'src/shared/sqs/producer/producer.module';
 import { CanvaModule } from '../canva/canva.module';
+import { CategoryRepository } from '../category/repository/category.repository';
 import { UserModule } from '../user/user.module';
 import { SendDataToSqsHelper } from './helpers/send-data-to-sqs.helper';
 import { BatchUpdateStatusRepository } from './repository/batch-update-status.repository';
@@ -22,6 +23,7 @@ import { UploadController } from './upload.controller';
     BatchUpdateCanvasService,
     SendDataToSqsHelper,
     BatchUpdateStatusRepository,
+    CategoryRepository,
   ],
   exports: [BatchUpdateStatusRepository],
 })

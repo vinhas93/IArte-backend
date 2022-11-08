@@ -24,7 +24,7 @@ export class UpdateCanvaByIdService {
 
     if (!canvaExists) {
       return {
-        status: 400,
+        status: 404,
         data: { message: 'Canva not found' },
       };
     }

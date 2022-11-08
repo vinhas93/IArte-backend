@@ -16,7 +16,7 @@ export class MessageHandler {
   async handleMessage(message: AWS.SQS.Message) {
     const obj = JSON.parse(message.Body) as Message;
 
-    const { data, status } = await this.switchService.execute(obj);
+    const { status, data } = await this.switchService.execute(obj);
 
     return {
       status,

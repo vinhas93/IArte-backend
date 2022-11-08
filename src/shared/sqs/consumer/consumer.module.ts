@@ -2,8 +2,9 @@ import { Module } from '@nestjs/common';
 import { SqsModule } from '@ssut/nestjs-sqs';
 import * as AWS from 'aws-sdk';
 import { CanvaModule } from 'src/modules/canva/canva.module';
-import { RecordModule } from 'src/modules/historic/record.module';
+
 import { MailModule } from 'src/modules/mails/mail.module';
+import { RecordModule } from 'src/modules/record/record.module';
 import { UploadModule } from 'src/modules/upload/upload.module';
 import { UserModule } from 'src/modules/user/user.module';
 import { SendEmailBatchStatusUpdate } from 'src/shared/services/send-email-batch-status-update.service';

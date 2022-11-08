@@ -5,7 +5,7 @@ generator client {
 datasource db {
   provider          = "postgresql"
   url               = env("DATABASE_URL")
-  // shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
 model Canva {
@@ -14,12 +14,12 @@ model Canva {
   price              Float
   description        String?              @db.VarChar(300)
   inStock            Boolean              @default(true) @map("in_stock")
-  image              String
-  categoryName       String               @map("category_name") @db.VarChar(255)
   createdAt          DateTime             @default(now()) @map("created_at")
-  updatedAt          DateTime             @updatedAt @map("updated_at")
+  updatedAt          DateTime             @default(now()) @updatedAt @map("updated_at")
+  categoryName       String               @map("category_name") @db.VarChar(255)
+  image              String
   genre              CanvaGenre           @default(Others)
-  category           Category             @relation(fields: [categoryName], references: [name], onDelete: Cascade, onUpdate: Cascade)
+  category           Category             @relation(fields: [categoryName], references: [name], onDelete: Cascade)
   batchUpdateRecords BatchUpdateRecords[]
   product            Product[]
 
@@ -50,7 +50,7 @@ model Category {
   description String?  @db.VarChar(300)
   cost        Float
   createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
   canvas      Canva[]
 
   @@map("categories")
@@ -95,40 +95,44 @@ model Product {
 }
 
 model BatchUpdateRecords {
-  id        Int      @id @default(autoincrement())
-  oldPrice  Float    @map("old_price")
-  newPrice  Float    @map("new_price")
-  userId    Int      @map("user_id")
-  canvaId   Int      @map("canva_id")
-  createdAt DateTime @default(now()) @map("created_at")
-  user      User     @relation(fields: [userId], references: [id], onDelete: SetNull, map: "batch_update_records_fk0")
-  canva     Canva    @relation(fields: [canvaId], references: [id], onDelete: Cascade, map: "batch_update_records_fk1")
+  id                Int               @id @default(autoincrement())
+  oldPrice          Float             @map("old_price")
+  newPrice          Float             @map("new_price")
+  userId            Int               @map("user_id")
+  canvaId           Int               @map("canva_id")
+  createdAt         DateTime          @default(now()) @map("created_at")
+  atStatus          Int               @map("at_status")
+  statusMessage     String?           @map("status_message")
+  user              User              @relation(fields: [userId], references: [id], onDelete: SetNull, map: "batch_update_records_fk0")
+  canva             Canva             @relation(fields: [canvaId], references: [id], onDelete: Cascade, map: "batch_update_records_fk1")
+  batchUpdadeStatus BatchUpdateStatus @relation(fields: [atStatus], references: [id], map: "batch_update_records_fk2")
 
   @@map("batch_update_records")
 }
 
 model BatchUpdateStatus {
-  id               Int      @id @default(autoincrement())
-  totalItensUpdate Int      @map("total_itens_update")
-  successes        Int?     @default(0)
-  failures         Int?     @default(0)
-  createdAt        DateTime @default(now()) @map("created_at")
-  updatedAt        DateTime @default(now()) @updatedAt @map("updated_at")
+  id                 Int                  @id @default(autoincrement())
+  totalItensUpdate   Int                  @map("total_itens_update")
+  successes          Int?                 @default(0)
+  failures           Int?                 @default(0)
+  createdAt          DateTime             @default(now()) @map("created_at")
+  updatedAt          DateTime             @default(now()) @updatedAt @map("updated_at")
+  BatchUpdateRecords BatchUpdateRecords[]
 
   @@map("batch_update_status")
 }
 
 model User {
-  id                   Int                  @id() @default(autoincrement())
+  id                   Int                  @id @default(autoincrement())
   name                 String               @db.VarChar(25)
   image                String?              @db.VarChar(255)
   password             String               @db.VarChar(255)
   email                String               @unique @db.VarChar(50)
-  recoverPasswordToken String?
   role                 UserRole             @default(SalesPerson)
-  batchUpdateRecords   BatchUpdateRecords[]
   createdAt            DateTime             @default(now()) @map("created_at")
-  updatedAt            DateTime             @updatedAt @map("updated_at")
+  updatedAt            DateTime             @default(now()) @updatedAt @map("updated_at")
+  recoverPasswordToken String?
+  batchUpdateRecords   BatchUpdateRecords[]
 
   @@map("users")
 }
