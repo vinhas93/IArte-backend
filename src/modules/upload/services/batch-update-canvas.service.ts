@@ -27,6 +27,7 @@ export class BatchUpdateCanvasService {
 
     if (batchUpdate.length > 0) {
       const batchUpdateStatus = await this.batchUpdateStatusRepository.create({
+        userId: user.id,
         totalItensUpdate: batchUpdate.length,
         successes: 0,
         failures: 0,

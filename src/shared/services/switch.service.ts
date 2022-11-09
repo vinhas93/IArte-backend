@@ -54,16 +54,6 @@ export class SwitchService {
           }
         }
 
-        // await this.sendEmailBatchStatusUpdate.execute(
-        //   createRecord,
-        //   batchUpdateStatus,
-        //   {
-        //     failures: {
-        //       increment: 1,
-        //     },
-        //   },
-        // );
-
         return;
 
       default:

@@ -66,7 +66,6 @@ export class SendDataToSqsHelper {
         createRecord: {
           oldPrice: canvaExists ? +canvaExists.price : 0,
           newPrice: +newPrice.toFixed(2),
-          userId: +user.id,
           canvaId: +canva.id,
           atStatus: batchUpdateStatusId,
         },

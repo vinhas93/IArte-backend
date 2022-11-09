@@ -11,17 +11,6 @@ export class CreateRecordService {
   ) {}
 
   async execute(data: CreateRecordDto) {
-    const { userId } = data;
-
-    const userExists = await this.userRepository.findUserById(userId);
-
-    if (!userExists) {
-      return {
-        status: 400,
-        data: { message: 'User not found' },
-      };
-    }
-
     const newRecord = await this.recordRepository.createRecord(data);
 
     return {
