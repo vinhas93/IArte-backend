@@ -8,6 +8,7 @@ import { UserModule } from '../user/user.module';
 import { SendDataToSqsHelper } from './helpers/send-data-to-sqs.helper';
 import { BatchUpdateStatusRepository } from './repository/batch-update-status.repository';
 import { BatchUpdateCanvasService } from './services/batch-update-canvas.service';
+import { FindOneBatchUpdateCanvasService } from './services/find-one-batch-update-canvas.service';
 import { FileUploadService } from './services/upload-image.service';
 import { UploadController } from './upload.controller';
 
@@ -26,6 +27,7 @@ import { UploadController } from './upload.controller';
     BatchUpdateStatusRepository,
     CategoryRepository,
     SendEmailBatchStatusUpdate,
+    FindOneBatchUpdateCanvasService,
   ],
   exports: [BatchUpdateStatusRepository],
 })

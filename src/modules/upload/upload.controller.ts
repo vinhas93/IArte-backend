@@ -1,8 +1,11 @@
 import {
   BadRequestException,
   Controller,
+  Get,
+  Param,
   Patch,
   Post,
+  Res,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -11,10 +14,13 @@ import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { User } from '@prisma/client';
+import { Response } from 'express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
-import { LoggedUser } from '../auth/decorator/logged-user.decorator';
+import { LoggedManager } from '../auth/decorator/logged-manager.decorator';
+import { BatchUpdateStatusRepository } from './repository/batch-update-status.repository';
 import { BatchUpdateCanvasService } from './services/batch-update-canvas.service';
+import { FindOneBatchUpdateCanvasService } from './services/find-one-batch-update-canvas.service';
 import { FileUploadService } from './services/upload-image.service';
 
 @ApiTags('Upload')
@@ -25,6 +31,8 @@ export class UploadController {
   constructor(
     private fileUploadService: FileUploadService,
     private batchUpdateCanvasService: BatchUpdateCanvasService,
+    private batchUpdateStatusRepository: BatchUpdateStatusRepository,
+    private findOneBatchUpdateCanvasService: FindOneBatchUpdateCanvasService,
   ) {}
 
   @Post()
@@ -57,7 +65,7 @@ export class UploadController {
       },
     }),
   )
-  async upload(@LoggedUser() user: User, @UploadedFile() file) {
+  async upload(@LoggedManager() user: User, @UploadedFile() file) {
     const response = await this.fileUploadService.upload(file);
 
     if (response.Location) {
@@ -84,9 +92,31 @@ export class UploadController {
       }),
     }),
   )
-  async uploadFile(@LoggedUser() user: User, @UploadedFile() file) {
+  async uploadFile(@LoggedManager() user: User, @UploadedFile() file) {
     const response = await this.batchUpdateCanvasService.execute(file, user);
 
     return response;
+  }
+
+  @Get('status')
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
+  async findAll(@LoggedManager() user: User, @Res() res: Response) {
+    const { status, data } = await this.batchUpdateStatusRepository.findAll();
+    return res.status(status).send(data);
+  }
+
+  @Get('status/:id')
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
+  async findOne(
+    @LoggedManager() user: User,
+    @Res() res: Response,
+    @Param('id') id: string,
+  ) {
+    const { status, data } = await this.findOneBatchUpdateCanvasService.execute(
+      +id,
+    );
+    return res.status(status).send(data);
   }
 }
