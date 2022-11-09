@@ -33,49 +33,38 @@ export class SwitchService {
       case 'updateCanvas':
         const { createRecord, updateCanva, batchUpdateStatus } = data as Data;
 
-        const { status } = await this.updateCanvaByIdService.execute(
-          updateCanva.id,
-          updateCanva,
-        );
-
-        if (
-          status == 200 &&
-          updateCanva.id != undefined &&
-          updateCanva.id != 0
-        ) {
-          createRecord.statusMessage = 'Updated successfully.';
-          await this.sendEmailBatchStatusUpdate.execute(
-            createRecord,
-            batchUpdateStatus,
-            {
-              successes: {
-                increment: 1,
-              },
-            },
+        if (updateCanva.id != null) {
+          const { status } = await this.updateCanvaByIdService.execute(
+            updateCanva.id,
+            updateCanva,
           );
-          return this.createRecordService.execute(createRecord);
+
+          if (status == 200) {
+            createRecord.statusMessage = 'Updated successfully.';
+            await this.sendEmailBatchStatusUpdate.execute(
+              createRecord,
+              batchUpdateStatus,
+              {
+                successes: {
+                  increment: 1,
+                },
+              },
+            );
+            return this.createRecordService.execute(createRecord);
+          }
         }
 
-        const failedRecord: CreateRecordDto = {
-          atStatus: createRecord.atStatus,
-          canvaId: 0,
-          newPrice: 0,
-          oldPrice: 0,
-          userId: createRecord.userId,
-          statusMessage: 'Canva not found',
-        };
+        // await this.sendEmailBatchStatusUpdate.execute(
+        //   createRecord,
+        //   batchUpdateStatus,
+        //   {
+        //     failures: {
+        //       increment: 1,
+        //     },
+        //   },
+        // );
 
-        await this.sendEmailBatchStatusUpdate.execute(
-          createRecord,
-          batchUpdateStatus,
-          {
-            failures: {
-              increment: 1,
-            },
-          },
-        );
-
-        return this.createRecordService.execute(failedRecord);
+        return;
 
       default:
         break;

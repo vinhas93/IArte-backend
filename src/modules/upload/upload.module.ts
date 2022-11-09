@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
+import { SendEmailBatchStatusUpdate } from 'src/shared/services/send-email-batch-status-update.service';
 import { ProducerModule } from 'src/shared/sqs/producer/producer.module';
 import { CanvaModule } from '../canva/canva.module';
 import { CategoryRepository } from '../category/repository/category.repository';
@@ -24,6 +25,7 @@ import { UploadController } from './upload.controller';
     SendDataToSqsHelper,
     BatchUpdateStatusRepository,
     CategoryRepository,
+    SendEmailBatchStatusUpdate,
   ],
   exports: [BatchUpdateStatusRepository],
 })

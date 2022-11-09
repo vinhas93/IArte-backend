@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CategoryRepository } from 'src/modules/category/repository/category.repository';
+import { SendEmailBatchStatusUpdate } from 'src/shared/services/send-email-batch-status-update.service';
 import { CanvaRepository } from '../../../modules/canva/repository/canva.repository';
 import { MessageProducer } from '../../../shared/sqs/producer/producer.service';
 
@@ -9,13 +10,37 @@ export class SendDataToSqsHelper {
     private messageProducer: MessageProducer,
     private canvaRepository: CanvaRepository,
     private categoryRepository: CategoryRepository,
+    private sendEmailBatchStatusUpdate: SendEmailBatchStatusUpdate,
   ) {}
 
   async execute(canva, user, batchUpdateStatusId) {
-    if (isNaN(canva.id)) {
-      canva.id = 0;
+    if (isNaN(canva.id) || canva.id < 1) {
+      const batchUpdateStatus = {
+        id: batchUpdateStatusId,
+      };
+      await this.sendEmailBatchStatusUpdate.execute(null, batchUpdateStatus, {
+        failures: {
+          increment: 1,
+        },
+      });
+
+      return;
     }
+
     const canvaExists = await this.canvaRepository.getCanvaById(+canva.id);
+
+    if (!canvaExists) {
+      const batchUpdateStatus = {
+        id: batchUpdateStatusId,
+      };
+      await this.sendEmailBatchStatusUpdate.execute(null, batchUpdateStatus, {
+        failures: {
+          increment: 1,
+        },
+      });
+      return;
+    }
+
     let newPrice = 0;
 
     if (canvaExists) {

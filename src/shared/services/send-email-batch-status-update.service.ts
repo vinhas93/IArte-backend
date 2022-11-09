@@ -18,7 +18,7 @@ export class SendEmailBatchStatusUpdate {
 
     const { successes, failures, totalItensUpdate } = statusBatchUpdate;
 
-    const haveAllCanvasBeenUpdated = successes + failures >= totalItensUpdate;
+    const haveAllCanvasBeenUpdated = successes + failures === totalItensUpdate;
 
     if (haveAllCanvasBeenUpdated) {
       const user = await this.userRepository.findUserById(createRecord.userId);

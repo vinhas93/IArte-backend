@@ -19,6 +19,7 @@ export class BatchUpdateCanvasService {
     const batchUpdate: Array<any> = await new Promise((resolve) => {
       Papa.parse(csvData, {
         header: true,
+        skipEmptyLines: true,
         delimiter: ';',
         complete: async (results) => {
           resolve(results.data);
@@ -28,7 +29,7 @@ export class BatchUpdateCanvasService {
 
     if (batchUpdate.length > 0) {
       const batchUpdateStatus = await this.batchUpdateStatusRepository.create({
-        totalItensUpdate: batchUpdate.length - 1,
+        totalItensUpdate: batchUpdate.length,
         successes: 0,
         failures: 0,
       });
