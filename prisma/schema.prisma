@@ -32,7 +32,7 @@ model Cart {
   finalPrice       Float     @map("final_price")
   totalDiscount    Float     @map("total_discount")
   createdAt        DateTime  @default(now()) @map("created_at")
-  updatedAt        DateTime  @updatedAt @map("updated_at")
+  updatedAt        DateTime  @default(now()) @updatedAt @map("updated_at")
   costumerId       Int       @map("costumer_id")
   voucherId        Int?      @map("voucher_id")
   volumeOfProducts Int?      @map("volume_of_products")
@@ -63,7 +63,7 @@ model Customer {
   email     String   @unique @db.VarChar(50)
   wallet    Float
   createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
   carts     Cart[]
 
   @@map("customers")
@@ -75,7 +75,7 @@ model Guideline {
   privacyPolicy String?  @map("privacy_policy") @db.VarChar(500)
   refundPolicy  String   @map("refund_policy") @db.VarChar(500)
   createdAt     DateTime @default(now()) @map("created_at")
-  updatedAt     DateTime @updatedAt @map("updated_at")
+  updatedAt     DateTime @default(now()) @updatedAt @map("updated_at")
 
   @@map("guidelines")
 }
@@ -84,7 +84,7 @@ model Product {
   id        Int      @id @default(autoincrement())
   erased    Boolean  @default(false)
   createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
   cartId    Int      @map("cart_id")
   canvaId   Int?     @map("canva_id")
   quantity  Int?
@@ -103,7 +103,7 @@ model BatchUpdateRecords {
   createdAt         DateTime          @default(now()) @map("created_at")
   atStatus          Int               @map("at_status")
   statusMessage     String?           @map("status_message")
-  user              User              @relation(fields: [userId], references: [id], onDelete: SetNull, map: "batch_update_records_fk0")
+  user              User              @relation(fields: [userId], references: [id], onDelete: NoAction, map: "batch_update_records_fk0")
   canva             Canva             @relation(fields: [canvaId], references: [id], onDelete: Cascade, map: "batch_update_records_fk1")
   batchUpdadeStatus BatchUpdateStatus @relation(fields: [atStatus], references: [id], map: "batch_update_records_fk2")
 
@@ -146,7 +146,7 @@ model Voucher {
   interval     Int
   endDate      DateTime? @map("end_date") @db.Date
   createdAt    DateTime  @default(now()) @map("created_at")
-  updatedAt    DateTime  @updatedAt @map("updated_at")
+  updatedAt    DateTime  @default(now()) @updatedAt @map("updated_at")
   cart         Cart[]
 
   @@map("vouchers")
