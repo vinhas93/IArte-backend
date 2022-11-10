@@ -90,6 +90,12 @@ Instale as dependências
 
 ## 🌐 Rodando localmente
 
+Antes de Iniciar nosso servidor valor executar o comando para popular nosso banco de dados
+
+```bash
+  npm run seed
+```
+
 Inicie o servidor
 
 ```bash
