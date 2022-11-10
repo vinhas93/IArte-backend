@@ -158,8 +158,7 @@ Link para baixar: https://insomnia.rest/download
 | :------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------: | 
   
 ## Autor(es) 👨🏼‍💻👨🏼‍💻👨🏼‍💻👨🏼‍💻 - Front-End
-| [<img src="https://avatars.githubusercontent.com/u/97991367?v=4" width=115><br><sub>Henrique Gomes</sub>](https://github.com/Henriqueggperes) 
-| [<img src="https://avatars.githubusercontent.com/u/88009922?v=4" width=115><br><sub>Amaro Fransisco</sub>](https://github.com/Amaro13) | [<img src="https://avatars.githubusercontent.com/u/60695991?v=4" width=115><br><sub>Paulo Gabriel</sub>](https://github.com/PauloGLemos) | 
+| [<img src="https://avatars.githubusercontent.com/u/97991367?v=4" width=115><br><sub>Henrique Gomes</sub>](https://github.com/Henriqueggperes) | [<img src="https://avatars.githubusercontent.com/u/88009922?v=4" width=115><br><sub>Amaro Fransisco</sub>](https://github.com/Amaro13) | [<img src="https://avatars.githubusercontent.com/u/60695991?v=4" width=115><br><sub>Paulo Gabriel</sub>](https://github.com/PauloGLemos) | 
 | :------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------: | 
 
 
