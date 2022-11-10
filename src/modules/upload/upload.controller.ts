@@ -12,12 +12,19 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
+  ApiTags,
+  ApiOperation,
+} from '@nestjs/swagger';
 import { User } from '@prisma/client';
 import { Response } from 'express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { LoggedManager } from '../auth/decorator/logged-manager.decorator';
+import { LoggedSalesPerson } from '../auth/decorator/logged-sales-person.decorator';
 import { BatchUpdateStatusRepository } from './repository/batch-update-status.repository';
 import { BatchUpdateCanvasService } from './services/batch-update-canvas.service';
 import { FindOneBatchUpdateCanvasService } from './services/find-one-batch-update-canvas.service';
@@ -36,6 +43,9 @@ export class UploadController {
   ) {}
 
   @Post()
+  @ApiOperation({
+    summary: 'Upload an image file. - [SalesPerson][Manager][Owner]',
+  })
   @ApiConsumes('multipart/form-data')
   @ApiBody({
     description: 'Upload images',
@@ -65,7 +75,7 @@ export class UploadController {
       },
     }),
   )
-  async upload(@LoggedManager() user: User, @UploadedFile() file) {
+  async upload(@LoggedSalesPerson() user: User, @UploadedFile() file) {
     const response = await this.fileUploadService.upload(file);
 
     if (response.Location) {
@@ -76,6 +86,9 @@ export class UploadController {
   }
 
   @Patch('batch_update')
+  @ApiOperation({
+    summary: 'Update goods in bulk. - [Manager][Owner]',
+  })
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
   @UseInterceptors(
@@ -99,6 +112,10 @@ export class UploadController {
   }
 
   @Get('status')
+  @ApiOperation({
+    summary:
+      'Display status of all records updated in bulk. - [Manager][Owner]',
+  })
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
   async findAll(@LoggedManager() user: User, @Res() res: Response) {
@@ -107,6 +124,10 @@ export class UploadController {
   }
 
   @Get('status/:id')
+  @ApiOperation({
+    summary:
+      'Display status of a record by ID updated in bulk. - [Manager][Owner]',
+  })
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
   async findOne(

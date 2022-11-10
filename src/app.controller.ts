@@ -9,7 +9,7 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
-  @ApiOperation({ summary: 'visualizar status da aplicação.' })
+  @ApiOperation({ summary: 'Display the application status.' })
   getAppStatus(@Req() req: Request) {
     const baseUrl = req.protocol + '://' + req.get('host');
     return this.appService.getAppStatus(baseUrl);

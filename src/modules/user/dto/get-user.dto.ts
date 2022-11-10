@@ -12,6 +12,10 @@ import {
 export class GetUserByIdDto {
   @IsNumberString()
   @IsNotEmpty()
+  @ApiProperty({
+    description: "User's Id",
+    example: 1,
+  })
   id: string;
 }
 

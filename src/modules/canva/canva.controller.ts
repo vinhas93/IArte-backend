@@ -11,13 +11,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import {
-  ApiBearerAuth,
-  ApiOperation,
-  ApiQuery,
-  ApiTags,
-} from '@nestjs/swagger';
-import { CanvaGenre } from '@prisma/client';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { PageOptionsDto } from 'src/shared/pagination-dtos/pageOptions.dto';
 import { LoggedSalesPerson } from '../auth/decorator/logged-sales-person.decorator';
@@ -50,7 +44,7 @@ export class CanvaController {
 
   @Post('canva')
   @ApiOperation({
-    summary: 'Create a canva. - (User`s but Customer)',
+    summary: 'Create a canva. - [SalesPerson][Manager][Owner]',
   })
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
@@ -95,20 +89,6 @@ export class CanvaController {
   @ApiOperation({
     summary: 'Search canva by name or id and filter by genre and/or category.',
   })
-  @ApiQuery({
-    name: 'categoryName',
-    description: 'Filter search results by category.',
-    allowEmptyValue: true,
-    example: 'wolf',
-    required: false,
-  })
-  @ApiQuery({
-    name: 'genre',
-    description: 'Filter search results by genre.',
-    allowEmptyValue: true,
-    enum: CanvaGenre,
-    required: false,
-  })
   async searchCanva(
     @Query() searchDto: SearchDto,
     @Query() dropdownDto: DropdownDto,
@@ -127,7 +107,7 @@ export class CanvaController {
 
   @Put('canva/:id')
   @ApiOperation({
-    summary: 'Update a canva. - (User`s but Customer)',
+    summary: 'Update a canva. - [SalesPerson][Manager][Owner]',
   })
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
@@ -147,7 +127,7 @@ export class CanvaController {
 
   @Delete('canva/:id')
   @ApiOperation({
-    summary: 'Delete a canva. - (User`s but Customer)',
+    summary: 'Delete a canva. - [SalesPerson][Manager][Owner]',
   })
   @UseGuards(AuthGuard())
   @ApiBearerAuth()

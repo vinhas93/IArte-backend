@@ -7,8 +7,4 @@ export class RecordRepository extends PrismaClient {
   async createRecord(data: CreateRecordDto): Promise<RecordEntity> {
     return this.batchUpdateRecords.create({ data }).catch(handleError);
   }
-
-  async findAllRecords(): Promise<RecordEntity[]> {
-    return this.batchUpdateRecords.findMany().catch(handleError);
-  }
 }

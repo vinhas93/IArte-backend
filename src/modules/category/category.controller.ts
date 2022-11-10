@@ -48,7 +48,7 @@ export class CategoryController {
   @ApiBearerAuth()
   @Post()
   @ApiOperation({
-    summary: 'Create a new category - (FOR ADMIN).',
+    summary: 'Create a new category - [Manager][Owner].',
   })
   async createCategory(
     @LoggedManager() user: UserEntity,
@@ -73,17 +73,6 @@ export class CategoryController {
 
     return res.status(status).send(data);
   }
-
-  // @Get('/dropdown')
-  // @ApiOperation({
-  //   summary: 'Return all categories registered.',
-  // })
-  // async findAllCategoriesDropdown(@Res() res: Response) {
-  //   const { status, data } =
-  //     await this.findAllCategoriesDropdownService.execute();
-
-  //   return res.status(status).send(data);
-  // }
 
   @Get('/:name')
   @ApiOperation({
@@ -114,7 +103,7 @@ export class CategoryController {
   @ApiBearerAuth()
   @Patch('/:id')
   @ApiOperation({
-    summary: 'Edit a category by ID - (FOR ADMIN).',
+    summary: 'Edit a category by ID - [Manager][Owner].',
   })
   async updateCategory(
     @LoggedManager() user: UserEntity,
@@ -132,7 +121,7 @@ export class CategoryController {
   @Delete('/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({
-    summary: 'Delete a category by ID - (FOR ADMIN).',
+    summary: 'Delete a category by ID - [Manager][Owner].',
   })
   async deleteCategory(
     @LoggedManager() user: UserEntity,

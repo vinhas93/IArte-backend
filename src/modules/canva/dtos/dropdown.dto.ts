@@ -1,21 +1,22 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { CanvaGenre } from '@prisma/client';
-import { IsIn, IsOptional, IsString } from 'class-validator';
+import { IsIn, IsOptional } from 'class-validator';
 
 export class DropdownDto {
   @IsOptional()
   @IsIn(['Others', 'Realism', 'Abstract', 'Fantasy', 'Gothic', 'PopArt', ''])
   @ApiProperty({
     description: "Filter Canva's results by genre",
-    example: 'Fantasy',
+    // example: 'Fantasy',
+    required: false,
+    // enum: ['Others', 'Realism', 'Abstract', 'Fantasy', 'Gothic', 'PopArt', ''],
   })
   genre?: CanvaGenre;
 
   @IsOptional()
-  @IsString()
   @ApiProperty({
     description: "Filter Canva's results by category",
-    example: 'wolf',
+    required: false,
   })
   categoryName?: string;
 }

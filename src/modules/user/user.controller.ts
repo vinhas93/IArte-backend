@@ -18,6 +18,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { LoggedManager } from '../auth/decorator/logged-manager.decorator';
+import { LoggedOwner } from '../auth/decorator/logged-owner.decorator';
 import { LoggedUser } from '../auth/decorator/logged-user.decorator';
 import { CreateUserDto } from './dto/create-user.dto';
 import {
@@ -63,11 +64,11 @@ export class UserController {
   // ============================ Permissões LoggedManager ==========================
 
   @ApiTags('User')
-  @Post('/admin/create-user') //Owner ou Manager Criam usuários
+  @Post('/admin/create-user')
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
   @ApiOperation({
-    summary: 'Create a User. - (Manager)',
+    summary: 'Create a User. - [Manager][Owner]',
   })
   async createUser(
     @LoggedManager() user: UserEntity,
@@ -83,11 +84,11 @@ export class UserController {
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
   @ApiOperation({
-    summary: 'Get a User by id. - (Manager)',
+    summary: 'Get a User by id. - [Manager][Owner]',
   })
   async getUserById(
+    @Param() id: GetUserByIdDto,
     @LoggedManager() user: UserEntity,
-    @Param() { id }: GetUserByIdDto,
     @Res() res: Response,
   ) {
     const { status, data } = await this.findUserByIdService.execute(+id);
@@ -100,7 +101,7 @@ export class UserController {
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
   @ApiOperation({
-    summary: 'Get all Users. - (Manager)',
+    summary: 'Get all Users. - [Manager][Owner]',
   })
   async findAllUsers(@LoggedManager() user: UserEntity, @Res() res: Response) {
     const { status, data } = await this.findAllUsersService.execute();
@@ -113,7 +114,7 @@ export class UserController {
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
   @ApiOperation({
-    summary: 'Delete user account. - (Manager)',
+    summary: 'Delete user account. - [Manager][Owner]',
   })
   async deleteAccount(
     @LoggedManager() user: UserEntity,
@@ -125,13 +126,15 @@ export class UserController {
     return res.status(status).send(data);
   }
 
+  // ============================ Permissões LoggedOwner ==========================
+
   @ApiTags('User')
   @Patch('update-role/:id')
   @ApiOperation({
-    summary: 'Update user role. - (Manager)',
+    summary: 'Update user role. - [Owner]',
   })
   async updateUserRole(
-    @LoggedManager() user: UserEntity,
+    @LoggedOwner() user: UserEntity,
     @Param() { id }: GetUserByIdDto,
     @Body() { role }: UpdateUserRole,
     @Res() res: Response,
@@ -142,12 +145,13 @@ export class UserController {
   }
 
   // ============================ Permissões LoggedUser ==========================
+
   @ApiTags('My account')
-  @Get('/my-account') //Perfil de quem está logado
+  @Get('/my-account')
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
   @ApiOperation({
-    summary: 'Return logged user`s profile. - (User`s but Customer)',
+    summary: 'Return logged user`s profile. - [SalesPerson][Manager][Owner]',
   })
   async myAccount(@LoggedUser() user: UserEntity, @Res() res: Response) {
     const { status, data } = await this.myAccountService.execute(user.id);
@@ -155,11 +159,11 @@ export class UserController {
   }
 
   @ApiTags('My account')
-  @Put('/my-account') //Update Password
+  @Put('/my-account')
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
   @ApiOperation({
-    summary: 'Upddates logged User`s password. - (User`s but Customer)',
+    summary: 'Upddates logged User`s password. - [SalesPerson][Manager][Owner]',
   })
   async updateMyPassword(
     @LoggedUser() user: UserEntity,
@@ -174,11 +178,12 @@ export class UserController {
   }
 
   @ApiTags('My account')
-  @Patch('/my-account') //Update nome ou imagem da conta
+  @Patch('/my-account')
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
   @ApiOperation({
-    summary: 'Upddates logged User`s name or image. - (User`s but Customer)',
+    summary:
+      'Upddates logged User`s name or image. - [SalesPerson][Manager][Owner]',
   })
   async updateMyAccount(
     @LoggedUser() user: UserEntity,
@@ -195,7 +200,7 @@ export class UserController {
   @ApiTags('My account')
   @Patch('recovery-password')
   @ApiOperation({
-    summary: 'Send email to recovery password. - (User`s but Customer)',
+    summary: 'Send email to recovery password. - [SalesPerson][Manager][Owner]',
   })
   async recoveryPasswordSendEmail(
     @Body() { email }: UserEmailDto,
@@ -209,18 +214,18 @@ export class UserController {
   @ApiTags('My account')
   @Patch('update_password')
   @ApiOperation({
-    summary: 'User update password. - (User`s but Customer)',
+    summary: 'User update password. - [SalesPerson][Manager][Owner]',
   })
   updatePassword(@Body() updatePassword: CreatePasswordHashDto) {
     return this.updatePasswordByEmailService.execute(updatePassword);
   }
 
   @ApiTags('My account')
-  @Delete('/my-account') //Deleta a conta do usuário logado
+  @Delete('/my-account')
   @UseGuards(AuthGuard())
   @ApiBearerAuth()
   @ApiOperation({
-    summary: 'Delete logged user`s account. - (User`s but Customer)',
+    summary: 'Delete logged user`s account. - [SalesPerson][Manager][Owner]',
   })
   async DeleteMyAccount(@LoggedUser() user: UserEntity, @Res() res: Response) {
     const { status, data } = await this.deleteMyAccountService.execute(user.id);

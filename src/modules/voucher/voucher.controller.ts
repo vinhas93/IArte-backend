@@ -44,7 +44,7 @@ export class VoucherController {
   @ApiBearerAuth()
   @Post()
   @ApiOperation({
-    summary: 'Create a new voucher - (FOR ADMIN).',
+    summary: 'Create a new voucher. - [Manager][Owner]',
   })
   async createVoucher(
     @LoggedManager() user: UserEntity,
@@ -84,7 +84,7 @@ export class VoucherController {
   @ApiBearerAuth()
   @Patch('/:id')
   @ApiOperation({
-    summary: 'Edit a voucher by ID - (FOR ADMIN).',
+    summary: 'Edit a voucher by ID. - [Manager][Owner]',
   })
   async updateVoucher(
     @LoggedManager() user: UserEntity,
@@ -102,7 +102,7 @@ export class VoucherController {
   @Delete('/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({
-    summary: 'Delete a voucher by ID - (FOR ADMIN).',
+    summary: 'Delete a voucher by ID. - [Manager][Owner]',
   })
   async deleteVoucher(
     @LoggedManager() user: UserEntity,
