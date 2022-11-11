@@ -1,5 +1,6 @@
 import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
+import { CreateUserDto } from '../user/dto/create-user.dto';
 import { UserEntity } from '../user/entity/user.entity';
 
 type DataResponse = {
@@ -65,6 +66,29 @@ export class MailService {
         name,
       },
     });
+    return;
+  }
+
+  async sendDobleAuthentication(user: CreateUserDto, token) {
+    const { email, name } = user;
+
+    const url =
+      process.env.NODE_ENV !== 'production'
+        ? `${process.env.URL_PROD}`
+        : `${process.env.URL_DEV}`;
+
+    await this.mailerService.sendMail({
+      to: email,
+      from: process.env.MAIL_FROM,
+      subject: 'I Art - login',
+      template: './send-login.hbs',
+      context: {
+        name,
+        url,
+        token,
+      },
+    });
+
     return;
   }
 }
