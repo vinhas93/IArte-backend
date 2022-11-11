@@ -17,8 +17,9 @@ export class SendDataToSqsHelper {
     if (isNaN(canva.id) || canva.id < 1) {
       const batchUpdateStatus = {
         id: batchUpdateStatusId,
+        userId: user.id,
       };
-      await this.sendEmailBatchStatusUpdate.execute(null, batchUpdateStatus, {
+      await this.sendEmailBatchStatusUpdate.execute(batchUpdateStatus, {
         failures: {
           increment: 1,
         },
@@ -32,8 +33,9 @@ export class SendDataToSqsHelper {
     if (!canvaExists) {
       const batchUpdateStatus = {
         id: batchUpdateStatusId,
+        userId: user.id,
       };
-      await this.sendEmailBatchStatusUpdate.execute(null, batchUpdateStatus, {
+      await this.sendEmailBatchStatusUpdate.execute(batchUpdateStatus, {
         failures: {
           increment: 1,
         },
@@ -71,6 +73,7 @@ export class SendDataToSqsHelper {
         },
         batchUpdateStatus: {
           id: batchUpdateStatusId,
+          userId: user.id,
         },
       },
     };

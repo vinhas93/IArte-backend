@@ -10,7 +10,7 @@ export class SendEmailBatchStatusUpdate {
     private userRepository: UserRepository,
     private mailService: MailService,
   ) {}
-  async execute(createRecord, batchUpdateStatus, data) {
+  async execute(batchUpdateStatus, data) {
     const statusBatchUpdate = await this.batchUpdateStatusRepository.update(
       data,
       batchUpdateStatus.id,
@@ -21,7 +21,9 @@ export class SendEmailBatchStatusUpdate {
     const haveAllCanvasBeenUpdated = successes + failures === totalItensUpdate;
 
     if (haveAllCanvasBeenUpdated) {
-      const user = await this.userRepository.findUserById(createRecord.userId);
+      const user = await this.userRepository.findUserById(
+        batchUpdateStatus.userId,
+      );
       return await this.mailService.sendStatusBatchUpdate(
         totalItensUpdate,
         successes,

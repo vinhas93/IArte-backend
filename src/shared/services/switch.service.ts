@@ -41,15 +41,11 @@ export class SwitchService {
 
           if (status == 200) {
             createRecord.statusMessage = 'Updated successfully.';
-            await this.sendEmailBatchStatusUpdate.execute(
-              createRecord,
-              batchUpdateStatus,
-              {
-                successes: {
-                  increment: 1,
-                },
+            await this.sendEmailBatchStatusUpdate.execute(batchUpdateStatus, {
+              successes: {
+                increment: 1,
               },
-            );
+            });
             return this.createRecordService.execute(createRecord);
           }
         }
