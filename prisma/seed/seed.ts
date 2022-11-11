@@ -8,8 +8,9 @@ async function main() {
     await prisma.$queryRaw(
       Prisma.sql`INSERT INTO users(id,name,image,password,email,role)
     VALUES
-      (1,'Daniel Vinhas','https://img.freepik.com/vetores-premium/rosto-de-jovem-negro-com-bigode-retrato-masculino-ou-avatar-em-estilo-simples-vista-frontal-vetor_497399-233.jpg?w=500','$2b$10$uabs/U9gibQFEXdbjxjaWuUr58ss1EX.XnKfXdCo.1n2.n3oHx/rS','vinhas.daniel@gmail.com','Owner'),
-      (2,'Henrique Gomes','https://img.freepik.com/vetores-premium/rosto-de-jovem-negro-com-bigode-retrato-masculino-ou-avatar-em-estilo-simples-vista-frontal-vetor_497399-233.jpg?w=500','$2b$10$uabs/U9gibQFEXdbjxjaWuUr58ss1EX.XnKfXdCo.1n2.n3oHx/rS','henriqquegperes@gmail.com','Owner'),
+      (1,'IArte Admin','https://img.freepik.com/vetores-premium/rosto-de-jovem-negro-com-bigode-retrato-masculino-ou-avatar-em-estilo-simples-vista-frontal-vetor_497399-233.jpg?w=500','$2b$10$uabs/U9gibQFEXdbjxjaWuUr58ss1EX.XnKfXdCo.1n2.n3oHx/rS','admin@admin.com','Owner'),
+      (2,'Daniel Vinhas','https://img.freepik.com/vetores-premium/rosto-de-jovem-negro-com-bigode-retrato-masculino-ou-avatar-em-estilo-simples-vista-frontal-vetor_497399-233.jpg?w=500','$2b$10$uabs/U9gibQFEXdbjxjaWuUr58ss1EX.XnKfXdCo.1n2.n3oHx/rS','vinhas.daniel@gmail.com','Owner'),
+      (3,'Henrique Gomes','https://img.freepik.com/vetores-premium/rosto-de-jovem-negro-com-bigode-retrato-masculino-ou-avatar-em-estilo-simples-vista-frontal-vetor_497399-233.jpg?w=500','$2b$10$uabs/U9gibQFEXdbjxjaWuUr58ss1EX.XnKfXdCo.1n2.n3oHx/rS','henriqquegperes@gmail.com','Owner'),
       (10,'Robin Hawkins','https://img.freepik.com/vetores-premium/rosto-de-jovem-negro-com-bigode-retrato-masculino-ou-avatar-em-estilo-simples-vista-frontal-vetor_497399-233.jpg?w=500','$2b$10$uabs/U9gibQFEXdbjxjaWuUr58ss1EX.XnKfXdCo.1n2.n3oHx/rS','robinhawkins@iart.org','Manager'),
       (11,'Benjamin Jensen','https://img.freepik.com/vetores-premium/rosto-de-jovem-negro-com-bigode-retrato-masculino-ou-avatar-em-estilo-simples-vista-frontal-vetor_497399-233.jpg?w=500','$2b$10$uabs/U9gibQFEXdbjxjaWuUr58ss1EX.XnKfXdCo.1n2.n3oHx/rS','benjaminjensen4709@iart.edu','SalesPerson'),
       (12,'Trevor Odom','https://img.freepik.com/vetores-premium/rosto-de-jovem-negro-com-bigode-retrato-masculino-ou-avatar-em-estilo-simples-vista-frontal-vetor_497399-233.jpg?w=500','$2b$10$uabs/U9gibQFEXdbjxjaWuUr58ss1EX.XnKfXdCo.1n2.n3oHx/rS','trevorodom@iart.org','Manager'),
@@ -35,8 +36,10 @@ async function main() {
     await prisma.$queryRaw(
       Prisma.sql`INSERT INTO categories(id,price,name,description,cost)
     VALUES
-      (1,'22.06','TSHIRT','tristique senectus et netus et malesuada','15.15'),
-      (2,'32.55','CANVA','orci, consectetuer euismod est arcu ac orci. Ut semper pretium','22.39');`,
+      (1,'22.06','CAMISA','tristique senectus et netus et malesuada','15.15'),
+      (2,'32.55','TELA','orci, consectetuer euismod est arcu ac orci. Ut semper pretium','22.39');,
+      (3,'23.06','CANECA','tristique senectus et netus et malesuada','7.55'),
+      (4,'17.45','RETRATO','orci, consectetuer euismod est arcu ac orci. Ut semper pretium','3.37');`,
     ),
 
     await prisma.$queryRaw(
