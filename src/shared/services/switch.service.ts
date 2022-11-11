@@ -33,7 +33,7 @@ export class SwitchService {
       case 'updateCanvas':
         const { createRecord, updateCanva, batchUpdateStatus } = data as Data;
 
-        if (updateCanva.id != null) {
+        if (updateCanva.id) {
           const { status } = await this.updateCanvaByIdService.execute(
             updateCanva.id,
             updateCanva,

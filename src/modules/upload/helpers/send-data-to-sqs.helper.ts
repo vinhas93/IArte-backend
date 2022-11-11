@@ -25,58 +25,57 @@ export class SendDataToSqsHelper {
       });
 
       return;
-    }
+    } else {
+      const canvaExists = await this.canvaRepository.getCanvaById(+canva.id);
 
-    const canvaExists = await this.canvaRepository.getCanvaById(+canva.id);
-
-    if (!canvaExists) {
-      const batchUpdateStatus = {
-        id: batchUpdateStatusId,
-      };
-      await this.sendEmailBatchStatusUpdate.execute(null, batchUpdateStatus, {
-        failures: {
-          increment: 1,
-        },
-      });
-      return;
-    }
-
-    let newPrice = 0;
-
-    if (canvaExists) {
-      const category = await this.categoryRepository.findCategoryByName(
-        canvaExists.categoryName,
-      );
-
-      newPrice = canvaExists.price * ((100 - canva.percentualDesconto) / 100);
-
-      if (newPrice < category.price) {
-        newPrice = category.price;
-      }
-    }
-
-    const producerSqsMessage = {
-      event: 'updateCanvas',
-      data: {
-        updateCanva: {
-          id: +canva.id,
-          price: +newPrice.toFixed(2),
-          genre: canvaExists ? canvaExists.genre : '',
-        },
-        createRecord: {
-          oldPrice: canvaExists ? +canvaExists.price : 0,
-          newPrice: +newPrice.toFixed(2),
-          canvaId: +canva.id,
-          atStatus: batchUpdateStatusId,
-        },
-        batchUpdateStatus: {
+      if (!canvaExists) {
+        const batchUpdateStatus = {
           id: batchUpdateStatusId,
+        };
+        await this.sendEmailBatchStatusUpdate.execute(null, batchUpdateStatus, {
+          failures: {
+            increment: 1,
+          },
+        });
+        return;
+      }
+
+      let newPrice = 0;
+
+      if (canvaExists) {
+        const category = await this.categoryRepository.findCategoryByName(
+          canvaExists.categoryName,
+        );
+
+        newPrice = canvaExists.price * ((100 - canva.percentualDesconto) / 100);
+
+        if (newPrice < category.price) {
+          newPrice = category.price;
+        }
+      }
+
+      const producerSqsMessage = {
+        event: 'updateCanvas',
+        data: {
+          updateCanva: {
+            id: +canva.id,
+            price: +newPrice.toFixed(2),
+            genre: canvaExists ? canvaExists.genre : '',
+          },
+          createRecord: {
+            oldPrice: canvaExists ? +canvaExists.price : 0,
+            newPrice: +newPrice.toFixed(2),
+            canvaId: +canva.id,
+            atStatus: batchUpdateStatusId,
+          },
+          batchUpdateStatus: {
+            id: batchUpdateStatusId,
+          },
         },
-      },
-    };
+      };
 
-    await this.messageProducer.sendMessage(producerSqsMessage);
-
+      await this.messageProducer.sendMessage(producerSqsMessage);
+    }
     return;
   }
 }
