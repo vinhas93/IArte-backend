@@ -37,9 +37,9 @@ async function main() {
       Prisma.sql`INSERT INTO categories(id,price,name,description,cost)
     VALUES
       (1,'22.06','CAMISA','tristique senectus et netus et malesuada','15.15'),
-      (2,'32.55','TELA','orci, consectetuer euismod est arcu ac orci. Ut semper pretium','22.39');,
+      (2,'32.55','TELA','orci, consectetuer euismod est arcu ac orci. Ut semper pretium','22.39'),
       (3,'23.06','CANECA','tristique senectus et netus et malesuada','7.55'),
-      (4,'17.45','RETRATO','orci, consectetuer euismod est arcu ac orci. Ut semper pretium','3.37');`,
+      (4,'17.45','RETRATO','orci, consectetuer euismod est arcu ac orci. Ut semper pretium','3.37')`,
     ),
 
     await prisma.$queryRaw(
