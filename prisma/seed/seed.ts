@@ -3,12 +3,10 @@ import { PrismaClient, Prisma } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log(`Start seeding ...`);
-  
-  await Promise.all([
-    console.log(`Start seed ===> Users <===.`);
-    await prisma.$queryRaw(
-      Prisma.sql`INSERT INTO users(id,name,image,password,email,role)
+  console.log(`Start seeding ...`),
+    await Promise.all([
+      await prisma.$queryRaw(
+        Prisma.sql`INSERT INTO users(id,name,image,password,email,role)
     VALUES
       (1,'IArte Admin','https://img.freepik.com/vetores-premium/rosto-de-jovem-negro-com-bigode-retrato-masculino-ou-avatar-em-estilo-simples-vista-frontal-vetor_497399-233.jpg?w=500','$2b$10$uabs/U9gibQFEXdbjxjaWuUr58ss1EX.XnKfXdCo.1n2.n3oHx/rS','admin@admin.com','Owner'),
       (2,'Daniel Vinhas','https://img.freepik.com/vetores-premium/rosto-de-jovem-negro-com-bigode-retrato-masculino-ou-avatar-em-estilo-simples-vista-frontal-vetor_497399-233.jpg?w=500','$2b$10$uabs/U9gibQFEXdbjxjaWuUr58ss1EX.XnKfXdCo.1n2.n3oHx/rS','vinhas.daniel@gmail.com','Owner'),
@@ -33,24 +31,19 @@ async function main() {
       (27,'Darryl Wade','https://img.freepik.com/vetores-premium/rosto-de-jovem-negro-com-bigode-retrato-masculino-ou-avatar-em-estilo-simples-vista-frontal-vetor_497399-233.jpg?w=500','$2b$10$uabs/U9gibQFEXdbjxjaWuUr58ss1EX.XnKfXdCo.1n2.n3oHx/rS','darrylwade@iart.org','SalesPerson'),
       (28,'Ima Owen','https://img.freepik.com/vetores-premium/rosto-de-jovem-negro-com-bigode-retrato-masculino-ou-avatar-em-estilo-simples-vista-frontal-vetor_497399-233.jpg?w=500','$2b$10$uabs/U9gibQFEXdbjxjaWuUr58ss1EX.XnKfXdCo.1n2.n3oHx/rS','imaowen@iart.com','Manager'),
       (29,'Vaughan Walker','https://img.freepik.com/vetores-premium/rosto-de-jovem-negro-com-bigode-retrato-masculino-ou-avatar-em-estilo-simples-vista-frontal-vetor_497399-233.jpg?w=500','$2b$10$uabs/U9gibQFEXdbjxjaWuUr58ss1EX.XnKfXdCo.1n2.n3oHx/rS','vaughanwalker2535@iart.com','SalesPerson');`,
-    ),
-     console.log(`Finished seed ===> Users <===.`);
-     console.log(`Start seed ===> categories <===.`);
-    
-    await prisma.$queryRaw(
-      Prisma.sql`INSERT INTO categories(id,price,name,description,cost)
+      ),
+
+      await prisma.$queryRaw(
+        Prisma.sql`INSERT INTO categories(id,price,name,description,cost)
     VALUES
       (1,'22.06','CAMISA','tristique senectus et netus et malesuada','15.15'),
       (2,'32.55','TELA','orci, consectetuer euismod est arcu ac orci. Ut semper pretium','22.39'),
       (3,'23.06','CANECA','tristique senectus et netus et malesuada','7.55'),
       (4,'17.45','RETRATO','orci, consectetuer euismod est arcu ac orci. Ut semper pretium','3.37')`,
-    ),
-     
-    console.log(`Finished seed ===> categories <===.`);
-    console.log(`Start seed ===> canvas <===.`);
-  
-    await prisma.$queryRaw(
-      Prisma.sql`INSERT INTO canvas (id,name,price,description,in_stock,category_name,image,genre)
+      ),
+
+      await prisma.$queryRaw(
+        Prisma.sql`INSERT INTO canvas (id,name,price,description,in_stock,category_name,image,genre)
 VALUES
   (1,'enim. Etiam imperdiet','83.84','accumsan sed, facilisis vitae, orci. Phasellus','false','TELA','https://iart.s3.amazonaws.com/1668020741174Undefeated.jpg','Abstract'),
   (2,'nulla. Integer urna.','39.40','at risus. Nunc ac sem ut','true','CAMISA','https://iart.s3.amazonaws.com/1668020725306TheWoods.jpg','Abstract'),
@@ -350,9 +343,9 @@ VALUES
   (296,'primis in faucibus','179.00','mi, ac mattis velit justo nec ante. Maecenas','true','CAMISA','https://iart.s3.amazonaws.com/1668020725306TheWoods.jpg','Gothic'),
   (297,'ridiculus mus. Proin','175.50','mauris blandit mattis. Cras eget nisi dictum augue malesuada','false','RETRATO','https://iart.s3.amazonaws.com/1668020293002FeverDream.jpg','Fantasy'),
   (298,'vitae, orci. Phasellus','43.61','morbi tristique senectus et netus et malesuada fames ac','false','RETRATO','https://iart.s3.amazonaws.com/1668020741174Undefeated.jpg','Realism'),
-  (299,'arcu imperdiet','154.69','felis. Donec tempor, est ac','true','TELA','https://iart.s3.amazonaws.com/1668020741174Undefeated.jpg','Realism')`
-  ]);
-   console.log(`Finished seed ===> canvas <===.`);
+  (299,'arcu imperdiet','154.69','felis. Donec tempor, est ac','true','TELA','https://iart.s3.amazonaws.com/1668020741174Undefeated.jpg','Realism')`,
+      ),
+    ]);
 
   console.log(`Seeding finished.`);
 }
